@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kiosko Proveedores</title>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    try{ document.documentElement.dataset.theme = localStorage.getItem("ui_theme") || "dark"; }catch{}
+  </script>
+  <style>
+    :root{ --bg:#0b1220; --panel:#111c33; --text:#e5e7eb; --muted:#94a3b8; --brand:#2563eb; --ok:#22c55e; --bad:#ef4444; --border:rgba(255,255,255,.10); --font:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+    html[data-theme="light"]{ --bg:#f8fafc; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --border:rgba(15,23,42,.14); }
+    *{ box-sizing:border-box; }
+    body{ margin:0; min-height:100vh; font-family:var(--font); color:var(--text); background:var(--bg); }
+    main{ width:min(820px,100%); margin:0 auto; padding:18px 12px 80px; }
+    .head{ display:flex; justify-content:space-between; gap:14px; align-items:flex-start; margin:8px 0 14px; }
+    .head-actions{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    h1{ margin:0; font-size:22px; line-height:1.1; }
+    .sub{ color:var(--muted); font-size:13px; margin-top:6px; }
+    .badge{ border:1px solid rgba(96,165,250,.45); color:#bfdbfe; border-radius:999px; padding:7px 10px; font-size:12px; white-space:nowrap; background:rgba(37,99,235,.16); }
+    .card{ background:linear-gradient(180deg, rgba(17,28,51,.96), rgba(15,23,42,.94)); border:1px solid var(--border); border-radius:14px; padding:14px; box-shadow:0 18px 44px rgba(0,0,0,.35); }
+    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    label{ display:block; color:var(--muted); font-size:12px; margin:0 0 6px; }
+    input, select, textarea{ width:100%; border:1px solid var(--border); background:rgba(2,6,23,.38); color:var(--text); border-radius:12px; padding:11px 12px; outline:none; font:inherit; }
+    textarea{ resize:vertical; min-height:82px; }
+    button{ width:100%; border:0; border-radius:12px; padding:12px 14px; background:var(--brand); color:white; font-weight:800; cursor:pointer; font:inherit; }
+    .theme-btn{ width:auto; padding:7px 10px; background:rgba(148,163,184,.18); color:var(--text); border:1px solid var(--border); font-size:12px; white-space:nowrap; }
+    button:disabled{ opacity:.65; cursor:not-allowed; }
+    .hint{ color:var(--muted); font-size:12px; line-height:1.35; }
+    .divider{ height:1px; background:var(--border); margin:14px 0; }
+    .qr-card{ display:none; margin-top:14px; text-align:center; }
+    .qr-card.show{ display:block; }
+    #qrcode{ display:inline-block; background:white; padding:10px; border-radius:14px; }
+    .folio{ color:var(--muted); font-size:12px; margin-top:10px; overflow-wrap:anywhere; }
+    .factura-oc-editor{ display:grid; gap:10px; }
+    .factura-oc-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; }
+    .factura-oc-head label{ margin:0; }
+    .factura-oc-list{ display:grid; gap:10px; }
+    .factura-oc-item{ display:grid; grid-template-columns:minmax(140px,.8fr) minmax(180px,1.2fr) auto; gap:10px; align-items:end; padding:10px; border:1px solid var(--border); border-radius:12px; background:rgba(2,6,23,.25); }
+    .factura-oc-item textarea{ min-height:42px; resize:vertical; }
+    .mini-btn{ width:auto; padding:9px 11px; background:rgba(148,163,184,.18); border:1px solid var(--border); box-shadow:none; }
+    .agenda{ display:grid; gap:10px; }
+    .agenda-head{ display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; color:var(--muted); font-size:12px; }
+    .slots{ display:none; }
+    .slot{ border:1px solid var(--border); border-radius:12px; padding:10px 8px; text-align:center; cursor:pointer; font-weight:800; background:rgba(34,197,94,.16); color:#86efac; }
+    .slot.busy{ cursor:not-allowed; background:rgba(239,68,68,.18); color:#fca5a5; opacity:.82; }
+    .slot.selected{ outline:3px solid rgba(37,99,235,.45); background:rgba(37,99,235,.26); color:#bfdbfe; }
+    .availability-editor{ display:grid; gap:22px; padding-top:4px; }
+    .availability-title{ margin:0; font-size:20px; line-height:1.15; }
+    .availability-section{ display:grid; gap:9px; }
+    .availability-section h3{ margin:0; font-size:14px; }
+    .availability-section h3 small{ color:var(--muted); font-size:13px; }
+    .availability-chips{ display:flex; flex-wrap:wrap; gap:9px; }
+    .availability-chip{ width:auto; min-width:66px; min-height:36px; border-radius:999px; padding:8px 13px; border:1px solid rgba(34,197,94,.36); background:rgba(16,185,129,.22); color:#86efac; font-size:13px; font-weight:900; box-shadow:inset 0 1px 0 rgba(255,255,255,.08); }
+    .availability-chip.busy{ border-color:rgba(251,146,60,.45); background:rgba(125,68,38,.78); color:#fed7aa; cursor:not-allowed; }
+    .availability-chip.selected{ outline:3px solid rgba(96,165,250,.45); border-color:rgba(147,197,253,.72); background:rgba(37,99,235,.30); color:#bfdbfe; }
+    .availability-chip .x{ margin-left:3px; font-weight:900; }
+    .toast{ position:fixed; left:12px; right:12px; bottom:14px; display:none; border-radius:14px; padding:12px; border:1px solid var(--border); background:rgba(17,28,51,.98); color:var(--text); box-shadow:0 18px 44px rgba(0,0,0,.35); }
+    .toast.show{ display:block; }
+    .toast.ok{ border-color:rgba(34,197,94,.45); }
+    .toast.bad{ border-color:rgba(239,68,68,.45); }
+    html[data-theme="light"] .card{ background:#ffffff; box-shadow:0 18px 44px rgba(15,23,42,.10); }
+    html[data-theme="light"] input,
+    html[data-theme="light"] select,
+    html[data-theme="light"] textarea{ background:#ffffff; color:var(--text); }
+    html[data-theme="light"] .factura-oc-item{ background:#f8fafc; }
+    html[data-theme="light"] .toast{ background:#ffffff; box-shadow:0 18px 44px rgba(15,23,42,.14); }
+    html[data-theme="light"] .slot{ background:rgba(34,197,94,.14); color:#166534; }
+    html[data-theme="light"] .slot.busy{ background:rgba(239,68,68,.12); color:#991b1b; }
+    html[data-theme="light"] .slot.selected,
+    html[data-theme="light"] .availability-chip.selected{ color:#1d4ed8; }
+    @media (max-width:700px){ main{ padding:14px 10px 74px; } .head{ display:grid; } .badge{ width:max-content; } .grid{ grid-template-columns:1fr; } .factura-oc-item{ grid-template-columns:1fr; } .availability-chip{ min-width:62px; padding:8px 11px; } .mini-btn{ width:100%; } h1{ font-size:20px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="head">
+      <div>
+        <h1>Solicitud de proveedor</h1>
+        <div class="sub">Recibiras un QR. El acceso se libera cuando compras/anfitrion autorice la cita.</div>
+      </div>
+      <div class="head-actions">
+        <button class="theme-btn" id="btnTheme" type="button">Tema</button>
+        <div class="badge">Proveedores</div>
+      </div>
+    </div>
+
+    <form class="card" id="form">
+      <div class="grid">
+        <div>
+          <label>Proveedor / razon social *</label>
+          <input id="proveedor" autocomplete="organization" required>
+        </div>
+        <div>
+          <label>Codigo proveedor</label>
+          <input id="proveedorCodigo">
+        </div>
+        <div>
+          <label>Nombre contacto *</label>
+          <input id="contacto" autocomplete="name" required>
+        </div>
+        <div>
+          <label>Telefono</label>
+          <input id="telefono" inputmode="tel" autocomplete="tel">
+        </div>
+        <div>
+          <label>Persona a quien visita *</label>
+          <select id="persona" required></select>
+        </div>
+        <div>
+          <label>Area *</label>
+          <select id="area" required></select>
+        </div>
+        <div>
+          <label>Motivo *</label>
+          <select id="motivo" required></select>
+        </div>
+        <div>
+          <label>Fecha y hora solicitada *</label>
+          <input id="fechaHora" type="datetime-local" required>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="agenda" id="agenda">
+        <div class="agenda-head">
+          <span id="agendaTitle">Disponibilidad de hoy</span>
+          <span id="agendaInfo">Selecciona fecha y area</span>
+        </div>
+        <div class="slots" id="slots"></div>
+        <div class="availability-editor" id="availabilityEditor"></div>
+      </div>
+      <div class="divider"></div>
+      <div class="factura-oc-editor" id="facturasOcEditor">
+        <div class="factura-oc-head">
+          <label>Facturas / OC</label>
+          <button class="mini-btn" type="button" id="addFacturaOc">Agregar relacion</button>
+        </div>
+        <div class="factura-oc-list" id="facturaOcList"></div>
+        <p class="hint">Puedes capturar una factura y varias OC separadas por coma.</p>
+      </div>
+      <div class="divider"></div>
+      <label>Material / observaciones</label>
+      <textarea id="material" placeholder="Material a entregar, recolectar o notas para autorizacion"></textarea>
+      <div class="divider"></div>
+      <p class="hint">Conserva el QR. Si aun no esta autorizado, el guardia vera el aviso al escanear.</p>
+      <button id="btnEnviar" type="submit">Enviar y generar QR</button>
+    </form>
+
+    <section class="card qr-card" id="qrCard">
+      <h2 style="margin:0 0 10px;">QR generado</h2>
+      <div id="qrcode"></div>
+      <div class="folio" id="folioTxt"></div>
+      <p class="hint">Estado inicial: pendiente de autorizacion.</p>
+    </section>
+  </main>
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import {
+      AREAS,
+      MOTIVOS,
+      PERSONAS,
+      capArea,
+      fetchCitasByDate,
+      fillSelect,
+      generarSlots,
+      slotOcupadas,
+      setupKioskoTheme,
+      toast,
+      crearSolicitudCita
+    } from "./kiosko-common.js";
+
+    setupKioskoTheme();
+    fillSelect("persona", PERSONAS);
+    fillSelect("area", AREAS);
+    fillSelect("motivo", MOTIVOS);
+    document.getElementById("fechaHora").min = `${new Date().toISOString().slice(0,10)}T00:00`;
+
+    const form = document.getElementById("form");
+    const btn = document.getElementById("btnEnviar");
+    const qrCard = document.getElementById("qrCard");
+    const qrBox = document.getElementById("qrcode");
+    const folioTxt = document.getElementById("folioTxt");
+    const facturaOcList = document.getElementById("facturaOcList");
+    const slotsEl = document.getElementById("slots");
+    const availabilityEditor = document.getElementById("availabilityEditor");
+    const agendaInfo = document.getElementById("agendaInfo");
+    let citasDia = [];
+    let disponibilidadOk = true;
+    let selectedHora = "";
+
+    function todayISO(){
+      return new Date().toISOString().slice(0,10);
+    }
+
+    function formatDateLabel(dateISO){
+      if(!dateISO) return "hoy";
+      const today = todayISO();
+      if(dateISO === today) return "hoy";
+      return new Date(`${dateISO}T00:00:00`).toLocaleDateString("es-MX", {
+        day:"2-digit",
+        month:"short",
+        year:"numeric"
+      });
+    }
+
+    function renderQR(id){
+      qrBox.innerHTML = "";
+      new QRCode(qrBox, { text:String(id), width:260, height:260, colorDark:"#111827", colorLight:"#ffffff", correctLevel:QRCode.CorrectLevel.M });
+      folioTxt.textContent = `ID: ${id}`;
+      qrCard.classList.add("show");
+      qrCard.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+
+    function renderFacturaOcRow(rel = { facturaNo:"", ocNos:"" }){
+      const item = document.createElement("div");
+      item.className = "factura-oc-item";
+      item.innerHTML = `
+        <div>
+          <label>Factura</label>
+          <input class="factura-no" maxlength="100" placeholder="Ej. FAC-88921" value="${rel.facturaNo || ""}">
+        </div>
+        <div>
+          <label>OC relacionadas</label>
+          <textarea class="oc-nos" rows="1" placeholder="Ej. 450001, 450002">${rel.ocNos || ""}</textarea>
+        </div>
+        <button class="mini-btn remove-factura-oc" type="button">Quitar</button>
+      `;
+      facturaOcList.appendChild(item);
+    }
+
+    function collectFacturaOc(){
+      const rows = [...facturaOcList.querySelectorAll(".factura-oc-item")];
+      const facturasOc = rows.map(row => {
+        const facturaNo = row.querySelector(".factura-no").value.trim();
+        const ocNos = row.querySelector(".oc-nos").value
+          .split(/[\s,;|/]+/)
+          .map(x => x.trim())
+          .filter(Boolean);
+        return { facturaNo, ocNos };
+      }).filter(r => r.facturaNo || r.ocNos.length);
+
+      return {
+        facturasOc,
+        facturaNo: facturasOc.map(r => r.facturaNo).filter(Boolean).join(", "),
+        ocNo: [...new Set(facturasOc.flatMap(r => r.ocNos))].join(", ")
+      };
+    }
+
+    function setSelectedSlot(hora, areaOverride = ""){
+      selectedHora = hora;
+      if(areaOverride) document.getElementById("area").value = areaOverride;
+      const fecha = document.getElementById("fechaHora").value.slice(0,10) || todayISO();
+      document.getElementById("fechaHora").value = `${fecha}T${hora}`;
+      [...slotsEl.querySelectorAll(".slot")].forEach(el => {
+        el.classList.toggle("selected", el.dataset.hora === hora);
+      });
+      [...availabilityEditor.querySelectorAll(".availability-chip")].forEach(el => {
+        el.classList.toggle("selected", el.dataset.hora === hora && el.dataset.area === document.getElementById("area").value);
+      });
+    }
+
+    async function refreshAgenda(){
+      const area = document.getElementById("area").value;
+      const fechaHoraInput = document.getElementById("fechaHora");
+      const dateISO = fechaHoraInput.value.slice(0,10) || todayISO();
+      selectedHora = fechaHoraInput.value.slice(11,16);
+      slotsEl.innerHTML = "";
+      availabilityEditor.innerHTML = "";
+
+      if(!dateISO){
+        agendaInfo.textContent = "Selecciona fecha";
+        return;
+      }
+
+      document.getElementById("agendaTitle").textContent =
+        dateISO === todayISO() ? "Disponibilidad de hoy" : `Disponibilidad del ${formatDateLabel(dateISO)}`;
+      agendaInfo.textContent = "Cargando disponibilidad...";
+      disponibilidadOk = true;
+      try{
+        citasDia = await fetchCitasByDate(dateISO);
+      }catch(e){
+        console.warn(e);
+        citasDia = [];
+        disponibilidadOk = false;
+        toast("No se pudo consultar disponibilidad. Se mostrara agenda local.", "bad");
+      }
+
+      const allSlots = generarSlots();
+      const selectedArea = area;
+      const totalDisponibles = AREAS.reduce((total, areaName) => {
+        const cap = capArea(areaName);
+        return total + allSlots.filter(hora => slotOcupadas(citasDia, dateISO, areaName, hora) < cap).length;
+      }, 0);
+      agendaInfo.textContent = disponibilidadOk
+        ? `${totalDisponibles} horarios disponibles`
+        : "No se pudieron cargar horarios ocupados";
+
+      slotsEl.innerHTML = selectedArea ? allSlots.map(hora => {
+        const cap = capArea(selectedArea);
+        const ocupadas = slotOcupadas(citasDia, dateISO, selectedArea, hora);
+        const busy = ocupadas >= cap;
+        return `
+          <button type="button"
+                  class="slot ${busy ? "busy" : ""} ${selectedHora === hora ? "selected" : ""}"
+                  data-hora="${hora}"
+                  ${busy ? "disabled" : ""}>
+            ${hora}<br><small>${ocupadas}/${cap}</small>
+          </button>
+        `;
+      }).join("") : "";
+
+      availabilityEditor.innerHTML = `
+        <h2 class="availability-title">${dateISO === todayISO() ? "Disponibilidad de hoy" : `Disponibilidad del ${formatDateLabel(dateISO)}`}</h2>
+        ${AREAS.map(areaName => {
+          const cap = capArea(areaName);
+          const showCap = cap > 1 ? ` <small>(capacidad ${cap})</small>` : "";
+          return `
+            <div class="availability-section">
+              <h3>${areaName}${showCap}</h3>
+              <div class="availability-chips">
+                ${allSlots.map(hora => {
+                  const ocupadas = slotOcupadas(citasDia, dateISO, areaName, hora);
+                  const busy = ocupadas >= cap;
+                  const selected = selectedArea === areaName && selectedHora === hora;
+                  const label = cap > 1 ? `${hora} (${ocupadas}/${cap})` : hora;
+                  return `
+                    <button type="button"
+                            class="availability-chip ${busy ? "busy" : ""} ${selected ? "selected" : ""}"
+                            data-area="${areaName}"
+                            data-hora="${hora}"
+                            ${busy ? "disabled" : ""}>
+                      ${label}${busy ? `<span class="x">×</span>` : ""}
+                    </button>
+                  `;
+                }).join("")}
+              </div>
+            </div>
+          `;
+        }).join("")}
+      `;
+    }
+
+    renderFacturaOcRow();
+    document.getElementById("addFacturaOc").addEventListener("click", () => renderFacturaOcRow());
+    facturaOcList.addEventListener("click", (e) => {
+      const btnRemove = e.target.closest(".remove-factura-oc");
+      if(!btnRemove) return;
+      const rows = facturaOcList.querySelectorAll(".factura-oc-item");
+      if(rows.length <= 1){
+        btnRemove.closest(".factura-oc-item").querySelectorAll("input, textarea").forEach(el => el.value = "");
+      }else{
+        btnRemove.closest(".factura-oc-item").remove();
+      }
+    });
+    slotsEl.addEventListener("click", (e) => {
+      const slot = e.target.closest(".slot");
+      if(!slot || slot.classList.contains("busy")) return;
+      setSelectedSlot(slot.dataset.hora);
+    });
+    availabilityEditor.addEventListener("click", (e) => {
+      const chip = e.target.closest(".availability-chip");
+      if(!chip || chip.classList.contains("busy")) return;
+      setSelectedSlot(chip.dataset.hora, chip.dataset.area);
+    });
+    document.getElementById("area").addEventListener("change", refreshAgenda);
+    document.getElementById("fechaHora").addEventListener("change", refreshAgenda);
+    refreshAgenda();
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      btn.disabled = true;
+      btn.textContent = "Enviando...";
+      try{
+        const proveedor = document.getElementById("proveedor").value.trim();
+        const docs = collectFacturaOc();
+        const area = document.getElementById("area").value;
+        const fechaHora = document.getElementById("fechaHora").value;
+        const dateISO = fechaHora.slice(0,10);
+        const hora = fechaHora.slice(11,16);
+        if(!disponibilidadOk){
+          toast("No se pudo validar disponibilidad. Intenta de nuevo.", "bad");
+          return;
+        }
+        const ocupadas = slotOcupadas(citasDia, dateISO, area, hora);
+        if(capArea(area) <= ocupadas){
+          toast("Horario no disponible para esa aduana.", "bad");
+          return;
+        }
+        const cita = await crearSolicitudCita({
+          tipoVisita: "proveedor",
+          tipoAcceso: "proveedor",
+          nombreVisitante: "",
+          proveedorCodigo: document.getElementById("proveedorCodigo").value.trim(),
+          proveedor,
+          empresa: proveedor,
+          contactoProveedor: document.getElementById("contacto").value.trim(),
+          telefono: document.getElementById("telefono").value.trim(),
+          personaVisita: document.getElementById("persona").value,
+          area,
+          motivo: document.getElementById("motivo").value,
+          fechaHora,
+          ocNo: docs.ocNo,
+          facturaNo: docs.facturaNo,
+          facturasOc: docs.facturasOc,
+          materialRecibir: document.getElementById("material").value.trim(),
+          observacionesKiosko: document.getElementById("material").value.trim(),
+          createdBySource: "kiosko_proveedores"
+        });
+        renderQR(cita.id);
+        form.reset();
+        facturaOcList.innerHTML = "";
+        renderFacturaOcRow();
+        slotsEl.innerHTML = "";
+        agendaInfo.textContent = "Selecciona fecha y area";
+        toast("Solicitud enviada. QR generado en espera de autorizacion.", "ok");
+      }catch(err){
+        console.error(err);
+        toast(err?.message || "No se pudo enviar la solicitud.", "bad");
+      }finally{
+        btn.disabled = false;
+        btn.textContent = "Enviar y generar QR";
+      }
+    });
+  </script>
+</body>
+</html>

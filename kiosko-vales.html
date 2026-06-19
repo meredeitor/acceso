@@ -1,0 +1,373 @@
+﻿<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kiosko Vales</title>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script>
+    try{ document.documentElement.dataset.theme = localStorage.getItem("ui_theme") || "dark"; }catch{}
+  </script>
+  <style>
+    :root{ --bg:#0b1220; --panel:#111c33; --text:#e5e7eb; --muted:#94a3b8; --brand:#2563eb; --accent:#7c3aed; --ok:#22c55e; --bad:#ef4444; --border:rgba(255,255,255,.10); --font:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; }
+    html[data-theme="light"]{ --bg:#f8fafc; --panel:#ffffff; --text:#0f172a; --muted:#64748b; --border:rgba(15,23,42,.14); }
+    *{ box-sizing:border-box; }
+    body{ margin:0; min-height:100vh; font-family:var(--font); color:var(--text); background:var(--bg); }
+    main{ width:min(920px,100%); margin:0 auto; padding:18px 12px 80px; }
+    .head{ display:flex; justify-content:space-between; gap:14px; align-items:flex-start; margin:8px 0 14px; }
+    .head-actions{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    h1{ margin:0; font-size:22px; line-height:1.1; }
+    h2{ margin:0 0 10px; font-size:18px; }
+    .sub{ color:var(--muted); font-size:13px; margin-top:6px; }
+    .badge{ border:1px solid rgba(96,165,250,.45); color:#dbeafe; border-radius:999px; padding:7px 10px; font-size:12px; white-space:nowrap; background:rgba(37,99,235,.16); }
+    .card{ background:linear-gradient(180deg, rgba(17,28,51,.96), rgba(15,23,42,.94)); border:1px solid var(--border); border-radius:14px; padding:14px; box-shadow:0 18px 44px rgba(0,0,0,.35); }
+    .selector{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+    .type-card{ text-align:left; border:1px solid var(--border); background:linear-gradient(180deg, rgba(30,41,59,.9), rgba(15,23,42,.95)); color:var(--text); border-radius:14px; padding:16px; cursor:pointer; min-height:126px; }
+    .type-card strong{ display:block; font-size:18px; margin-bottom:8px; }
+    .type-card span{ display:block; color:var(--muted); font-size:13px; line-height:1.35; font-weight:500; }
+    .type-card.active{ border-color:rgba(96,165,250,.7); box-shadow:0 0 0 3px rgba(37,99,235,.18); }
+    .type-card.personal.active{ border-color:rgba(167,139,250,.7); box-shadow:0 0 0 3px rgba(124,58,237,.18); }
+    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    label{ display:block; color:var(--muted); font-size:12px; margin:0 0 6px; }
+    input, select, textarea{ width:100%; border:1px solid var(--border); background:rgba(2,6,23,.38); color:var(--text); border-radius:12px; padding:11px 12px; outline:none; font:inherit; }
+    textarea{ resize:vertical; min-height:82px; }
+    button{ width:100%; border:0; border-radius:12px; padding:12px 14px; background:var(--brand); color:white; font-weight:800; cursor:pointer; font:inherit; }
+    .theme-btn{ width:auto; padding:7px 10px; background:rgba(148,163,184,.18); color:var(--text); border:1px solid var(--border); font-size:12px; white-space:nowrap; }
+    button.secondary{ background:rgba(148,163,184,.18); color:var(--text); border:1px solid var(--border); }
+    button.personal-btn{ background:var(--accent); }
+    button:disabled{ opacity:.65; cursor:not-allowed; }
+    .auth-card{ margin-bottom:14px; }
+    .auth-row{ display:grid; grid-template-columns:1fr 1fr auto; gap:10px; align-items:end; }
+    .session-pill{ display:none; align-items:center; justify-content:space-between; gap:10px; border:1px solid rgba(34,197,94,.35); background:rgba(34,197,94,.12); border-radius:12px; padding:10px; margin-bottom:14px; }
+    .session-pill.show{ display:flex; }
+    .session-pill b{ color:var(--text); }
+    .locked{ opacity:.42; pointer-events:none; filter:saturate(.7); }
+    .hint{ color:var(--muted); font-size:12px; line-height:1.35; }
+    .divider{ height:1px; background:var(--border); margin:14px 0; }
+    .form-card, .qr-card{ display:none; }
+    .form-card.show, .qr-card.show{ display:block; }
+    .qr-card{ margin-top:14px; text-align:center; }
+    #qrcode{ display:inline-block; background:white; padding:10px; border-radius:14px; }
+    .folio{ color:var(--muted); font-size:12px; margin-top:10px; overflow-wrap:anywhere; }
+    .toast{ position:fixed; left:12px; right:12px; bottom:14px; display:none; border-radius:14px; padding:12px; border:1px solid var(--border); background:rgba(17,28,51,.98); color:var(--text); box-shadow:0 18px 44px rgba(0,0,0,.35); }
+    .toast.show{ display:block; }
+    .toast.ok{ border-color:rgba(34,197,94,.45); }
+    .toast.bad{ border-color:rgba(239,68,68,.45); }
+    html[data-theme="light"] .card,
+    html[data-theme="light"] .type-card{ background:#ffffff; box-shadow:0 18px 44px rgba(15,23,42,.10); }
+    html[data-theme="light"] input,
+    html[data-theme="light"] select,
+    html[data-theme="light"] textarea{ background:#ffffff; color:var(--text); }
+    html[data-theme="light"] .toast{ background:#ffffff; box-shadow:0 18px 44px rgba(15,23,42,.14); }
+    @media (max-width:720px){ main{ padding:14px 10px 74px; } .head{ display:grid; } .badge{ width:max-content; } .selector,.grid,.auth-row{ grid-template-columns:1fr; } h1{ font-size:20px; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="head">
+      <div>
+        <h1>Kiosko de vales de salida</h1>
+        <div class="sub">Captura la solicitud; el jefe la autoriza desde el dashboard.</div>
+      </div>
+      <div class="head-actions">
+        <button class="theme-btn" id="btnTheme" type="button">Tema</button>
+        <div class="badge">Activos / Personal</div>
+      </div>
+    </div>
+
+    <section class="selector" id="selector">
+      <button class="type-card personal active" type="button" data-type="personal">
+        <strong>Vale de personal</strong>
+        <span>Permiso de entrada o salida para colaborador, con tiempo autorizado y QR.</span>
+      </button>
+      <button class="type-card" type="button" data-type="activo">
+        <strong>Vale de activo</strong>
+        <span>Salida de herramientas, equipo, mobiliario u otro activo con seguimiento por QR.</span>
+      </button>
+    </section>
+
+    <form class="card form-card show" id="formPersonal">
+      <h2>Solicitud de vale de salida de personal</h2>
+      <div class="grid">
+        <div><label>Nombre colaborador *</label><input id="pNombreColaborador" autocomplete="name" required></div>
+        <div><label>Nomina *</label><input id="pNomina" required></div>
+        <div>
+          <label>Departamento *</label>
+          <select id="pDepartamento" required>
+            <option value="">Seleccione...</option>
+            <option>Administraci&oacute;n y Finanzas</option>
+            <option>Calidad</option>
+            <option>Comercializaci&oacute;n</option>
+            <option>Compras</option>
+            <option>Contraloria</option>
+            <option>Dise&ntilde;o y desarrollo</option>
+            <option>DOH</option>
+            <option>Ingenier&iacute;a</option>
+            <option>Mantenimiento</option>
+            <option>Operaciones</option>
+            <option>SYS</option>
+            <option>TI</option>
+            <option>Ventas</option>
+          </select>
+        </div>
+        <div>
+          <label>Tipo permiso *</label>
+          <select id="pTipoPermiso" required>
+            <option value="">Seleccione...</option>
+            <option>Salida</option>
+            <option>Entrada</option>
+          </select>
+        </div>
+        <div>
+          <label>Tiempo autorizado *</label>
+          <select id="pTiempoAutorizado" required>
+            <option value="">Seleccione...</option>
+            <option>15min</option>
+            <option>30min</option>
+            <option>1hr</option>
+            <option>Sin regreso</option>
+          </select>
+        </div>
+        <div><label>Fecha *</label><input id="pFecha" type="date" required></div>
+        <div>
+          <label>Autoriza *</label>
+          <select id="pAutorizador" required>
+            <option value="">Cargando autorizadores...</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1;"><label>Observaciones</label><textarea id="pObservaciones" placeholder="Ej. Entrada posterior a 8:15, cita medica, asunto personal..."></textarea></div>
+      </div>
+      <div class="divider"></div>
+      <p class="hint">La solicitud queda pendiente hasta que el jefe la autorice.</p>
+      <button id="btnPersonal" class="personal-btn" type="submit">Enviar solicitud</button>
+    </form>
+
+    <form class="card form-card" id="formActivo">
+      <h2>Solicitud de vale de salida de activo</h2>
+      <div class="grid">
+        <div><label>Fecha *</label><input id="aFecha" type="date" required></div>
+        <div><label>Planta *</label><input id="aPlanta" required></div>
+        <div><label>Departamento *</label><input id="aDepartamento" required></div>
+        <div><label>Nombre / solicitante *</label><input id="aNombre" autocomplete="name" required></div>
+        <div>
+          <label>Tipo de activo *</label>
+          <select id="aTipoActivo" required>
+            <option value="">Seleccione...</option>
+            <option>Maquinaria y equipo de produccion</option>
+            <option>Formas, molduras y suajes</option>
+            <option>Equipo de Computo</option>
+            <option>Mobiliario y equipo de oficina</option>
+            <option>Herramientas</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div>
+          <label>Motivo *</label>
+          <select id="aMotivo" required>
+            <option value="">Seleccione...</option>
+            <option>Reparacion</option>
+            <option>Prestamo</option>
+            <option>Devolucion</option>
+            <option>Venta</option>
+            <option>Traspaso a otra planta</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <div style="grid-column:1/-1;"><label>Descripcion *</label><textarea id="aDescripcion" required></textarea></div>
+        <div><label>No. serie</label><input id="aNoSerie"></div>
+        <div><label>Codigo / Lote</label><input id="aCodigoLote"></div>
+        <div><label>Fecha de retorno</label><input id="aFechaRetorno" type="date"></div>
+        <div>
+          <label>Autoriza *</label>
+          <select id="aAutorizador" required>
+            <option value="">Cargando autorizadores...</option>
+          </select>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <p class="hint">La solicitud queda pendiente hasta que el jefe la autorice.</p>
+      <button id="btnActivo" type="submit">Enviar solicitud</button>
+    </form>
+
+    <section class="card qr-card" id="qrCard">
+      <h2>Solicitud enviada</h2>
+      <div id="qrcode"></div>
+      <div class="folio" id="folioTxt"></div>
+      <p class="hint">Estado inicial: pendiente por autorizar.</p>
+      <button class="secondary" type="button" id="btnOtro" style="margin-top:12px;">Crear otro vale</button>
+    </section>
+  </main>
+  <div id="toast" class="toast"></div>
+
+  <script type="module">
+    import {
+      toast,
+      crearSolicitudValeActivo,
+      crearSolicitudValePersonal,
+      escapeHtml,
+      fetchValeAutorizadores,
+      setupKioskoTheme
+    } from "./kiosko-common.js";
+
+    setupKioskoTheme();
+    const today = new Date().toISOString().slice(0, 10);
+    document.getElementById("aFecha").value = today;
+    document.getElementById("pFecha").value = today;
+
+    const formActivo = document.getElementById("formActivo");
+    const formPersonal = document.getElementById("formPersonal");
+    const qrCard = document.getElementById("qrCard");
+    const qrBox = document.getElementById("qrcode");
+    const folioTxt = document.getElementById("folioTxt");
+    const autorizadorActivoSelect = document.getElementById("aAutorizador");
+    const autorizadorPersonalSelect = document.getElementById("pAutorizador");
+    const cards = [...document.querySelectorAll(".type-card")];
+
+    function value(id){
+      return document.getElementById(id).value.trim();
+    }
+
+    function showType(type){
+      cards.forEach(card => card.classList.toggle("active", card.dataset.type === type));
+      formActivo.classList.toggle("show", type === "activo");
+      formPersonal.classList.toggle("show", type === "personal");
+      qrCard.classList.remove("show");
+      if(type === "activo") loadAutorizadores(autorizadorActivoSelect, "activo");
+      if(type === "personal") loadAutorizadores(autorizadorPersonalSelect, "personal");
+    }
+
+    async function loadAutorizadores(selectEl, tipo){
+      if(!selectEl || selectEl.dataset.loaded === "true") return;
+      selectEl.innerHTML = `<option value="">Cargando autorizadores...</option>`;
+      try{
+        const list = await fetchValeAutorizadores(tipo);
+        if(!list.length){
+          selectEl.innerHTML = `<option value="">No hay autorizadores disponibles</option>`;
+          toast("No hay usuarios configurados para autorizar este tipo de vale.", "bad");
+          return;
+        }
+        selectEl.innerHTML = `<option value="">Seleccione autorizador...</option>` + list.map(u => `
+          <option
+            value="${escapeHtml(u.uid)}"
+            data-email="${escapeHtml(u.email)}"
+            data-nombre="${escapeHtml(u.nombre)}"
+            data-role="${escapeHtml(u.role)}"
+          >${escapeHtml(u.nombre)}</option>
+        `).join("");
+        selectEl.dataset.loaded = "true";
+      }catch(err){
+        console.error(err);
+        selectEl.innerHTML = `<option value="">No se pudieron cargar jefes</option>`;
+        toast("No se pudieron cargar jefes. Revisa permisos de Firestore.", "bad");
+      }
+    }
+
+    function renderSolicitud(prefix, vale){
+      qrBox.innerHTML = "";
+      new QRCode(qrBox, {
+        text: `${prefix}:${vale.id}`,
+        width: 260,
+        height: 260,
+        colorDark: "#111827",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+      folioTxt.textContent = `Folio: ${vale.folio || vale.id} - Pendiente por autorizar`;
+      qrCard.classList.add("show");
+      qrCard.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+
+    cards.forEach(card => card.addEventListener("click", () => showType(card.dataset.type)));
+      loadAutorizadores(autorizadorPersonalSelect, "personal");
+
+    document.getElementById("btnOtro").addEventListener("click", () => {
+      qrCard.classList.remove("show");
+      window.scrollTo({ top:0, behavior:"smooth" });
+    });
+
+    formActivo.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("btnActivo");
+      btn.disabled = true;
+      btn.textContent = "Enviando...";
+      try{
+        const autorizadorOption = autorizadorActivoSelect?.selectedOptions?.[0];
+        const autorizadorUid = autorizadorActivoSelect?.value || "";
+        if(!autorizadorUid){
+          toast("Selecciona quien autoriza el vale.", "bad");
+          return;
+        }
+        const vale = await crearSolicitudValeActivo({
+          folio: `KVA-${Date.now()}`,
+          fecha: value("aFecha"),
+          planta: value("aPlanta"),
+          departamento: value("aDepartamento"),
+          nombre: value("aNombre"),
+          tipoActivo: value("aTipoActivo"),
+          motivo: value("aMotivo"),
+          descripcion: value("aDescripcion"),
+          noSerie: value("aNoSerie"),
+          codigoLote: value("aCodigoLote"),
+          fechaRetorno: value("aFechaRetorno"),
+          autorizadorUid,
+          autorizadorEmail: autorizadorOption?.dataset?.email || "",
+          autorizadorNombre: autorizadorOption?.dataset?.nombre || "",
+          autorizadorRole: autorizadorOption?.dataset?.role || "",
+          createdBySource: "kiosko_vales_activos"
+        });
+        renderSolicitud("VALE_ACTIVO", vale);
+        formActivo.reset();
+        document.getElementById("aFecha").value = today;
+        toast("Solicitud enviada. Pendiente por autorizar.", "ok");
+      }catch(err){
+        console.error(err);
+        toast(err?.message || "No se pudo enviar la solicitud.", "bad");
+      }finally{
+        btn.disabled = false;
+        btn.textContent = "Enviar solicitud";
+      }
+    });
+
+    formPersonal.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById("btnPersonal");
+      btn.disabled = true;
+      btn.textContent = "Enviando...";
+      try{
+        const autorizadorOption = autorizadorPersonalSelect?.selectedOptions?.[0];
+        const autorizadorUid = autorizadorPersonalSelect?.value || "";
+        if(!autorizadorUid){
+          toast("Selecciona quien autoriza el vale.", "bad");
+          return;
+        }
+        const vale = await crearSolicitudValePersonal({
+          folio: `KVP-${Date.now()}`,
+          fecha: value("pFecha"),
+          nombreColaborador: value("pNombreColaborador"),
+          nomina: value("pNomina"),
+          departamento: value("pDepartamento"),
+          tipoPermiso: value("pTipoPermiso"),
+          tiempoAutorizado: value("pTiempoAutorizado"),
+          observaciones: value("pObservaciones"),
+          autorizadorUid,
+          autorizadorEmail: autorizadorOption?.dataset?.email || "",
+          autorizadorNombre: autorizadorOption?.dataset?.nombre || "",
+          autorizadorRole: autorizadorOption?.dataset?.role || "",
+          createdBySource: "kiosko_vales_personal"
+        });
+        renderSolicitud("VALE_PERSONAL", vale);
+        formPersonal.reset();
+        document.getElementById("pFecha").value = today;
+        toast("Solicitud enviada. Pendiente por autorizar.", "ok");
+      }catch(err){
+        console.error(err);
+        toast(err?.message || "No se pudo enviar la solicitud.", "bad");
+      }finally{
+        btn.disabled = false;
+        btn.textContent = "Enviar solicitud";
+      }
+    });
+  </script>
+</body>
+</html>
+
