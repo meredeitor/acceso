@@ -1,4 +1,4 @@
-const CACHE_NAME = "proveedores-v51";
+﻿const CACHE_NAME = "proveedores-v52";
 
 // Archivos base que siempre quieres offline
 const STATIC_ASSETS = [
@@ -9,8 +9,8 @@ const STATIC_ASSETS = [
   "./kiosko-visitantes.html",
   "./kiosko-vales.html",
   "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png",
+  "./icon-192-cobre.png",
+  "./icon-512-cobre.png",
   "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
   "https://unpkg.com/html5-qrcode",
   "https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.min.js"
@@ -82,3 +82,5 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
+
