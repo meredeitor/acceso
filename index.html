@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -962,6 +962,29 @@ html[data-theme="light"] .sb-btn[aria-current="page"]{
   pointer-events:auto;
 }
 
+.sb-caret{
+  margin-left:auto;
+  width:0;
+  height:0;
+  border-top:5px solid transparent;
+  border-bottom:5px solid transparent;
+  border-left:7px solid currentColor;
+  color:var(--muted);
+  opacity:.9;
+  transition:transform .22s ease, color .18s ease, opacity .18s ease;
+}
+.sb-btn[aria-expanded="true"] .sb-caret{
+  transform:rotate(90deg);
+  color:var(--accent);
+  opacity:1;
+}
+html[data-theme="light"] .sb-caret{
+  color:#475569;
+}
+html[data-theme="light"] .sb-btn[aria-expanded="true"] .sb-caret{
+  color:#2563eb;
+}
+
 /* ---------- SUBMENÚ CLARO ---------- */
 html[data-theme="light"] .sb-sub{
   background: transparent !important;
@@ -1250,7 +1273,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="sb-logo">PV</div>
     <div class="sb-title">
       <b>Control de Acesso</b>
-      <span>Proveedores • Visitantes • Citas • Configuración</span>
+      <span>Versión proveedores-v65</span>
     </div>
   </div>
   <div class="sb-section">
@@ -1258,12 +1281,12 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
 
   <div class="sb-nav" id="sbNav">
 
-    <div class="sb-btn" data-sb="grupo_operacion" id="sbOperacionToggle">
+    <div class="sb-btn" data-sb="grupo_operacion" id="sbOperacionToggle" aria-expanded="false">
       <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M9 22V12h6v10"/></svg></span>
       <span class="sb-txt">Operación</span>
-      <span class="sb-chip">Abierto</span>
+      <span class="sb-caret" aria-hidden="true"></span>
     </div>
-    <div class="sb-sub open" id="sbOperacionSub">
+    <div class="sb-sub" id="sbOperacionSub">
       <div class="sb-btn" data-sb="dashboard_proveedores" aria-current="page">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M9 22V12h6v10"/></svg></span>
         <span class="sb-txt">Proveedores</span>
@@ -1286,12 +1309,12 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
       </div>
     </div>
 
-    <div class="sb-btn" data-sb="grupo_vales" id="sbValesToggle">
+    <div class="sb-btn" data-sb="grupo_vales" id="sbValesToggle" aria-expanded="false">
       <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 3h10v18H7z"/><path d="M9 7h6"/><path d="M9 11h6"/><path d="M9 15h6"/></svg></span>
       <span class="sb-txt">Vales</span>
-      <span class="sb-chip">Abierto</span>
+      <span class="sb-caret" aria-hidden="true"></span>
     </div>
-    <div class="sb-sub open" id="sbValesSub">
+    <div class="sb-sub" id="sbValesSub">
       <div class="sb-btn" data-sb="vales_personal">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M16 6h4"/><path d="M18 4v4"/></svg></span>
         <span class="sb-txt">Vales personal</span>
@@ -1302,9 +1325,10 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
       </div>
     </div>
 
-    <div class="sb-btn" data-sb="grupo_guardia" id="sbGuardiaToggle">
+    <div class="sb-btn" data-sb="grupo_guardia" id="sbGuardiaToggle" aria-expanded="false">
       <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H4z"/><path d="M8 19h8"/><path d="M12 15v4"/></svg></span>
       <span class="sb-txt">Guardia</span>
+      <span class="sb-caret" aria-hidden="true"></span>
     </div>
     <div class="sb-sub" id="sbGuardiaSub">
       <div class="sb-btn" data-sb="scan">
@@ -1315,11 +1339,16 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 4h14v18H5z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span>
         <span class="sb-txt">Bitácora Novedades</span>
       </div>
+      <div class="sb-btn" data-sb="rondinero">
+        <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l7 4v5c0 5-3 8-7 9-4-1-7-4-7-9V7z"/><path d="M9 12l2 2 4-5"/></svg></span>
+        <span class="sb-txt">Rondinero</span>
+      </div>
     </div>
 
-    <div class="sb-btn" data-sb="grupo_reportes" id="sbReportesToggle">
+    <div class="sb-btn" data-sb="grupo_reportes" id="sbReportesToggle" aria-expanded="false">
       <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16v-6"/><path d="M12 16v-10"/><path d="M17 16v-4"/></svg></span>
       <span class="sb-txt">Reportes</span>
+      <span class="sb-caret" aria-hidden="true"></span>
     </div>
     <div class="sb-sub" id="sbReportesSub">
       <div class="sb-btn" data-sb="historial">
@@ -1334,10 +1363,10 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 7h10"/><path d="M7 11h10"/><path d="M7 15h6"/></svg></span>
         <span class="sb-txt">Cambios en Citas</span>
       </div>
-      <div class="sb-btn" data-sb="export" id="sbExportToggle">
+      <div class="sb-btn" data-sb="export" id="sbExportToggle" aria-expanded="false">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></span>
         <span class="sb-txt">Exportar</span>
-        <span class="sb-chip" id="sbExportChip">Excel/PDF</span>
+        <span class="sb-caret" aria-hidden="true"></span>
       </div>
       <div class="sb-sub" id="sbExportSub">
         <div class="sb-btn" data-sb="export_excel">
@@ -1355,10 +1384,10 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
       </div>
     </div>
 
-    <div class="sb-btn" data-sb="config" id="sbConfigToggle">
+    <div class="sb-btn" data-sb="config" id="sbConfigToggle" aria-expanded="false">
       <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z"/><path d="M19.4 15a7.8 7.8 0 0 0 .1-1 7.8 7.8 0 0 0-.1-1l2-1.6-2-3.4-2.4 1a8 8 0 0 0-1.7-1L15 3h-6l-.3 2.4a8 8 0 0 0-1.7 1l-2.4-1-2 3.4L4.6 13a7.8 7.8 0 0 0-.1 1 7.8 7.8 0 0 0 .1 1L2.6 16.6l2 3.4 2.4-1a8 8 0 0 0 1.7 1L9 21h6l.3-2.4a8 8 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6z"/></svg></span>
         <span class="sb-txt">Configuración</span>
-        <span class="sb-chip" id="sbConfigChip">ADMIN</span>
+        <span class="sb-caret" aria-hidden="true"></span>
     </div>
 
     <div class="sb-sub" id="sbConfigSub">
@@ -1532,6 +1561,10 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
   const COL_VALES_ACTIVOS = "vales_activos";
   const COL_VALES_PERSONAL = "vales_personal";
   const COL_BITACORA = "bitacora_guardia";
+  const COL_RONDINERO_PUNTOS = "rondinero_puntos";
+  const COL_RONDINERO_RUTAS = "rondinero_rutas";
+  const COL_RONDINERO_RONDINES = "rondinero_rondines";
+  const COL_RONDINERO_EVENTOS = "rondinero_eventos";
   const COL_SESIONES = "presence";
   const COL_USERS = "users";
   const COL_RESUMEN_DIARIO = "resumen_diario";
@@ -1543,11 +1576,13 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
     valesActivos: 10 * 60 * 1000,
     valesPersonal: 5 * 60 * 1000,
     bitacora: 3 * 60 * 1000,
+    rondinero: 3 * 60 * 1000,
     pendientesUsuarios: 5 * 60 * 1000
   };
   const cloudReadCache = {
     visitasDia: new Map(),
     bitacora: new Map(),
+    rondinero: 0,
     valesActivos: 0,
     valesPersonal: 0,
     pendientesUsuarios: { ts: 0, count: 0 }
@@ -1595,6 +1630,7 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
     "ver_vales_personal","crear_vale_personal","autorizar_vale_personal",
     "registrar_salida_personal","registrar_regreso_personal",
     "ver_bitacora_guardia","crear_bitacora_guardia",
+    "rondinero_ver","rondinero_ejecutar","rondinero_configurar","rondinero_reportes",
     "ver_sesiones_activas"
   ];
 
@@ -1621,7 +1657,9 @@ const PERMISOS = {
     "registrar_salida_personal",
     "registrar_regreso_personal",
     "ver_bitacora_guardia",
-    "crear_bitacora_guardia"
+    "crear_bitacora_guardia",
+    "rondinero_ver",
+    "rondinero_ejecutar"
   ],
 
   [ROLES.CALIDAD]: [
@@ -1686,7 +1724,9 @@ const PERMISOS = {
     "ver_vales_activos",
     "autorizar_vale_activo",
     "ver_vales_personal",
-    "autorizar_vale_personal"
+    "autorizar_vale_personal",
+    "rondinero_ver",
+    "rondinero_reportes"
   ],
 
   [ROLES.JEFE]: [
@@ -1811,6 +1851,10 @@ const PIN_SESSION_KEY = "adminPinOkTs";
     const LS_VALES_KEY = "vales_activos_v1";
     const LS_VALES_PERSONAL_KEY = "vales_personal_v1";
     const LS_BITACORA_KEY = "bitacora_guardia_v1";
+    const LS_RONDINERO_PUNTOS_KEY = "rondinero_puntos_v1";
+    const LS_RONDINERO_RUTAS_KEY = "rondinero_rutas_v1";
+    const LS_RONDINERO_RONDINES_KEY = "rondinero_rondines_v1";
+    const LS_RONDINERO_EVENTOS_KEY = "rondinero_eventos_v1";
 
     const Status = {
       PROGRAMADO:"programado",
@@ -1834,6 +1878,11 @@ const PIN_SESSION_KEY = "adminPinOkTs";
     let valesActivos = loadValesActivosLocal();
     let valesPersonal = loadValesPersonalLocal();
     let bitacoraGuardia = loadBitacoraLocal();
+    let rondineroPuntos = loadRondineroPuntosLocal();
+    let rondineroRutas = loadRondineroRutasLocal();
+    let rondineroRondines = loadRondineroRondinesLocal();
+    let rondineroEventos = loadRondineroEventosLocal();
+    let rondineroGuardiaCred = loadRondineroGuardiaCred();
     let _returnToEditCitaId = null;
     let _returnToEditMode = false;
 
@@ -2023,7 +2072,7 @@ function capArea(area){
 const SLOT_MINUTES = 30;      // bloques visuales
 const MIN_DIFF_MINUTES = 0;  // regla de negocio
 const AGENDA_START = 8;      // 08:00
-const AGENDA_END = 18;       // 18:00
+const AGENDA_END = 17;       // 17:00
 
 function generarSlots(){
   const slots = [];
@@ -2032,6 +2081,14 @@ function generarSlots(){
     slots.push(`${String(h).padStart(2,"0")}:30`);
   }
   return slots;
+}
+
+function horarioCitaPermitido(fechaHoraISO){
+  if(!fechaHoraISO) return false;
+  const fecha = new Date(fechaHoraISO);
+  if(Number.isNaN(fecha.getTime())) return false;
+  const minutos = fecha.getHours() * 60 + fecha.getMinutes();
+  return minutos < (AGENDA_END * 60);
 }
 
 function obtenerCitasDeHoy(){
@@ -3032,6 +3089,26 @@ function setActiveSb(key){
   });
 }
 
+function setSbExpanded(btn, sub, expanded){
+  if(!btn || !sub) return;
+  sub.classList.toggle('open', !!expanded);
+  btn.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+}
+
+function toggleSbSub(btn, sub){
+  if(!btn || !sub) return;
+  setSbExpanded(btn, sub, !sub.classList.contains('open'));
+}
+
+function collapseSidebarSubs(){
+  setSbExpanded(document.getElementById('sbOperacionToggle'), sbOperacionSub, false);
+  setSbExpanded(document.getElementById('sbValesToggle'), sbValesSub, false);
+  setSbExpanded(document.getElementById('sbGuardiaToggle'), sbGuardiaSub, false);
+  setSbExpanded(document.getElementById('sbReportesToggle'), sbReportesSub, false);
+  setSbExpanded(document.getElementById('sbExportToggle'), sbExportSub, false);
+  setSbExpanded(document.getElementById('sbConfigToggle'), sbConfigSub, false);
+}
+
 function canShowConfig(){
   return canConfigurePin() || (!!currentUser && (currentUser.role === ROLES.ADMIN) && hasPerm('admin_roles'));
 }
@@ -3058,12 +3135,7 @@ function paintSidebar(){
     });
 
     // Cerrar submenús por seguridad visual
-    if(sbOperacionSub) sbOperacionSub.classList.remove('open');
-    if(sbValesSub) sbValesSub.classList.remove('open');
-    if(sbGuardiaSub) sbGuardiaSub.classList.remove('open');
-    if(sbReportesSub) sbReportesSub.classList.remove('open');
-    if(sbExportSub) sbExportSub.classList.remove('open');
-    if(sbConfigSub) sbConfigSub.classList.remove('open');
+    collapseSidebarSubs();
 
     return;
   }
@@ -3079,6 +3151,7 @@ const scan  = sidebarEl.querySelector('[data-sb="scan"]');
 const vales = sidebarEl.querySelector('[data-sb="vales_activos"]');
 const valesPersonalBtn = sidebarEl.querySelector('[data-sb="vales_personal"]');
 const bitacoraBtn = sidebarEl.querySelector('[data-sb="bitacora_guardia"]');
+const rondineroBtn = sidebarEl.querySelector('[data-sb="rondinero"]');
 const groupOperacion = sidebarEl.querySelector('[data-sb="grupo_operacion"]');
 const groupVales = sidebarEl.querySelector('[data-sb="grupo_vales"]');
 const groupGuardia = sidebarEl.querySelector('[data-sb="grupo_guardia"]');
@@ -3092,6 +3165,7 @@ if(scan)  scan.style.display  = hasPerm('escanear_qr') ? '' : 'none';
 if(vales) vales.style.display = hasPerm('ver_vales_activos') ? '' : 'none';
 if(valesPersonalBtn) valesPersonalBtn.style.display = hasPerm('ver_vales_personal') ? '' : 'none';
 if(bitacoraBtn) bitacoraBtn.style.display = hasPerm('ver_bitacora_guardia') ? '' : 'none';
+if(rondineroBtn) rondineroBtn.style.display = hasPerm('rondinero_ver') ? '' : 'none';
   // ===============================
   // Exportar (Excel / PDF)
   // ===============================
@@ -3105,10 +3179,7 @@ if(bitacoraBtn) bitacoraBtn.style.display = hasPerm('ver_bitacora_guardia') ? ''
   if(expX) expX.style.display = canExport ? '' : 'none';
   if(expP) expP.style.display = canExport ? '' : 'none';
 
-  if(sbExportSub) sbExportSub.classList.remove('open');
-  if(sbGuardiaSub) sbGuardiaSub.classList.remove('open');
-  if(sbReportesSub) sbReportesSub.classList.remove('open');
-  if(sbExportChip) sbExportChip.textContent = canExport ? 'Excel / PDF' : '';
+  collapseSidebarSubs();
 
   // ===============================
   // Configuración (ADMIN + PIN)
@@ -3121,16 +3192,8 @@ if(bitacoraBtn) bitacoraBtn.style.display = hasPerm('ver_bitacora_guardia') ? ''
   if(cfgToggle) cfgToggle.style.display = showCfg ? '' : 'none';
   if(sesionesBtn) sesionesBtn.style.display = hasPerm('ver_sesiones_activas') ? '' : 'none';
   if(miPinBtn) miPinBtn.style.display = canConfigurePin() ? '' : 'none';
-  if(sbConfigSub) sbConfigSub.classList.remove('open');
+  setSbExpanded(document.getElementById('sbConfigToggle'), sbConfigSub, false);
   
-if(sbConfigChip){
-  if(showCfg){
-    sbConfigChip.textContent = canConfigurePin() && !hasPerm('admin_roles') ? 'PIN' : 'ADMIN';
-    sbConfigChip.style.display = 'inline-flex';
-  } else {
-    sbConfigChip.textContent = '';
-    sbConfigChip.style.display = 'none';
-  }
   const citasProveedores = sidebarEl.querySelector('[data-sb="citas_proveedores"]');
   const citasVisitantes = sidebarEl.querySelector('[data-sb="citas_visitantes"]');
 if(citasProveedores) citasProveedores.style.display = hasPerm('ver_citas_compras') && !isAnfitrionOnly() ? '' : 'none';
@@ -3152,15 +3215,13 @@ const hasOperacionItems =
   canCreateAnyCita() ||
   hasPerm('ver_citas_compras');
 const hasValesItems = hasPerm('ver_vales_activos') || hasPerm('ver_vales_personal');
-const hasGuardiaItems = hasPerm('escanear_qr') || hasPerm('ver_bitacora_guardia');
+const hasGuardiaItems = hasPerm('escanear_qr') || hasPerm('ver_bitacora_guardia') || hasPerm('rondinero_ver');
 const hasReportesItems = hasPerm('ver_historial') || hasPerm('exportar_excel') || hasPerm('ver_dashboard') || (currentUser && (currentUser.role === ROLES.ADMIN || currentUser.role === ROLES.CONTRALORIA));
 
 if(groupOperacion) groupOperacion.style.display = hasOperacionItems ? '' : 'none';
 if(groupVales) groupVales.style.display = hasValesItems ? '' : 'none';
 if(groupGuardia) groupGuardia.style.display = hasGuardiaItems ? '' : 'none';
 if(groupReportes) groupReportes.style.display = hasReportesItems ? '' : 'none';
-
-}
 
   // ===============================
   // Logout (siempre visible con sesión)
@@ -3182,27 +3243,27 @@ if(!sb) return;
   const key = sb.dataset.sb;
 
   if(key === 'grupo_operacion'){
-    if(sbOperacionSub) sbOperacionSub.classList.toggle('open');
+    toggleSbSub(document.getElementById('sbOperacionToggle'), sbOperacionSub);
     return;
   }
   if(key === 'grupo_vales'){
-    if(sbValesSub) sbValesSub.classList.toggle('open');
+    toggleSbSub(document.getElementById('sbValesToggle'), sbValesSub);
     return;
   }
   if(key === 'grupo_guardia'){
-    if(sbGuardiaSub) sbGuardiaSub.classList.toggle('open');
+    toggleSbSub(document.getElementById('sbGuardiaToggle'), sbGuardiaSub);
     return;
   }
   if(key === 'grupo_reportes'){
-    if(sbReportesSub) sbReportesSub.classList.toggle('open');
+    toggleSbSub(document.getElementById('sbReportesToggle'), sbReportesSub);
     return;
   }
   if(key === 'export'){
-  if(sbExportSub) sbExportSub.classList.toggle('open');
+  toggleSbSub(document.getElementById('sbExportToggle'), sbExportSub);
   return;
  }
  if(key === 'config'){
-    if(sbConfigSub) sbConfigSub.classList.toggle('open');
+    toggleSbSub(document.getElementById('sbConfigToggle'), sbConfigSub);
     return;
   }
   if(key === 'dashboard' || key === 'dashboard_proveedores'){
@@ -3257,6 +3318,12 @@ if(!sb) return;
   setActiveSb('bitacora_guardia');
   sbClose();
   await renderBitacoraGuardia();
+  return;
+}
+  if(key === 'rondinero'){
+  setActiveSb('rondinero');
+  sbClose();
+  await renderRondinero();
   return;
 }
   if(key === 'scan'){
@@ -3765,6 +3832,158 @@ function fmt(ts){
         console.warn(e);
         markCloudRead(cloudReadCache.bitacora, cacheKey);
         toast("Bitácora", "No se pudo sincronizar la bitácora.", "warn", 3200);
+      }
+    }
+
+    function loadRondineroPuntosLocal(){
+      try{
+        const raw = localStorage.getItem(LS_RONDINERO_PUNTOS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      }catch{ return []; }
+    }
+
+    function loadRondineroRutasLocal(){
+      try{
+        const raw = localStorage.getItem(LS_RONDINERO_RUTAS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      }catch{ return []; }
+    }
+
+    function loadRondineroRondinesLocal(){
+      try{
+        const raw = localStorage.getItem(LS_RONDINERO_RONDINES_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      }catch{ return []; }
+    }
+
+    function loadRondineroEventosLocal(){
+      try{
+        const raw = localStorage.getItem(LS_RONDINERO_EVENTOS_KEY);
+        const arr = raw ? JSON.parse(raw) : [];
+        return Array.isArray(arr) ? arr : [];
+      }catch{ return []; }
+    }
+
+    function saveRondineroLocal(){
+      try{
+        localStorage.setItem(LS_RONDINERO_PUNTOS_KEY, JSON.stringify(rondineroPuntos));
+        localStorage.setItem(LS_RONDINERO_RUTAS_KEY, JSON.stringify(rondineroRutas));
+        localStorage.setItem(LS_RONDINERO_RONDINES_KEY, JSON.stringify(rondineroRondines));
+        localStorage.setItem(LS_RONDINERO_EVENTOS_KEY, JSON.stringify(rondineroEventos));
+        return true;
+      }catch(e){
+        console.warn(e);
+        toast("Almacenamiento", "No se pudo guardar Rondinero localmente.", "warn", 3600);
+        return false;
+      }
+    }
+
+    async function cloudUpsertRondineroPunto(punto){
+      await setDoc(doc(db, COL_RONDINERO_PUNTOS, String(punto.id)), {
+        ...punto,
+        updatedTs: Date.now(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+
+    async function cloudUpsertRondineroRuta(ruta){
+      await setDoc(doc(db, COL_RONDINERO_RUTAS, String(ruta.id)), {
+        ...ruta,
+        updatedTs: Date.now(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+
+    async function cloudUpsertRondineroRondin(rondin){
+      await setDoc(doc(db, COL_RONDINERO_RONDINES, String(rondin.id)), {
+        ...rondin,
+        updatedTs: Date.now(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+
+    async function cloudUpsertRondineroEvento(evento){
+      await setDoc(doc(db, COL_RONDINERO_EVENTOS, String(evento.id)), {
+        ...evento,
+        updatedTs: Date.now(),
+        updatedAt: serverTimestamp()
+      }, { merge: true });
+    }
+
+    async function syncRondinero(force = false){
+      if(!navigator.onLine || !currentUser || currentUser.role === ROLES.PENDIENTE) return;
+      if(!shouldReadCloudStamp(cloudReadCache.rondinero, CLOUD_READ_TTL.rondinero, force)) return;
+      try{
+        const puntosSnap = await getDocs(query(collection(db, COL_RONDINERO_PUNTOS), limit(300)));
+        const puntos = [];
+        puntosSnap.forEach(d => puntos.push({ id: d.id, ...d.data() }));
+        rondineroPuntos = mergeById(rondineroPuntos, puntos);
+
+        const rutasSnap = await getDocs(query(collection(db, COL_RONDINERO_RUTAS), limit(200)));
+        const rutas = [];
+        rutasSnap.forEach(d => rutas.push({ id: d.id, ...d.data() }));
+        rondineroRutas = mergeById(rondineroRutas, rutas);
+
+        const rondinesSnap = await getDocs(query(collection(db, COL_RONDINERO_RONDINES), orderBy("createdTs", "desc"), limit(100)));
+        const rondines = [];
+        rondinesSnap.forEach(d => rondines.push({ id: d.id, ...d.data() }));
+        rondineroRondines = mergeById(rondineroRondines, rondines);
+
+        const eventosSnap = await getDocs(query(collection(db, COL_RONDINERO_EVENTOS), orderBy("createdTs", "desc"), limit(500)));
+        const eventos = [];
+        eventosSnap.forEach(d => eventos.push({ id: d.id, ...d.data() }));
+        rondineroEventos = mergeById(rondineroEventos, eventos);
+
+        saveRondineroLocal();
+        markCloudRead("rondinero");
+      }catch(e){
+        console.warn(e);
+        markCloudRead("rondinero");
+        toast("Rondinero", "No se pudo sincronizar Rondinero.", "warn", 3200);
+      }
+    }
+
+    async function syncRondineroGuardia(force = false){
+      if(!navigator.onLine || !currentUser || currentUser.role === ROLES.PENDIENTE) return;
+      if(!shouldReadCloudStamp(cloudReadCache.rondinero, CLOUD_READ_TTL.rondinero, force)) return;
+      try{
+        const puntosSnap = await getDocs(query(collection(db, COL_RONDINERO_PUNTOS), limit(300)));
+        const puntos = [];
+        puntosSnap.forEach(d => puntos.push({ id: d.id, ...d.data() }));
+        rondineroPuntos = mergeById(rondineroPuntos, puntos);
+
+        const rutasSnap = await getDocs(query(collection(db, COL_RONDINERO_RUTAS), limit(200)));
+        const rutas = [];
+        rutasSnap.forEach(d => rutas.push({ id: d.id, ...d.data() }));
+        rondineroRutas = mergeById(rondineroRutas, rutas);
+
+        const rondinesSnap = await getDocs(query(
+          collection(db, COL_RONDINERO_RONDINES),
+          where("operadorUid", "==", currentUser.uid),
+          limit(50)
+        ));
+        const rondines = [];
+        rondinesSnap.forEach(d => rondines.push({ id: d.id, ...d.data() }));
+        rondineroRondines = mergeById(rondineroRondines, rondines);
+
+        const eventosSnap = await getDocs(query(
+          collection(db, COL_RONDINERO_EVENTOS),
+          where("operadorUid", "==", currentUser.uid),
+          limit(300)
+        ));
+        const eventos = [];
+        eventosSnap.forEach(d => eventos.push({ id: d.id, ...d.data() }));
+        rondineroEventos = mergeById(rondineroEventos, eventos);
+
+        saveRondineroLocal();
+        markCloudRead("rondinero");
+      }catch(e){
+        console.warn(e);
+        markCloudRead("rondinero");
+        toast("Rondinero", "No se pudo sincronizar tu rondín.", "warn", 3200);
       }
     }
 
@@ -5801,10 +6020,27 @@ async function renderBitacoraGuardia(fecha = todayISO()){
       <div class="divider"></div>
 
       ${hasPerm("crear_bitacora_guardia") ? `
+        <div class="tarjeta history-card">
+          <strong>Guardia que registra</strong>
+          <div style="height:8px;"></div>
+          ${rondineroGuardiaCred ? `
+            <div class="pill"><span class="dot ok"></span>${esc(rondineroGuardiaCred.nombre)}</div>
+            <div class="row" style="margin-top:10px;">
+              <button class="secondary" data-action="bitacoraScanGuardia">Cambiar guardia</button>
+              <button class="secondary" data-action="bitacoraClearGuardia">Quitar guardia</button>
+            </div>
+          ` : `
+            <div style="color:var(--muted);font-size:12px;">Escanea la credencial QR del guardia antes de guardar novedades.</div>
+            <div class="row" style="margin-top:10px;">
+              <button data-action="bitacoraScanGuardia">Escanear credencial de guardia</button>
+            </div>
+          `}
+        </div>
+        <div style="height:12px;"></div>
         <label>Novedad *</label>
         <textarea id="bitacoraTexto" rows="4" placeholder="Ej. Incidencias, rondines, pendientes, observaciones del turno..."></textarea>
         <div class="row" style="margin-top:10px;">
-          <button data-action="guardarBitacora">Guardar novedad</button>
+          <button data-action="guardarBitacora" ${rondineroGuardiaCred ? "" : "disabled"}>Guardar novedad</button>
         </div>
         <div class="divider"></div>
       ` : ""}
@@ -5836,6 +6072,10 @@ async function guardarBitacora(){
   if(!requirePerm("crear_bitacora_guardia","Solo GUARDIA y ADMIN pueden registrar novedades.")) return;
   const fecha = document.getElementById("bitacoraFecha")?.value || todayISO();
   const texto = document.getElementById("bitacoraTexto")?.value.trim() || "";
+  if(!rondineroGuardiaCred?.uid){
+    toast("Guardia requerido","Escanea la credencial del guardia antes de guardar.","warn",3200);
+    return;
+  }
   if(!texto){
     toast("Campo obligatorio","Escribe la novedad antes de guardar.","warn",2600);
     return;
@@ -5846,9 +6086,12 @@ async function guardarBitacora(){
     fecha,
     titulo: "Novedad",
     texto,
-    autorUid: currentUser?.uid || "",
-    autorEmail: currentUser?.email || "",
-    autorNombre: currentUser?.nombre || currentUser?.email || "",
+    autorUid: rondineroGuardiaCred.uid,
+    autorEmail: rondineroGuardiaCred.email || "",
+    autorNombre: rondineroGuardiaCred.nombre || "Guardia",
+    operadorUid: currentUser?.uid || "",
+    operadorEmail: currentUser?.email || "",
+    operadorNombre: currentUser?.nombre || currentUser?.email || "Tablet",
     createdTs: Date.now(),
     updatedTs: Date.now()
   };
@@ -5860,6 +6103,946 @@ async function guardarBitacora(){
   }
   toast("Bitácora","Novedad guardada.","ok",2200);
   await renderBitacoraGuardia(fecha);
+}
+
+function rondineroQrText(puntoId){
+  return `RONDINERO_POINT:${puntoId}`;
+}
+
+function rondineroGuardiaQrText(user){
+  const payload = {
+    uid: String(user?.uid || user?.id || ""),
+    nombre: String(user?.nombre || user?.email || "Guardia"),
+    email: String(user?.email || "")
+  };
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(payload))));
+  return `RONDINERO_GUARD:${encoded}`;
+}
+
+function parseRondineroGuardiaQr(qrText){
+  const prefix = "RONDINERO_GUARD:";
+  if(!String(qrText || "").toUpperCase().startsWith(prefix)) return null;
+  try{
+    const raw = qrText.slice(prefix.length).trim();
+    const data = JSON.parse(decodeURIComponent(escape(atob(raw))));
+    if(!data.uid || !data.nombre) return null;
+    return {
+      uid: String(data.uid),
+      nombre: String(data.nombre),
+      email: String(data.email || "")
+    };
+  }catch(e){
+    console.warn(e);
+    return null;
+  }
+}
+
+function loadRondineroGuardiaCred(){
+  try{
+    const raw = sessionStorage.getItem("rondinero_guardia_cred_v1");
+    return raw ? JSON.parse(raw) : null;
+  }catch{ return null; }
+}
+
+function saveRondineroGuardiaCred(cred){
+  rondineroGuardiaCred = cred || null;
+  try{
+    if(rondineroGuardiaCred){
+      sessionStorage.setItem("rondinero_guardia_cred_v1", JSON.stringify(rondineroGuardiaCred));
+    }else{
+      sessionStorage.removeItem("rondinero_guardia_cred_v1");
+    }
+  }catch{}
+}
+
+function getRondineroPuntosActivos(){
+  return rondineroPuntos
+    .filter(p => p.activo !== false)
+    .sort((a,b)=>(Number(a.orden)||0)-(Number(b.orden)||0) || String(a.nombre||"").localeCompare(String(b.nombre||"")));
+}
+
+function getRondineroRutasActivas(){
+  return rondineroRutas
+    .filter(r => r.activo !== false)
+    .sort((a,b)=>String(a.nombre||"").localeCompare(String(b.nombre||"")));
+}
+
+function getRondineroPuntosPorRuta(rutaId){
+  const ruta = rondineroRutas.find(r => String(r.id) === String(rutaId));
+  const ids = Array.isArray(ruta?.puntoIds) ? ruta.puntoIds.map(String) : [];
+  return getRondineroPuntosActivos().filter(p => ids.includes(String(p.id)));
+}
+
+function getRondineroPuntosParaRondin(rondin){
+  const ids = Array.isArray(rondin?.puntoIdsEsperados) ? rondin.puntoIdsEsperados.map(String) : [];
+  return getRondineroPuntosActivos().filter(p => ids.includes(String(p.id)));
+}
+
+function getRondineroActivo(){
+  return rondineroRondines.find(r =>
+    r.status === "en_curso" &&
+    String(r.operadorUid || r.guardiaUid || "") === String(currentUser?.uid || "")
+  );
+}
+
+function getRondineroEventos(rondinId){
+  return rondineroEventos
+    .filter(e => String(e.rondinId || "") === String(rondinId || ""))
+    .sort((a,b)=>(a.createdTs||0)-(b.createdTs||0));
+}
+
+function calcRondineroStats(rondines, eventos){
+  const total = rondines.length;
+  const completados = rondines.filter(r => r.status === "completado").length;
+  const incompletos = rondines.filter(r => r.status === "incompleto").length;
+  const enCurso = rondines.filter(r => r.status === "en_curso").length;
+  const puntosVisitados = rondines.reduce((sum, r) => sum + ((r.puntoIdsVisitados || []).length), 0);
+  const puntosEsperados = rondines.reduce((sum, r) => sum + ((r.puntoIdsEsperados || []).length), 0);
+  const novedades = eventos.filter(e => e.tipo === "novedad").length;
+  const conTiempo = rondines.filter(r => typeof r.tiempoTotalMin === "number" && r.tiempoTotalMin >= 0);
+  const tiempoProm = conTiempo.length
+    ? Math.round(conTiempo.reduce((sum, r) => sum + r.tiempoTotalMin, 0) / conTiempo.length)
+    : 0;
+  const cumplimiento = total ? Math.round((completados / total) * 100) : 0;
+  return {
+    total,
+    completados,
+    incompletos,
+    enCurso,
+    puntosVisitados,
+    puntosOmitidos: Math.max(0, puntosEsperados - puntosVisitados),
+    novedades,
+    tiempoProm,
+    cumplimiento
+  };
+}
+
+function renderRondineroPuntoCard(p){
+  return `
+    <div class="tarjeta history-card">
+      <strong>${esc(p.nombre || "Punto")}</strong>
+      <small>${esc(p.ubicacion || "Sin ubicación")}</small>
+      <div style="margin-top:8px;color:var(--muted);font-size:12px;">${esc(p.descripcion || "")}</div>
+      <div class="meta">
+        <span class="pill"><span class="dot ${p.activo === false ? "bad" : "ok"}"></span>${p.activo === false ? "Inactivo" : "Activo"}</span>
+        <span class="pill">Orden ${esc(p.orden || 0)}</span>
+      </div>
+      <div class="row" style="margin-top:10px;">
+        <button class="secondary" data-action="rondineroQR" data-id="${esc(p.id)}" data-no-sb="true">Ver QR</button>
+        ${hasPerm("rondinero_configurar") ? `<button class="secondary" data-action="rondineroTogglePunto" data-id="${esc(p.id)}" data-no-sb="true">${p.activo === false ? "Activar" : "Desactivar"}</button>` : ""}
+      </div>
+    </div>
+  `;
+}
+
+function renderRondineroRutaCard(r){
+  const puntoIds = Array.isArray(r.puntoIds) ? r.puntoIds.map(String) : [];
+  const nombres = puntoIds
+    .map(id => rondineroPuntos.find(p => String(p.id) === id)?.nombre)
+    .filter(Boolean);
+  return `
+    <div class="tarjeta history-card">
+      <strong>${esc(r.nombre || "Ruta")}</strong>
+      <small>${esc(r.turno || "Sin turno")} • ${puntoIds.length} puntos</small>
+      <div style="margin-top:8px;color:var(--muted);font-size:12px;">${esc(r.descripcion || "")}</div>
+      <div class="meta">
+        <span class="pill"><span class="dot ${r.activo === false ? "bad" : "ok"}"></span>${r.activo === false ? "Inactiva" : "Activa"}</span>
+        ${nombres.slice(0, 4).map(n => `<span class="pill">${esc(n)}</span>`).join("")}
+        ${nombres.length > 4 ? `<span class="pill">+${nombres.length - 4}</span>` : ""}
+      </div>
+      <div class="row" style="margin-top:10px;">
+        ${hasPerm("rondinero_configurar") ? `<button class="secondary" data-action="rondineroToggleRuta" data-id="${esc(r.id)}" data-no-sb="true">${r.activo === false ? "Activar" : "Desactivar"}</button>` : ""}
+      </div>
+    </div>
+  `;
+}
+
+async function renderRondineroGuardia(){
+  if(!requirePerm("rondinero_ejecutar","Tu rol no puede ejecutar rondines.")) return;
+  currentView = "rondinero_guardia";
+  try{ setActiveSb("rondinero"); }catch{}
+  await syncRondineroGuardia();
+
+  const rutas = getRondineroRutasActivas();
+  const activo = getRondineroActivo();
+  const puntos = activo ? getRondineroPuntosParaRondin(activo) : [];
+  const eventos = activo ? getRondineroEventos(activo.id) : [];
+  const visitadosCount = activo ? (activo.puntoIdsVisitados || []).length : 0;
+  const totalCount = activo ? (activo.puntoIdsEsperados || []).length : 0;
+  const avance = totalCount ? Math.round((visitadosCount / totalCount) * 100) : 0;
+  const ultimoScan = eventos.filter(e => e.tipo === "scan").slice(-1)[0];
+  const novedades = eventos.filter(e => e.tipo === "novedad").length;
+
+  appEl.innerHTML = `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start;">
+        <div>
+          <h2 style="margin:0 0 4px;">Mi rondín</h2>
+          <div style="color:var(--muted);font-size:12px;">Escanea los puntos asignados y reporta novedades del recorrido.</div>
+        </div>
+        <div class="row">
+          <button class="secondary" data-action="rondineroRefresh">Actualizar</button>
+          <button class="secondary" data-action="home">Volver</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      ${activo ? `
+        <div class="tarjeta history-card">
+          <div class="row" style="justify-content:space-between;align-items:flex-start;">
+            <div>
+              <strong>Rondín en curso</strong>
+              <small>${esc(activo.guardiaNombre || "Guardia")} • ${esc(activo.rutaNombre || "Ruta")} • ${esc(activo.turno || "Sin turno")} • ${esc(new Date(activo.inicioTs || Date.now()).toLocaleString())}</small>
+            </div>
+            <span class="pill"><span class="dot info"></span>${visitadosCount}/${totalCount} puntos</span>
+          </div>
+          <div style="height:10px;"></div>
+          <div style="height:10px;border-radius:999px;background:rgba(148,163,184,.22);overflow:hidden;">
+            <div style="width:${avance}%;height:100%;background:var(--accent);"></div>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            <button data-action="rondineroScan">Escanear punto</button>
+            <button class="secondary" data-action="rondineroNovedad">Reportar novedad</button>
+            <button class="ok" data-action="rondineroCerrar">Cerrar rondín</button>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));">
+          <div class="tarjeta"><strong>${visitadosCount}</strong><small>Puntos registrados</small></div>
+          <div class="tarjeta"><strong>${Math.max(0, totalCount - visitadosCount)}</strong><small>Puntos pendientes</small></div>
+          <div class="tarjeta"><strong>${novedades}</strong><small>Novedades</small></div>
+        </div>
+
+        <div style="height:12px;"></div>
+        <div class="tarjeta history-card">
+          <strong>Último registro</strong>
+          <small>${ultimoScan ? esc(new Date(ultimoScan.createdTs || Date.now()).toLocaleString()) : "Aún no hay puntos registrados."}</small>
+        </div>
+      ` : `
+        <div class="tarjeta history-card">
+          <strong>Sin rondín en curso</strong>
+          <small>${rutas.length ? "Escanea la credencial del guardia y selecciona la ruta asignada." : "No hay rutas activas configuradas."}</small>
+          <div style="height:10px;"></div>
+          ${rondineroGuardiaCred ? `
+            <div class="pill"><span class="dot ok"></span>Guardia: <b style="margin-left:6px;color:var(--text);">${esc(rondineroGuardiaCred.nombre)}</b></div>
+            <div class="row" style="margin-top:10px;">
+              <button class="secondary" data-action="rondineroScanGuardia">Cambiar guardia</button>
+              <button class="secondary" data-action="rondineroClearGuardia">Quitar guardia</button>
+            </div>
+          ` : `
+            <button data-action="rondineroScanGuardia">Escanear credencial de guardia</button>
+          `}
+          ${rutas.length && rondineroGuardiaCred ? `
+            <div style="height:10px;"></div>
+            <label>Ruta *</label>
+            <select id="rondRutaInicio">
+              ${rutas.map(r => `<option value="${esc(r.id)}">${esc(r.nombre)}${r.turno ? ` • ${esc(r.turno)}` : ""}</option>`).join("")}
+            </select>
+          ` : ""}
+          <div class="row" style="margin-top:12px;">
+            <button data-action="rondineroIniciar" ${rutas.length && rondineroGuardiaCred ? "" : "disabled"}>Iniciar rondín</button>
+          </div>
+        </div>
+      `}
+    </div>
+  `;
+}
+
+async function renderRondinero(){
+  if(!requirePerm("rondinero_ver","Tu rol no puede usar Rondinero.")) return;
+  if(!hasPerm("rondinero_configurar") && !hasPerm("rondinero_reportes")){
+    return renderRondineroGuardia();
+  }
+  currentView = "rondinero";
+  try{ setActiveSb("rondinero"); }catch{}
+  await syncRondinero();
+
+  const puntos = getRondineroPuntosActivos();
+  const rutas = getRondineroRutasActivas();
+  const activo = getRondineroActivo();
+  const puntosActivo = activo ? getRondineroPuntosParaRondin(activo) : puntos;
+  const eventos = activo ? getRondineroEventos(activo.id) : [];
+  const visitados = new Set(eventos.filter(e => e.tipo === "scan").map(e => String(e.puntoId)));
+  const avance = puntosActivo.length ? Math.round((visitados.size / puntosActivo.length) * 100) : 0;
+  const novedades = eventos.filter(e => e.tipo === "novedad").length;
+  const puedeConfigurar = hasPerm("rondinero_configurar");
+  const puedeEjecutar = hasPerm("rondinero_ejecutar");
+  const puedeReportes = hasPerm("rondinero_reportes");
+  const rondinesHoy = rondineroRondines.filter(r => r.fecha === todayISO());
+  const eventosHoy = rondineroEventos.filter(e => e.fecha === todayISO());
+  const statsHoy = calcRondineroStats(rondinesHoy, eventosHoy);
+  const statsTotal = calcRondineroStats(rondineroRondines, rondineroEventos);
+  const porGuardia = Object.entries(rondineroRondines.reduce((acc, r) => {
+    const key = r.guardiaNombre || r.guardiaEmail || "Guardia";
+    if(!acc[key]) acc[key] = [];
+    acc[key].push(r);
+    return acc;
+  }, {})).map(([guardia, list]) => {
+    const sorted = list.slice().sort((a,b)=>(b.inicioTs || b.createdTs || 0)-(a.inicioTs || a.createdTs || 0));
+    return { guardia, latestId: sorted[0]?.id || "", ...calcRondineroStats(list, rondineroEventos.filter(e => list.some(r => r.id === e.rondinId))) };
+  });
+  const porTurno = Object.entries(rondineroRondines.reduce((acc, r) => {
+    const key = r.turno || "Sin turno";
+    if(!acc[key]) acc[key] = [];
+    acc[key].push(r);
+    return acc;
+  }, {})).map(([turno, list]) => ({ turno, ...calcRondineroStats(list, rondineroEventos.filter(e => list.some(r => r.id === e.rondinId))) }));
+
+  appEl.innerHTML = `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start;">
+        <div>
+          <h2 style="margin:0 0 4px;">Rondinero</h2>
+          <div style="color:var(--muted);font-size:12px;">Rondines digitales por puntos QR. Sin fotos ni video.</div>
+        </div>
+        <div class="row">
+          <button class="secondary" data-action="rondineroRefresh">Actualizar</button>
+          <button class="secondary" data-action="home">Volver</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));">
+        <div class="tarjeta"><strong>${puntos.length}</strong><small>Puntos activos</small></div>
+        <div class="tarjeta"><strong>${rutas.length}</strong><small>Rutas activas</small></div>
+        <div class="tarjeta"><strong>${statsHoy.total}</strong><small>Rondines hoy</small></div>
+        <div class="tarjeta"><strong>${statsHoy.cumplimiento}%</strong><small>Cumplimiento hoy</small></div>
+        <div class="tarjeta"><strong>${statsTotal.tiempoProm} min</strong><small>Tiempo promedio</small></div>
+        <div class="tarjeta"><strong>${statsTotal.puntosOmitidos}</strong><small>Puntos omitidos</small></div>
+        <div class="tarjeta"><strong>${statsTotal.novedades}</strong><small>Novedades</small></div>
+      </div>
+
+      <div class="divider"></div>
+
+      ${activo ? `
+        <div class="tarjeta history-card">
+          <div class="row" style="justify-content:space-between;align-items:flex-start;">
+            <div>
+              <strong>Rondín en curso</strong>
+              <small>${esc(activo.rutaNombre || "Ruta")} • ${esc(activo.turno || "Sin turno")} • ${esc(new Date(activo.inicioTs || Date.now()).toLocaleString())}</small>
+            </div>
+            <span class="pill"><span class="dot info"></span>${visitados.size}/${puntosActivo.length} puntos</span>
+          </div>
+          <div style="height:10px;"></div>
+          <div style="height:10px;border-radius:999px;background:rgba(148,163,184,.22);overflow:hidden;">
+            <div style="width:${avance}%;height:100%;background:var(--accent);"></div>
+          </div>
+          <div class="row" style="margin-top:12px;">
+            ${puedeEjecutar ? `<button data-action="rondineroScan">Escanear punto</button>` : ""}
+            ${puedeEjecutar ? `<button class="secondary" data-action="rondineroNovedad">Reportar novedad</button>` : ""}
+            ${puedeEjecutar ? `<button class="ok" data-action="rondineroCerrar">Cerrar rondín</button>` : ""}
+          </div>
+        </div>
+      ` : `
+        <div class="tarjeta history-card">
+          <strong>Sin rondín en curso</strong>
+          <small>${puntos.length ? "Inicia un recorrido para registrar puntos." : "Primero registra puntos de control."}</small>
+          <div class="row" style="margin-top:12px;">
+            ${puedeEjecutar ? `<button data-action="rondineroIniciar" ${puntos.length ? "" : "disabled"}>Iniciar rondín</button>` : ""}
+          </div>
+        </div>
+      `}
+
+      ${activo ? `
+        <div class="divider"></div>
+        <h3 style="margin:0 0 10px;">Avance del recorrido</h3>
+        <div class="dashboard-pending-list">
+          ${puntosActivo.map(p => {
+            const evento = eventos.find(e => e.tipo === "scan" && String(e.puntoId) === String(p.id));
+            return `
+              <div class="tarjeta history-card">
+                <strong>${esc(p.nombre)}</strong>
+                <small>${esc(p.ubicacion || "")}</small>
+                <div class="meta">
+                  <span class="pill"><span class="dot ${evento ? "ok" : "info"}"></span>${evento ? "Visitado" : "Pendiente"}</span>
+                  ${evento ? `<span class="pill">${esc(new Date(evento.createdTs).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}))}</span>` : ""}
+                </div>
+              </div>
+            `;
+          }).join("")}
+          ${novedades ? `<div class="tarjeta history-card"><strong>${novedades} novedades reportadas</strong><small>Registradas durante este rondín.</small></div>` : ""}
+        </div>
+      ` : ""}
+
+      ${puedeConfigurar ? `
+        <div class="divider"></div>
+        <h3 style="margin:0 0 10px;">Rutas de rondín</h3>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+          <div><label>Nombre de ruta *</label><input id="rondRutaNombre" placeholder="Ej. Ruta nocturna patio"></div>
+          <div><label>Turno</label><select id="rondRutaTurno"><option>Día</option><option>Tarde</option><option>Noche</option><option>Mixto</option></select></div>
+          <div style="grid-column:1/-1;"><label>Descripción</label><textarea id="rondRutaDesc" rows="2" placeholder="Referencia breve de la ruta"></textarea></div>
+        </div>
+        <div style="height:10px;"></div>
+        <label>Puntos de la ruta *</label>
+        <div class="dashboard-pending-list" style="max-height:260px;overflow:auto;">
+          ${puntos.length ? puntos.map(p => `
+            <label class="tarjeta history-card" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;">
+              <input type="checkbox" class="rondRutaPunto" value="${esc(p.id)}" style="width:auto;margin-top:3px;">
+              <span><strong>${esc(p.nombre)}</strong><small>${esc(p.ubicacion || "")}</small></span>
+            </label>
+          `).join("") : `<div style="color:var(--muted);font-size:12px;">Registra puntos activos antes de crear rutas.</div>`}
+        </div>
+        <div class="row" style="margin-top:10px;"><button data-action="rondineroGuardarRuta" ${puntos.length ? "" : "disabled"}>Guardar ruta</button></div>
+        <div style="height:12px;"></div>
+        <div class="dashboard-pending-list">
+          ${rondineroRutas.length ? rondineroRutas.map(renderRondineroRutaCard).join("") : `<div style="color:var(--muted);font-size:12px;">Sin rutas registradas.</div>`}
+        </div>
+
+        <div class="divider"></div>
+        <h3 style="margin:0 0 10px;">Puntos de control</h3>
+        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+          <div><label>Nombre *</label><input id="rondPuntoNombre" placeholder="Ej. Caseta principal"></div>
+          <div><label>Ubicación *</label><input id="rondPuntoUbicacion" placeholder="Ej. Acceso norte"></div>
+          <div><label>Orden</label><input id="rondPuntoOrden" type="number" min="0" value="${puntos.length + 1}"></div>
+          <div style="grid-column:1/-1;"><label>Descripción</label><textarea id="rondPuntoDesc" rows="2" placeholder="Referencia breve del punto"></textarea></div>
+        </div>
+        <div class="row" style="margin-top:10px;"><button data-action="rondineroGuardarPunto">Guardar punto</button></div>
+        <div style="height:12px;"></div>
+        <div class="dashboard-pending-list">
+          ${rondineroPuntos.length ? rondineroPuntos.map(renderRondineroPuntoCard).join("") : `<div style="color:var(--muted);font-size:12px;">Sin puntos registrados.</div>`}
+        </div>
+      ` : ""}
+
+      ${puedeReportes ? `
+        <div class="divider"></div>
+        <h3 style="margin:0 0 10px;">Cumplimiento por guardia</h3>
+        <div class="dashboard-pending-list">
+          ${porGuardia.slice(0, 20).map(g => `
+            <div class="tarjeta history-card">
+              <strong>${esc(g.guardia)}</strong>
+              <div class="meta">
+                <span class="pill">${esc(g.total)} rondines</span>
+                <span class="pill"><span class="dot ok"></span>${esc(g.cumplimiento)}%</span>
+                <span class="pill">${esc(g.completados)} completos</span>
+                <span class="pill">${esc(g.incompletos)} incompletos</span>
+              </div>
+              <div class="row" style="margin-top:10px;">
+                <button class="secondary" data-action="rondineroDetalle" data-id="${esc(g.latestId)}" data-no-sb="true" ${g.latestId ? "" : "disabled"}>Detalle</button>
+              </div>
+            </div>
+          `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin datos por guardia.</div>`}
+        </div>
+
+        <div style="height:14px;"></div>
+        <h3 style="margin:0 0 10px;">Cumplimiento por turno</h3>
+        <div class="dashboard-pending-list">
+          ${porTurno.map(t => `
+            <div class="tarjeta history-card">
+              <strong>${esc(t.turno)}</strong>
+              <div class="meta">
+                <span class="pill">${esc(t.total)} rondines</span>
+                <span class="pill"><span class="dot ok"></span>${esc(t.cumplimiento)}%</span>
+                <span class="pill">${esc(t.puntosOmitidos)} omitidos</span>
+                <span class="pill">${esc(t.tiempoProm)} min prom.</span>
+              </div>
+            </div>
+          `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin datos por turno.</div>`}
+        </div>
+
+        <div style="height:14px;"></div>
+        <h3 style="margin:0 0 10px;">Historial reciente</h3>
+        <div class="dashboard-pending-list">
+          ${rondineroRondines.slice().sort((a,b)=>(b.createdTs||0)-(a.createdTs||0)).slice(0,20).map(r => `
+            <div class="tarjeta history-card">
+              <strong>${esc(r.guardiaNombre || "Guardia")}</strong>
+              <small>${esc(r.rutaNombre || "Ruta")} • ${esc(r.turno || "Sin turno")} • ${esc(new Date(r.inicioTs || r.createdTs || Date.now()).toLocaleString())}</small>
+              <div class="meta">
+                <span class="pill"><span class="dot ${r.status === "completado" ? "ok" : r.status === "incompleto" ? "bad" : "info"}"></span>${esc(r.status || "")}</span>
+                <span class="pill">${esc((r.puntoIdsVisitados || []).length)}/${esc((r.puntoIdsEsperados || []).length)} puntos</span>
+                <span class="pill">${esc(r.novedadesCount || 0)} novedades</span>
+              </div>
+              <div class="row" style="margin-top:10px;">
+                <button class="secondary" data-action="rondineroDetalle" data-id="${esc(r.id)}" data-no-sb="true">Detalle</button>
+              </div>
+            </div>
+          `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin rondines registrados.</div>`}
+        </div>
+      ` : ""}
+    </div>
+  `;
+}
+
+async function guardarRondineroPunto(){
+  if(!requirePerm("rondinero_configurar","Tu rol no puede configurar puntos.")) return;
+  const nombre = document.getElementById("rondPuntoNombre")?.value.trim() || "";
+  const ubicacion = document.getElementById("rondPuntoUbicacion")?.value.trim() || "";
+  const descripcion = document.getElementById("rondPuntoDesc")?.value.trim() || "";
+  const orden = Number(document.getElementById("rondPuntoOrden")?.value || 0);
+  if(!nombre || !ubicacion){
+    toast("Campos obligatorios","Nombre y ubicación son requeridos.","warn",2600);
+    return;
+  }
+  const id = `RP-${Date.now()}`;
+  const punto = {
+    id,
+    nombre,
+    ubicacion,
+    descripcion,
+    orden,
+    qrCode: rondineroQrText(id),
+    activo: true,
+    createdByUid: currentUser?.uid || "",
+    createdByEmail: currentUser?.email || "",
+    createdTs: Date.now(),
+    updatedTs: Date.now()
+  };
+  rondineroPuntos.unshift(punto);
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{ await cloudUpsertRondineroPunto(punto); }catch(e){ console.warn(e); }
+  }
+  toast("Rondinero","Punto guardado.","ok",2200);
+  await renderRondinero();
+}
+
+async function renderRondineroDetalle(id){
+  if(!requirePerm("rondinero_reportes","Tu rol no puede ver detalle de rondines.")) return;
+  await syncRondinero(true);
+  const r = rondineroRondines.find(x => String(x.id) === String(id));
+  if(!r){
+    toast("Rondinero","No se encontró el recorrido.","warn",2600);
+    return renderRondinero();
+  }
+  currentView = "rondinero_detalle";
+  try{ setActiveSb("rondinero"); }catch{}
+
+  const eventos = getRondineroEventos(r.id);
+  const scans = eventos.filter(e => e.tipo === "scan");
+  const novedades = eventos.filter(e => e.tipo === "novedad");
+  const esperados = (r.puntoIdsEsperados || []).map(String);
+  const visitados = new Set((r.puntoIdsVisitados || []).map(String));
+  const puntosDetalle = esperados.map(pid => {
+    const punto = rondineroPuntos.find(p => String(p.id) === pid) || {};
+    const evento = scans.find(e => String(e.puntoId) === pid);
+    return { puntoId: pid, punto, evento };
+  });
+  const avance = esperados.length ? Math.round((visitados.size / esperados.length) * 100) : 0;
+  const tiempoTotal = typeof r.tiempoTotalMin === "number"
+    ? `${r.tiempoTotalMin} min`
+    : (r.inicioTs ? `${Math.max(0, Math.round(((r.finTs || Date.now()) - r.inicioTs) / 60000))} min` : "-");
+
+  appEl.innerHTML = `
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:flex-start;">
+        <div>
+          <h2 style="margin:0 0 4px;">Detalle del recorrido</h2>
+          <div style="color:var(--muted);font-size:12px;">${esc(r.rutaNombre || "Ruta")} • ${esc(r.turno || "Sin turno")}</div>
+        </div>
+        <div class="row">
+          <button class="secondary" data-action="rondinero">Volver</button>
+          <button class="secondary" data-action="print">Imprimir</button>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr));">
+        <div class="tarjeta"><strong>${esc(r.guardiaNombre || "Guardia")}</strong><small>Guardia</small></div>
+        <div class="tarjeta"><strong>${esc(r.status || "-")}</strong><small>Estatus</small></div>
+        <div class="tarjeta"><strong>${visitados.size}/${esperados.length}</strong><small>Puntos</small></div>
+        <div class="tarjeta"><strong>${avance}%</strong><small>Avance</small></div>
+        <div class="tarjeta"><strong>${esc(tiempoTotal)}</strong><small>Tiempo total</small></div>
+        <div class="tarjeta"><strong>${novedades.length}</strong><small>Novedades</small></div>
+      </div>
+
+      <div class="divider"></div>
+      <h3 style="margin:0 0 10px;">Puntos del recorrido</h3>
+      <div class="dashboard-pending-list">
+        ${puntosDetalle.map((item, idx) => {
+          const ev = item.evento;
+          return `
+            <div class="tarjeta history-card">
+              <strong>${idx + 1}. ${esc(item.punto.nombre || item.puntoId)}</strong>
+              <small>${esc(item.punto.ubicacion || ev?.ubicacion || "")}</small>
+              <div class="meta">
+                <span class="pill"><span class="dot ${ev ? "ok" : "bad"}"></span>${ev ? "Visitado" : "Omitido"}</span>
+                ${ev ? `<span class="pill">${esc(new Date(ev.createdTs || Date.now()).toLocaleString())}</span>` : ""}
+              </div>
+            </div>
+          `;
+        }).join("") || `<div style="color:var(--muted);font-size:12px;">Sin puntos esperados.</div>`}
+      </div>
+
+      <div class="divider"></div>
+      <h3 style="margin:0 0 10px;">Novedades</h3>
+      <div class="dashboard-pending-list">
+        ${novedades.map(n => `
+          <div class="tarjeta history-card">
+            <strong>${esc(new Date(n.createdTs || Date.now()).toLocaleString())}</strong>
+            <div style="margin-top:8px;color:var(--text);white-space:pre-wrap;">${esc(n.observaciones || "")}</div>
+          </div>
+        `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin novedades reportadas.</div>`}
+      </div>
+    </div>
+  `;
+}
+
+async function toggleRondineroPunto(id){
+  if(!requirePerm("rondinero_configurar","Tu rol no puede configurar puntos.")) return;
+  const p = rondineroPuntos.find(x => String(x.id) === String(id));
+  if(!p) return;
+  p.activo = p.activo === false;
+  p.updatedTs = Date.now();
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{ await cloudUpsertRondineroPunto(p); }catch(e){ console.warn(e); }
+  }
+  await renderRondinero();
+}
+
+async function guardarRondineroRuta(){
+  if(!requirePerm("rondinero_configurar","Tu rol no puede configurar rutas.")) return;
+  const nombre = document.getElementById("rondRutaNombre")?.value.trim() || "";
+  const turno = document.getElementById("rondRutaTurno")?.value.trim() || "";
+  const descripcion = document.getElementById("rondRutaDesc")?.value.trim() || "";
+  const puntoIds = Array.from(document.querySelectorAll(".rondRutaPunto:checked")).map(x => String(x.value));
+  if(!nombre || !puntoIds.length){
+    toast("Campos obligatorios","Nombre de ruta y al menos un punto son requeridos.","warn",2800);
+    return;
+  }
+  const id = `RR-${Date.now()}`;
+  const ruta = {
+    id,
+    nombre,
+    turno,
+    descripcion,
+    puntoIds,
+    activo: true,
+    createdByUid: currentUser?.uid || "",
+    createdByEmail: currentUser?.email || "",
+    createdTs: Date.now(),
+    updatedTs: Date.now()
+  };
+  rondineroRutas.unshift(ruta);
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{ await cloudUpsertRondineroRuta(ruta); }catch(e){ console.warn(e); }
+  }
+  toast("Rondinero","Ruta guardada.","ok",2200);
+  await renderRondinero();
+}
+
+async function toggleRondineroRuta(id){
+  if(!requirePerm("rondinero_configurar","Tu rol no puede configurar rutas.")) return;
+  const r = rondineroRutas.find(x => String(x.id) === String(id));
+  if(!r) return;
+  r.activo = r.activo === false;
+  r.updatedTs = Date.now();
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{ await cloudUpsertRondineroRuta(r); }catch(e){ console.warn(e); }
+  }
+  await renderRondinero();
+}
+
+function renderRondineroQR(id){
+  if(!requirePerm("rondinero_ver","Tu rol no puede ver Rondinero.")) return;
+  const p = rondineroPuntos.find(x => String(x.id) === String(id));
+  if(!p) return renderRondinero();
+  currentView = "rondinero_qr";
+  appEl.innerHTML = `
+    <div class="card printable">
+      <h2 style="margin:0 0 6px;">QR de punto Rondinero</h2>
+      <p style="margin:0 0 10px;color:var(--muted);font-size:12px;">${esc(p.nombre)} • ${esc(p.ubicacion || "")}</p>
+      <div id="qrcode" style="background:white; padding:10px; border-radius:14px; display:inline-block;"></div>
+      <div class="divider"></div>
+      <div style="font-family:monospace;font-size:12px;word-break:break-all;">${esc(p.qrCode || rondineroQrText(p.id))}</div>
+      <div class="divider"></div>
+      <div class="row">
+        <button class="secondary" data-action="rondinero">Volver</button>
+        <button class="secondary" data-action="print">Imprimir</button>
+      </div>
+    </div>
+  `;
+  const box = document.getElementById("qrcode");
+  if(box && window.QRCode){
+    box.innerHTML = "";
+    new QRCode(box, {
+      text: p.qrCode || rondineroQrText(p.id),
+      width: 220,
+      height: 220,
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+}
+
+async function iniciarRondinero(){
+  if(!requirePerm("rondinero_ejecutar","Tu rol no puede iniciar rondines.")) return;
+  if(hasPerm("rondinero_configurar") || hasPerm("rondinero_reportes")){
+    await syncRondinero(true);
+  }else{
+    await syncRondineroGuardia(true);
+  }
+  if(getRondineroActivo()){
+    toast("Rondinero","Ya tienes un rondín en curso.","warn",2600);
+    return renderRondinero();
+  }
+  if(!rondineroGuardiaCred?.uid){
+    toast("Guardia requerido","Escanea la credencial del guardia antes de iniciar.","warn",3200);
+    return renderRondinero();
+  }
+  const rutaId = document.getElementById("rondRutaInicio")?.value || "";
+  const rutas = getRondineroRutasActivas();
+  const ruta = rutas.find(r => String(r.id) === String(rutaId)) || rutas[0];
+  const puntos = ruta ? getRondineroPuntosPorRuta(ruta.id) : [];
+  if(!puntos.length){
+    toast("Rondinero","La ruta seleccionada no tiene puntos activos.","warn",2600);
+    return;
+  }
+  const rondin = {
+    id: `ROND-${Date.now()}`,
+    fecha: todayISO(),
+    rutaId: ruta?.id || "",
+    rutaNombre: ruta?.nombre || "Ruta",
+    turno: ruta?.turno || "",
+    status: "en_curso",
+    guardiaUid: rondineroGuardiaCred.uid,
+    guardiaEmail: rondineroGuardiaCred.email || "",
+    guardiaNombre: rondineroGuardiaCred.nombre || "Guardia",
+    operadorUid: currentUser?.uid || "",
+    operadorEmail: currentUser?.email || "",
+    operadorNombre: currentUser?.nombre || currentUser?.email || "Tablet",
+    inicioTs: Date.now(),
+    finTs: null,
+    puntoIdsEsperados: puntos.map(p => String(p.id)),
+    puntoIdsVisitados: [],
+    novedadesCount: 0,
+    createdTs: Date.now(),
+    updatedTs: Date.now()
+  };
+  rondineroRondines.unshift(rondin);
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{ await cloudUpsertRondineroRondin(rondin); }
+    catch(e){
+      console.warn(e);
+      toast("Permisos Firebase","No se pudo guardar el rondín en la nube. Revisa reglas de Rondinero.","warn",4200);
+    }
+  }
+  toast("Rondinero","Rondín iniciado.","ok",2200);
+  await renderRondinero();
+}
+
+function renderRondineroScanner(){
+  if(!requirePerm("rondinero_ejecutar","Tu rol no puede escanear Rondinero.")) return;
+  const activo = getRondineroActivo();
+  if(!activo){
+    toast("Rondinero","Primero inicia un rondín.","warn",2600);
+    return renderRondinero();
+  }
+  currentView = "rondinero_scanner";
+  cleanup();
+  appEl.innerHTML = `
+    <div class="card">
+      <h2 style="margin:0 0 6px;">Escanear punto Rondinero</h2>
+      <p style="margin:0 0 10px;color:var(--muted);font-size:12px;">Apunta la cámara al QR del punto de control.</p>
+      <div id="reader"></div>
+      <div class="divider"></div>
+      <div class="row"><button class="secondary" data-action="rondinero">Cancelar</button></div>
+    </div>
+  `;
+  try{
+    if(!window.Html5Qrcode){
+      toast("Escáner","La librería aún está cargando. Intenta de nuevo.","warn",2600);
+      return renderRondinero();
+    }
+    qrScanner = new Html5Qrcode("reader");
+  }catch(e){
+    console.warn(e);
+    toast("Escáner","No se pudo inicializar cámara.","bad",4200);
+    return renderRondinero();
+  }
+  let scanHandled = false;
+  qrScanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    async (decodedText) => {
+      if(scanHandled) return;
+      scanHandled = true;
+      stopScanner();
+      await registrarEscaneoRondinero(String(decodedText).trim());
+    },
+    () => {}
+  ).catch(err => {
+    toast("Permisos", "No se pudo abrir cámara: " + err, "bad", 4200);
+    renderRondinero();
+  });
+}
+
+function renderRondineroGuardiaScanner(returnTo = "rondinero"){
+  if(!requirePerm("rondinero_ejecutar","Tu rol no puede ejecutar rondines.")) return;
+  currentView = "rondinero_guardia_scanner";
+  cleanup();
+  appEl.innerHTML = `
+    <div class="card">
+      <h2 style="margin:0 0 6px;">Escanear credencial de guardia</h2>
+      <p style="margin:0 0 10px;color:var(--muted);font-size:12px;">Escanea la tarjeta QR del guardia que realizará el rondín.</p>
+      <div id="reader"></div>
+      <div class="divider"></div>
+      <div class="row"><button class="secondary" data-action="rondinero">Cancelar</button></div>
+    </div>
+  `;
+  try{
+    if(!window.Html5Qrcode){
+      toast("Escáner","La librería aún está cargando. Intenta de nuevo.","warn",2600);
+      return returnTo === "bitacora" ? renderBitacoraGuardia() : renderRondinero();
+    }
+    qrScanner = new Html5Qrcode("reader");
+  }catch(e){
+    console.warn(e);
+    toast("Escáner","No se pudo inicializar cámara.","bad",4200);
+    return returnTo === "bitacora" ? renderBitacoraGuardia() : renderRondinero();
+  }
+  let scanHandled = false;
+  qrScanner.start(
+    { facingMode: "environment" },
+    { fps: 10, qrbox: 250 },
+    async (decodedText) => {
+      if(scanHandled) return;
+      scanHandled = true;
+      stopScanner();
+      const cred = parseRondineroGuardiaQr(String(decodedText).trim());
+      if(!cred){
+        toast("QR inválido","Esta credencial no pertenece al Rondinero.","bad",3200);
+        return returnTo === "bitacora" ? renderBitacoraGuardia() : renderRondinero();
+      }
+      saveRondineroGuardiaCred(cred);
+      toast("Guardia identificado", cred.nombre, "ok", 2200);
+      if(returnTo === "bitacora") await renderBitacoraGuardia();
+      else await renderRondinero();
+    },
+    () => {}
+  ).catch(err => {
+    toast("Permisos", "No se pudo abrir cámara: " + err, "bad", 4200);
+    if(returnTo === "bitacora") renderBitacoraGuardia();
+    else renderRondinero();
+  });
+}
+
+async function registrarEscaneoRondinero(qrText){
+  if(!requirePerm("rondinero_ejecutar","Tu rol no puede escanear Rondinero.")) return;
+  const activo = getRondineroActivo();
+  if(!activo) return renderRondinero();
+  const prefix = "RONDINERO_POINT:";
+  if(!String(qrText || "").toUpperCase().startsWith(prefix)){
+    toast("QR inválido","Este QR no pertenece al Rondinero.","bad",3200);
+    return renderRondinero();
+  }
+  const puntoId = qrText.slice(prefix.length).trim();
+  const punto = rondineroPuntos.find(p => String(p.id) === String(puntoId));
+  if(!punto || punto.activo === false){
+    toast("Punto inválido","El punto no existe o está inactivo.","bad",3200);
+    return renderRondinero();
+  }
+  if(!(activo.puntoIdsEsperados || []).map(String).includes(String(punto.id))){
+    toast("Punto fuera de ruta","Este punto no pertenece al rondín actual.","warn",3200);
+    return renderRondinero();
+  }
+  if((activo.puntoIdsVisitados || []).map(String).includes(String(punto.id))){
+    toast("Punto ya visitado","Este punto ya fue registrado en el rondín.","warn",2600);
+    return renderRondinero();
+  }
+  const evento = {
+    id: `RE-${Date.now()}`,
+    rondinId: activo.id,
+    tipo: "scan",
+    puntoId: punto.id,
+    puntoNombre: punto.nombre,
+    ubicacion: punto.ubicacion || "",
+    estatus: "visitado",
+    observaciones: "",
+    guardiaUid: activo.guardiaUid || "",
+    guardiaEmail: activo.guardiaEmail || "",
+    guardiaNombre: activo.guardiaNombre || currentUser?.nombre || currentUser?.email || "Guardia",
+    operadorUid: currentUser?.uid || "",
+    operadorNombre: currentUser?.nombre || currentUser?.email || "Tablet",
+    fecha: todayISO(),
+    createdTs: Date.now(),
+    updatedTs: Date.now()
+  };
+  activo.puntoIdsVisitados = [...(activo.puntoIdsVisitados || []), String(punto.id)];
+  activo.updatedTs = Date.now();
+  rondineroEventos.unshift(evento);
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{
+      await cloudUpsertRondineroEvento(evento);
+      await cloudUpsertRondineroRondin(activo);
+    }catch(e){
+      console.warn(e);
+      toast("Permisos Firebase","El punto quedó local, pero Firebase bloqueó la sincronización.","warn",4200);
+    }
+  }
+  toast("Punto registrado", punto.nombre, "ok", 2200);
+  await renderRondinero();
+}
+
+async function guardarRondineroNovedad(){
+  if(!requirePerm("rondinero_ejecutar","Tu rol no puede registrar novedades.")) return;
+  const activo = getRondineroActivo();
+  if(!activo) return renderRondinero();
+  const texto = prompt("Describe la novedad del rondín:");
+  if(!texto || !texto.trim()) return;
+  const evento = {
+    id: `RN-${Date.now()}`,
+    rondinId: activo.id,
+    tipo: "novedad",
+    puntoId: "",
+    puntoNombre: "",
+    ubicacion: "",
+    estatus: "novedad",
+    observaciones: texto.trim(),
+    guardiaUid: activo.guardiaUid || "",
+    guardiaEmail: activo.guardiaEmail || "",
+    guardiaNombre: activo.guardiaNombre || currentUser?.nombre || currentUser?.email || "Guardia",
+    operadorUid: currentUser?.uid || "",
+    operadorNombre: currentUser?.nombre || currentUser?.email || "Tablet",
+    fecha: todayISO(),
+    createdTs: Date.now(),
+    updatedTs: Date.now()
+  };
+  activo.novedadesCount = Number(activo.novedadesCount || 0) + 1;
+  activo.updatedTs = Date.now();
+  rondineroEventos.unshift(evento);
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{
+      await cloudUpsertRondineroEvento(evento);
+      await cloudUpsertRondineroRondin(activo);
+    }catch(e){
+      console.warn(e);
+      toast("Permisos Firebase","La novedad quedó local, pero Firebase bloqueó la sincronización.","warn",4200);
+    }
+  }
+  toast("Rondinero","Novedad registrada.","ok",2200);
+  await renderRondinero();
+}
+
+async function cerrarRondinero(){
+  if(!requirePerm("rondinero_ejecutar","Tu rol no puede cerrar rondines.")) return;
+  const activo = getRondineroActivo();
+  if(!activo) return renderRondinero();
+  const esperados = (activo.puntoIdsEsperados || []).map(String);
+  const visitados = (activo.puntoIdsVisitados || []).map(String);
+  const completo = esperados.length > 0 && esperados.every(id => visitados.includes(id));
+  if(!completo && !confirm("El rondín está incompleto. ¿Deseas cerrarlo como incompleto?")) return;
+  activo.status = completo ? "completado" : "incompleto";
+  activo.finTs = Date.now();
+  activo.tiempoTotalMin = Math.max(0, Math.round((activo.finTs - (activo.inicioTs || activo.finTs)) / 60000));
+  activo.updatedTs = Date.now();
+  saveRondineroLocal();
+  if(navigator.onLine && currentUser?.role !== ROLES.PENDIENTE){
+    try{ await cloudUpsertRondineroRondin(activo); }
+    catch(e){
+      console.warn(e);
+      toast("Permisos Firebase","No se pudo cerrar el rondín en la nube. Revisa reglas de Rondinero.","warn",4200);
+    }
+  }
+  toast("Rondinero", completo ? "Rondín completado." : "Rondín cerrado como incompleto.", completo ? "ok" : "warn", 2600);
+  await renderRondinero();
 }
 
 function renderValePersonalModal(){
@@ -6375,6 +7558,11 @@ async function guardarEdicionCitaCompras(id){
 
   if(!proveedorNombre || !area || !motivo || !fechaHora){
     toast("Campos obligatorios",`${esVisitante ? "Nombre visitante" : "Proveedor"}, Área, Motivo y Fecha`,"warn");
+    return;
+  }
+
+  if(!horarioCitaPermitido(fechaHora)){
+    toast("Horario no permitido","No se pueden generar citas a las 5:00 pm o después.","warn");
     return;
   }
 
@@ -7377,6 +8565,13 @@ appEl.addEventListener("click", (e) => {
                   data-uid="${esc(u.uid)}">
               Editar
             </button>
+            ${String(u.role || "") === ROLES.GUARDIA ? `
+              <button class="secondary"
+                    data-action="rondineroGuardiaQR"
+                    data-uid="${esc(u.uid)}">
+                QR Guardia
+              </button>
+            ` : ""}
             <button class="secondary danger"
                     data-action="deleteUser"
                     data-uid="${esc(u.uid)}">
@@ -7446,6 +8641,46 @@ function renderUserModal(){
       </div>
     </div>
   `;
+}
+
+function renderRondineroGuardiaQR(uid){
+  if(!requirePerm("admin_roles","Solo ADMIN puede generar credenciales.")) return;
+  const u = _adminUsersCache.find(x => String(x.uid || x.id) === String(uid));
+  if(!u || String(u.role || "") !== ROLES.GUARDIA){
+    toast("Rondinero","Selecciona un usuario con rol guardia.","warn",2600);
+    return;
+  }
+  currentView = "rondinero_guardia_qr";
+  const qrText = rondineroGuardiaQrText(u);
+  appEl.innerHTML = `
+    <div class="card printable" style="max-width:520px;margin:0 auto;">
+      <h2 style="margin:0 0 6px;">Credencial Rondinero</h2>
+      <p style="margin:0 0 12px;color:var(--muted);font-size:12px;">Tarjeta QR para identificar al guardia antes de iniciar un rondín.</p>
+      <div class="tarjeta history-card" style="text-align:center;">
+        <div style="font-size:18px;font-weight:800;">${esc(u.nombre || "Guardia")}</div>
+        <div style="color:var(--muted);font-size:12px;margin-top:4px;">${esc(u.email || "")}</div>
+        <div style="height:14px;"></div>
+        <div id="qrcode" style="background:white; padding:10px; border-radius:14px; display:inline-block;"></div>
+        <div style="height:10px;"></div>
+        <span class="pill"><span class="dot ok"></span>GUARDIA</span>
+      </div>
+      <div class="divider"></div>
+      <div class="row">
+        <button class="secondary" data-action="adminRoles">Volver</button>
+        <button class="secondary" data-action="print">Imprimir</button>
+      </div>
+    </div>
+  `;
+  const box = document.getElementById("qrcode");
+  if(box && window.QRCode){
+    box.innerHTML = "";
+    new QRCode(box, {
+      text: qrText,
+      width: 220,
+      height: 220,
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
 }
 
 function openUserModal(uid){
@@ -8071,6 +9306,11 @@ function setupProveedorAutocomplete(){
 
   if(!persona || !area || !motivo || !fechaHora ){
     toast("Campos obligatorios","Persona, Área, Motivo y Fecha","warn");
+    return null;
+  }
+
+  if(!horarioCitaPermitido(fechaHora)){
+    toast("Horario no permitido","No se pueden generar citas a las 5:00 pm o después.","warn");
     return null;
   }
 
@@ -9642,6 +10882,29 @@ function renderProveedores(lista){
         case "valesPersonal": await renderValesPersonal(); break;
         case "bitacoraGuardia": await renderBitacoraGuardia(); break;
         case "guardarBitacora": await guardarBitacora(); break;
+        case "bitacoraScanGuardia": renderRondineroGuardiaScanner("bitacora"); break;
+        case "bitacoraClearGuardia": saveRondineroGuardiaCred(null); await renderBitacoraGuardia(); break;
+        case "rondinero": await renderRondinero(); break;
+        case "rondineroRefresh":
+          if(hasPerm("rondinero_configurar") || hasPerm("rondinero_reportes")){
+            await syncRondinero(true);
+          }else{
+            await syncRondineroGuardia(true);
+          }
+          await renderRondinero();
+          break;
+        case "rondineroGuardarPunto": await guardarRondineroPunto(); break;
+        case "rondineroTogglePunto": await toggleRondineroPunto(id); break;
+        case "rondineroGuardarRuta": await guardarRondineroRuta(); break;
+        case "rondineroToggleRuta": await toggleRondineroRuta(id); break;
+        case "rondineroDetalle": await renderRondineroDetalle(id); break;
+        case "rondineroQR": renderRondineroQR(id); break;
+        case "rondineroScanGuardia": renderRondineroGuardiaScanner(); break;
+        case "rondineroClearGuardia": saveRondineroGuardiaCred(null); await renderRondinero(); break;
+        case "rondineroIniciar": await iniciarRondinero(); break;
+        case "rondineroScan": renderRondineroScanner(); break;
+        case "rondineroNovedad": await guardarRondineroNovedad(); break;
+        case "rondineroCerrar": await cerrarRondinero(); break;
         case "openValePersonalModal": await openValePersonalModal(); break;
         case "closeValePersonalModal": closeValePersonalModal(); break;
         case "guardarValePersonal": await guardarValePersonal(); break;
@@ -9654,6 +10917,7 @@ function renderProveedores(lista){
 
         case "guardarProveedor": await guardarProveedor(); break;
         case "guardarMiPin": await guardarMiPin(); break;
+        case "adminRoles": await renderAdminRoles(); break;
 
         case "addFacturaOc": {
           const editorId = el.dataset.editor || "facturasOcEditor";
@@ -9778,6 +11042,10 @@ function renderProveedores(lista){
           break;
         case "openUserModal":
           openUserModal(el.dataset.uid);
+          break;
+
+        case "rondineroGuardiaQR":
+          renderRondineroGuardiaQR(el.dataset.uid);
           break;
         case "closeUserModal":
           closeUserModal();
