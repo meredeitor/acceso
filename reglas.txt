@@ -161,6 +161,62 @@ service cloud.firestore {
       allow delete: if isAdmin() || isCoordinador();
     }
 
+    match /visitantes/{id} {
+      allow read: if isAuth()
+        && (
+          isAdmin()
+          || isCoordinador()
+          || isCompras()
+          || isJefeCompras()
+          || isGuardia()
+          || isCalidad()
+          || isContraloria()
+          || isJefe()
+          || isAnfitrion()
+          || (isKioskoAnon() && request.query.limit <= 500)
+        );
+
+      allow create: if isAuth()
+        && request.resource.data.createdByUid == myUid()
+        && request.resource.data.tipoVisita == "visitante"
+        && (
+          (
+            (isAdmin() || isCoordinador() || isCompras() || isJefeCompras() || isAnfitrion() || isJefe())
+            && request.resource.data.status == "programado"
+          )
+          || (
+            isKioskoAnon()
+            && request.resource.data.status == "pendiente_autorizacion"
+          )
+        );
+
+      allow update: if isAuth() && (
+        isAdmin()
+        || isCoordinador()
+
+        || (
+          request.resource.data.createdByUid == resource.data.createdByUid
+          && request.resource.data.tipoVisita == "visitante"
+          && request.resource.data.status == resource.data.status
+        )
+
+        || (
+          isGuardia()
+          && resource.data.status in ["programado", "llegado"]
+          && request.resource.data.status in ["llegado", "dentro"]
+        )
+
+        || (
+          (isAdmin() || isCoordinador() || isGuardia())
+          && resource.data.status == "dentro"
+          && request.resource.data.tipoVisita == "visitante"
+          && request.resource.data.status == "finalizado"
+        )
+      );
+
+      allow delete: if isAdmin() || isCoordinador();
+    }
+
     match /resumen_diario/{fecha} {
       allow read, list: if isAuth()
         && (

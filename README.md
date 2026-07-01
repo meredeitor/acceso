@@ -2,7 +2,7 @@
 
 Aplicacion PWA para control operativo de accesos, citas, vales, bitacora de guardias y rondines de seguridad.
 
-Version actual visible en la app: `proveedores-v65`.
+Version actual visible en la app: `proveedores-v77`.
 
 ## Modulos principales
 
@@ -114,6 +114,7 @@ Colecciones principales usadas por la app:
 - `users`
 - `proveedores`
 - `visitas`
+- `visitantes`
 - `vales_activos`
 - `vales_personal`
 - `bitacora_guardia`
@@ -152,8 +153,8 @@ Esto fuerza a los equipos a descargar la nueva version de la app.
 
 Version actual:
 
-- Sidebar: `proveedores-v65`
-- Service Worker: `proveedores-v65`
+- Sidebar: `proveedores-v77`
+- Service Worker: `proveedores-v77`
 
 ## Mantenimiento recomendado
 
@@ -162,4 +163,3 @@ Version actual:
 - Limpiar cache del navegador si una tablet sigue mostrando una version anterior.
 - Mantener la version del sidebar y del service worker sincronizadas.
 - Evitar cargar archivos pesados a Firebase desde rondines o bitacora.
-

@@ -61,12 +61,16 @@
     .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
     .grid{ display:grid; gap:12px; }
     .grid.cols-5{ grid-template-columns: repeat(5, minmax(220px, 1fr)); }
+    .grid.cols-4{ grid-template-columns: repeat(4, minmax(220px, 1fr)); }
     .grid.vales-grid{ grid-template-columns: repeat(4, minmax(220px, 1fr)); align-items:start; }
     @media (max-width:1100px){ .grid.cols-5{ grid-template-columns: repeat(3, minmax(220px, 1fr)); } }
+    @media (max-width:1100px){ .grid.cols-4{ grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
     @media (max-width:1100px){ .grid.vales-grid{ grid-template-columns: repeat(2, minmax(220px, 1fr)); } }
     @media (max-width:720px){ .grid.cols-5{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width:720px){ .grid.cols-4{ grid-template-columns: repeat(2, 1fr); } }
     @media (max-width:720px){ .grid.vales-grid{ grid-template-columns: 1fr; } }
     @media (max-width:500px){ .grid.cols-5{ grid-template-columns: 1fr; } }
+    @media (max-width:500px){ .grid.cols-4{ grid-template-columns: 1fr; } }
 
     input, textarea, select{
       width:100%; padding:10px 12px; border-radius:12px;
@@ -299,9 +303,17 @@
     .table td code{ color:#93c5fd; }
 
     @media print{
+      html, body, .app-shell, main, #app{
+        background:#fff !important;
+        background-color:#fff !important;
+      }
+      *{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+      }
       body * { visibility:hidden !important; }
       .printable, .printable * { visibility:visible !important; }
-      .printable{ position:absolute; left:0; top:0; width:100%; padding:0 !important; background:white !important; color:black !important; }
+      .printable{ position:absolute; left:0; top:0; width:100%; padding:0 !important; color:black !important; }
       .printable .card{ box-shadow:none !important; border:none !important; background:white !important; }
       button, header{ display:none !important; }
     }
@@ -466,6 +478,405 @@ height: 100vh;
   word-break:break-word;
   white-space:normal;
   line-height:1.25;
+}
+.rondinero-print-shell{
+  max-width:680px;
+  margin:0 auto;
+}
+.rondinero-wall-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,.26);
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(248,250,252,.98), rgba(226,232,240,.96));
+  color:#0f172a;
+  box-shadow:0 22px 55px rgba(2,6,23,.28);
+}
+.rondinero-wall-band{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  padding:16px 18px;
+  background:linear-gradient(135deg,#0f172a,#1d4ed8);
+  color:#fff;
+}
+.rondinero-wall-brand{
+  display:grid;
+  gap:2px;
+  min-width:0;
+}
+.rondinero-wall-brand strong{
+  font-size:22px;
+  line-height:1;
+  letter-spacing:0;
+}
+.rondinero-wall-brand span{
+  font-size:11px;
+  color:rgba(255,255,255,.78);
+  text-transform:uppercase;
+}
+.rondinero-wall-badge{
+  flex:0 0 auto;
+  border:1px solid rgba(255,255,255,.28);
+  border-radius:999px;
+  padding:7px 11px;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:0;
+  background:rgba(255,255,255,.13);
+}
+.rondinero-wall-body{
+  display:grid;
+  grid-template-columns:minmax(240px,1fr) 250px;
+  gap:22px;
+  align-items:center;
+  padding:24px;
+}
+.rondinero-wall-title{
+  margin:0;
+  font-size:34px;
+  line-height:1.04;
+  color:#0f172a;
+}
+.rondinero-wall-location{
+  margin:10px 0 0;
+  font-size:17px;
+  font-weight:800;
+  color:#1d4ed8;
+}
+.rondinero-wall-desc{
+  margin:14px 0 0;
+  color:#475569;
+  font-size:14px;
+  line-height:1.45;
+}
+.rondinero-wall-steps{
+  display:grid;
+  gap:8px;
+  margin-top:18px;
+}
+.rondinero-wall-step{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:#334155;
+  font-size:13px;
+  font-weight:700;
+}
+.rondinero-wall-step b{
+  display:grid;
+  place-items:center;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  background:#facc15;
+  color:#0f172a;
+  font-size:12px;
+}
+.rondinero-wall-qr{
+  justify-self:center;
+  display:grid;
+  gap:10px;
+  justify-items:center;
+}
+.rondinero-wall-qr-box{
+  display:inline-block;
+  padding:12px;
+  border:2px solid #0f172a;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 10px 24px rgba(15,23,42,.16);
+}
+.rondinero-wall-code{
+  max-width:240px;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  font-size:10px;
+  line-height:1.25;
+  color:#64748b;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+.rondinero-wall-footer{
+  display:flex;
+  justify-content:space-between;
+  gap:14px;
+  padding:14px 18px;
+  border-top:1px solid rgba(15,23,42,.12);
+  background:rgba(255,255,255,.62);
+  color:#475569;
+  font-size:12px;
+  font-weight:700;
+}
+.rondinero-wall-footer span{
+  min-width:0;
+  overflow-wrap:anywhere;
+}
+.guard-badge-shell{
+  max-width:430px;
+  margin:0 auto;
+}
+.guard-badge{
+  position:relative;
+  overflow:hidden;
+  border-radius:22px;
+  background:#f8fafc;
+  color:#0f172a;
+  border:1px solid rgba(148,163,184,.55);
+  box-shadow:0 24px 70px rgba(2,6,23,.34);
+}
+.guard-badge::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border:10px solid rgba(15,23,42,.10);
+  border-radius:22px;
+}
+.guard-badge-hole{
+  width:96px;
+  height:22px;
+  margin:18px auto 14px;
+  border-radius:999px;
+  background:#020617;
+  box-shadow:inset 0 0 0 4px rgba(255,255,255,.82), 0 0 0 2px rgba(15,23,42,.18);
+}
+.guard-badge-panel{
+  position:relative;
+  margin:0 20px 20px;
+  overflow:hidden;
+  border-radius:18px;
+  background:#fff;
+}
+.guard-badge-top{
+  position:relative;
+  display:grid;
+  justify-items:center;
+  gap:10px;
+  padding:28px 24px 62px;
+  color:#fff;
+  background:linear-gradient(135deg,#031a34 0%,#08284b 58%,#075ebf 100%);
+}
+.guard-badge-top::after{
+  content:"";
+  position:absolute;
+  left:-8%;
+  right:-8%;
+  bottom:-34px;
+  height:82px;
+  background:#fff;
+  transform:skewY(10deg);
+  transform-origin:left top;
+}
+.guard-badge-shield{
+  position:relative;
+  z-index:1;
+  width:84px;
+  height:84px;
+  display:grid;
+  place-items:center;
+}
+.guard-badge-shield svg{
+  width:84px;
+  height:84px;
+  display:block;
+}
+.guard-badge-title{
+  position:relative;
+  z-index:1;
+  margin:0;
+  font-size:42px;
+  line-height:.95;
+  font-weight:900;
+  letter-spacing:8px;
+  color:#fff;
+  text-shadow:0 2px 12px rgba(0,0,0,.28);
+}
+.guard-badge-subtitle{
+  position:relative;
+  z-index:1;
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:5px;
+  color:rgba(255,255,255,.88);
+}
+.guard-badge-body{
+  position:relative;
+  z-index:2;
+  display:grid;
+  justify-items:center;
+  padding:0 28px 24px;
+  margin-top:-34px;
+}
+.guard-badge-qr-frame{
+  display:inline-block;
+  padding:12px;
+  border:4px solid #08284b;
+  border-radius:18px;
+  background:#fff;
+  box-shadow:0 10px 24px rgba(15,23,42,.18);
+}
+.guard-badge-verify{
+  margin-top:12px;
+  border-radius:999px;
+  padding:8px 18px;
+  background:#08284b;
+  color:#fff;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+.guard-badge-divider{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:14px;
+  width:100%;
+  margin:22px 0 12px;
+  color:#08284b;
+}
+.guard-badge-divider::before,
+.guard-badge-divider::after{
+  content:"";
+  height:2px;
+  background:#08284b;
+  opacity:.9;
+}
+.guard-badge-divider span{
+  display:grid;
+  place-items:center;
+  width:36px;
+  height:42px;
+  color:#fff;
+  background:#08284b;
+  clip-path:polygon(50% 0, 88% 18%, 78% 82%, 50% 100%, 22% 82%, 12% 18%);
+  font-size:18px;
+  font-weight:900;
+}
+.guard-badge-role{
+  margin:0;
+  color:#08284b;
+  font-size:25px;
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-align:center;
+  text-transform:uppercase;
+}
+.guard-badge-name{
+  margin-top:8px;
+  color:#334155;
+  font-size:14px;
+  font-weight:800;
+  text-align:center;
+  overflow-wrap:anywhere;
+}
+.guard-badge-meta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  align-items:center;
+  width:100%;
+  margin-top:24px;
+}
+.guard-badge-access{
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:10px;
+  align-items:center;
+  min-width:0;
+}
+.guard-badge-mini-shield{
+  display:grid;
+  place-items:center;
+  width:42px;
+  height:48px;
+  color:#fff;
+  background:#08284b;
+  clip-path:polygon(50% 0, 88% 18%, 78% 82%, 50% 100%, 22% 82%, 12% 18%);
+  font-size:18px;
+  font-weight:900;
+}
+.guard-badge-access strong{
+  display:block;
+  color:#08284b;
+  font-size:13px;
+  line-height:1.05;
+}
+.guard-badge-access span{
+  display:block;
+  color:#334155;
+  font-size:10px;
+  font-weight:800;
+  line-height:1.2;
+}
+.guard-badge-id{
+  border-left:2px solid #08284b;
+  padding-left:18px;
+  color:#0f172a;
+  font-size:17px;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.guard-badge-id b{
+  color:#075ebf;
+}
+.guard-badge-footer{
+  position:relative;
+  overflow:hidden;
+  padding:15px 20px;
+  background:#08284b;
+  color:#fff;
+  text-align:center;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:4px;
+  text-transform:uppercase;
+}
+.guard-badge-footer::after{
+  content:"";
+  position:absolute;
+  right:-20px;
+  top:0;
+  width:120px;
+  height:100%;
+  background:#075ebf;
+  transform:skewX(-32deg);
+}
+.guard-badge-footer span{
+  position:relative;
+  z-index:1;
+}
+.rondinero-tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.rondinero-tab{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(15,23,42,.42);
+  color:var(--muted);
+  border-radius:999px;
+  padding:9px 13px;
+  font-size:13px;
+  font-weight:800;
+}
+.rondinero-tab.active{
+  background:var(--accent);
+  border-color:rgba(255,255,255,.18);
+  color:#fff;
+  box-shadow:0 10px 24px rgba(37,99,235,.24);
+}
+@media (max-width:760px){
+  .rondinero-wall-body{ grid-template-columns:1fr; padding:18px; }
+  .rondinero-wall-title{ font-size:28px; }
+  .rondinero-wall-footer{ flex-direction:column; }
+  .guard-badge-shell{ max-width:380px; }
+  .guard-badge-title{ font-size:34px; letter-spacing:5px; }
+  .guard-badge-subtitle{ letter-spacing:3px; }
+  .guard-badge-meta{ grid-template-columns:1fr; }
+  .guard-badge-id{ border-left:0; border-top:2px solid #08284b; padding:12px 0 0; text-align:center; }
 }
 .factura-oc-editor{
   display:flex;
@@ -1177,6 +1588,37 @@ html[data-theme="mint"] .badge-dictamen.rechazado{ background:rgba(220,38,38,.18
 html[data-theme="mint"] .badge-dictamen.pendiente{ background:rgba(103,232,249,.30) !important; border-color:rgba(14,165,183,.48) !important; color:#0F3F3B !important; }
 html[data-theme="mint"] .badge-dictamen.aceptado{ background:rgba(52,211,153,.24) !important; border-color:rgba(15,118,110,.44) !important; color:#065f46 !important; }
 
+html[data-theme="light"] .rondinero-tab{
+  background:#fff !important;
+  border-color:rgba(15,23,42,.18) !important;
+  color:#0f172a !important;
+}
+html[data-theme="light"] .rondinero-tab.active{
+  background:#2563eb !important;
+  border-color:#2563eb !important;
+  color:#fff !important;
+}
+html[data-theme="desert"] .rondinero-tab{
+  background:rgba(247,243,232,.92) !important;
+  border-color:rgba(58,45,31,.24) !important;
+  color:#3A2D1F !important;
+}
+html[data-theme="desert"] .rondinero-tab.active{
+  background:#A67C52 !important;
+  border-color:#8f6840 !important;
+  color:#fff !important;
+}
+html[data-theme="mint"] .rondinero-tab{
+  background:rgba(236,254,255,.96) !important;
+  border-color:rgba(15,118,110,.26) !important;
+  color:#0F3F3B !important;
+}
+html[data-theme="mint"] .rondinero-tab.active{
+  background:#0F766E !important;
+  border-color:#0F766E !important;
+  color:#fff !important;
+}
+
 /* Viñetas con colores del tema claro en Desierto y Menta */
 html[data-theme="desert"] .pill .dot,
 html[data-theme="mint"] .pill .dot{
@@ -1273,7 +1715,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="sb-logo">PV</div>
     <div class="sb-title">
       <b>Control de Acesso</b>
-      <span>Versión proveedores-v65</span>
+      <span>Version proveedores-v77</span>
     </div>
   </div>
   <div class="sb-section">
@@ -1281,19 +1723,15 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
 
   <div class="sb-nav" id="sbNav">
 
-    <div class="sb-btn" data-sb="grupo_operacion" id="sbOperacionToggle" aria-expanded="false">
+    <div class="sb-btn" data-sb="grupo_proveedores" id="sbProveedoresToggle" aria-expanded="false">
       <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M9 22V12h6v10"/></svg></span>
-      <span class="sb-txt">Operación</span>
+      <span class="sb-txt">Proveedores</span>
       <span class="sb-caret" aria-hidden="true"></span>
     </div>
-    <div class="sb-sub" id="sbOperacionSub">
+    <div class="sb-sub" id="sbProveedoresSub">
       <div class="sb-btn" data-sb="dashboard_proveedores" aria-current="page">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 11l9-8 9 8"/><path d="M9 22V12h6v10"/></svg></span>
-        <span class="sb-txt">Proveedores</span>
-      </div>
-      <div class="sb-btn" data-sb="dashboard_visitantes">
-        <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M19 8h2"/><path d="M20 7v2"/></svg></span>
-        <span class="sb-txt">Visitantes</span>
+        <span class="sb-txt">Dashboard</span>
       </div>
       <div class="sb-btn" data-sb="nuevo">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></svg></span>
@@ -1301,11 +1739,27 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
       </div>
       <div class="sb-btn" data-sb="citas_proveedores">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 5h18"/><path d="M7 3v4"/><path d="M17 3v4"/><path d="M5 9h14"/><path d="M7 13h4"/><path d="M7 17h6"/></svg></span>
-        <span class="sb-txt">Citas proveedores</span>
+        <span class="sb-txt">Citas</span>
+      </div>
+    </div>
+
+    <div class="sb-btn" data-sb="grupo_visitantes" id="sbVisitantesToggle" aria-expanded="false">
+      <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M19 8h2"/><path d="M20 7v2"/></svg></span>
+      <span class="sb-txt">Visitantes</span>
+      <span class="sb-caret" aria-hidden="true"></span>
+    </div>
+    <div class="sb-sub" id="sbVisitantesSub">
+      <div class="sb-btn" data-sb="dashboard_visitantes">
+        <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M19 8h2"/><path d="M20 7v2"/></svg></span>
+        <span class="sb-txt">Dashboard</span>
+      </div>
+      <div class="sb-btn" data-sb="nuevo_visitante">
+        <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/><path d="M16 11a4 4 0 1 0-8 0"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></span>
+        <span class="sb-txt">Nueva cita</span>
       </div>
       <div class="sb-btn" data-sb="citas_visitantes">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 5h18"/><path d="M7 3v4"/><path d="M17 3v4"/><path d="M5 9h14"/><path d="M9 14a3 3 0 1 0 6 0"/><path d="M6 21a6 6 0 0 1 12 0"/></svg></span>
-        <span class="sb-txt">Citas visitantes</span>
+        <span class="sb-txt">Citas</span>
       </div>
     </div>
 
@@ -1558,6 +2012,7 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
 ========================= */
 
   const COL_VISITAS = "visitas";
+  const COL_VISITANTES = "visitantes";
   const COL_VALES_ACTIVOS = "vales_activos";
   const COL_VALES_PERSONAL = "vales_personal";
   const COL_BITACORA = "bitacora_guardia";
@@ -1568,7 +2023,7 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
   const COL_SESIONES = "presence";
   const COL_USERS = "users";
   const COL_RESUMEN_DIARIO = "resumen_diario";
-  const QR_LATE_BLOCK_MIN = 30; // ⛔ bloqueo duro por retraso
+  const QR_LATE_BLOCK_MIN = 30; // BLOQUEO bloqueo duro por retraso
   const VALES_ACTIVOS_LOOKBACK_DAYS = 30;
 
   const CLOUD_READ_TTL = {
@@ -1834,7 +2289,8 @@ const PIN_SESSION_KEY = "adminPinOkTs";
     const actionsBar = $("#actionsBar");
     const sidebarEl = document.getElementById('sidebar');
     const sbOverlay = document.getElementById('sbOverlay');
-    const sbOperacionSub = document.getElementById('sbOperacionSub');
+    const sbProveedoresSub = document.getElementById('sbProveedoresSub');
+    const sbVisitantesSub = document.getElementById('sbVisitantesSub');
     const sbValesSub = document.getElementById('sbValesSub');
     const sbGuardiaSub = document.getElementById('sbGuardiaSub');
     const sbReportesSub = document.getElementById('sbReportesSub');
@@ -1883,6 +2339,7 @@ const PIN_SESSION_KEY = "adminPinOkTs";
     let rondineroRondines = loadRondineroRondinesLocal();
     let rondineroEventos = loadRondineroEventosLocal();
     let rondineroGuardiaCred = loadRondineroGuardiaCred();
+    let rondineroAdminTab = "puntos";
     let _returnToEditCitaId = null;
     let _returnToEditMode = false;
 
@@ -2119,11 +2576,12 @@ function slotOcupado(area, slotHora, citasHoy){
 }
 
 async function goNuevaCita(){
-  setActiveSb('nuevo');   // ✅ CLAVE
+  const tipo = arguments[0] === "visitante" ? "visitante" : "proveedor";
+  setActiveSb(tipo === "visitante" ? "nuevo_visitante" : "nuevo");   // ✅ CLAVE
   lockView = true;        // 🔒 bloquea auto-render
-  currentView = "nuevo";
+  currentView = tipo === "visitante" ? "nuevo_visitante" : "nuevo";
   sbClose();
-  await renderNuevo();
+  await renderNuevo(tipo);
 }
 
 
@@ -2713,7 +3171,7 @@ function renderChartEstados(visitas){
   const ctx = document.getElementById("chartEstado");
   if(!ctx) return;
 
-  // Destruye instancia previa (evita “valores viejos” y encimados)
+  // Destruye instancia previa (evita "valores viejos" y encimados)
   if(chartEstadoInstance){
     chartEstadoInstance.destroy();
   }
@@ -2779,7 +3237,7 @@ function renderChartDictamen(visitas){
     chartDictamenInstance.destroy();
   }
 
-  // Si no hay dictámenes, muestra un donut “vacío” informativo
+  // Si no hay dictámenes, muestra un donut "vacío" informativo
   const dataToPlot = total > 0 ? values : [1];
   const labelsToPlot = total > 0 ? labels : ["Sin dictámenes"];
 
@@ -2795,7 +3253,7 @@ function renderChartDictamen(visitas){
               "rgba(239,68,68,.85)",  // Rechazado (bad)
               "rgba(250,204,21,.85)"  // Pendiente (warn)
             ]
-          : ["rgba(148,163,184,.35)"], // “Sin dictámenes”
+          : ["rgba(148,163,184,.35)"], // "Sin dictámenes"
         borderColor: "rgba(255,255,255,.10)",
         borderWidth: 1,
         hoverOffset: 6
@@ -2837,7 +3295,7 @@ function renderChartTiempoPorArea(visitas){
   const ctx = document.getElementById("chartTiempo");
   if(!ctx) return;
 
-  // Si no hay datos de tiempos, limpia la gráfica y muestra “—”
+  // Si no hay datos de tiempos, limpia la gráfica y muestra "—"
   if(chartTiempoInstance){
     chartTiempoInstance.destroy();
     chartTiempoInstance = null;
@@ -3101,7 +3559,8 @@ function toggleSbSub(btn, sub){
 }
 
 function collapseSidebarSubs(){
-  setSbExpanded(document.getElementById('sbOperacionToggle'), sbOperacionSub, false);
+  setSbExpanded(document.getElementById('sbProveedoresToggle'), sbProveedoresSub, false);
+  setSbExpanded(document.getElementById('sbVisitantesToggle'), sbVisitantesSub, false);
   setSbExpanded(document.getElementById('sbValesToggle'), sbValesSub, false);
   setSbExpanded(document.getElementById('sbGuardiaToggle'), sbGuardiaSub, false);
   setSbExpanded(document.getElementById('sbReportesToggle'), sbReportesSub, false);
@@ -3143,23 +3602,26 @@ function paintSidebar(){
   // ===============================
   // Navegación principal
   // ===============================
-  const dashProveedores  = sidebarEl.querySelector('[data-sb="dashboard_proveedores"]');
+const dashProveedores  = sidebarEl.querySelector('[data-sb="dashboard_proveedores"]');
 const dashVisitantes  = sidebarEl.querySelector('[data-sb="dashboard_visitantes"]');
 const nuevo = sidebarEl.querySelector('[data-sb="nuevo"]');
+const nuevoVisitante = sidebarEl.querySelector('[data-sb="nuevo_visitante"]');
 const hist  = sidebarEl.querySelector('[data-sb="historial"]');
 const scan  = sidebarEl.querySelector('[data-sb="scan"]');
 const vales = sidebarEl.querySelector('[data-sb="vales_activos"]');
 const valesPersonalBtn = sidebarEl.querySelector('[data-sb="vales_personal"]');
 const bitacoraBtn = sidebarEl.querySelector('[data-sb="bitacora_guardia"]');
 const rondineroBtn = sidebarEl.querySelector('[data-sb="rondinero"]');
-const groupOperacion = sidebarEl.querySelector('[data-sb="grupo_operacion"]');
+const groupProveedores = sidebarEl.querySelector('[data-sb="grupo_proveedores"]');
+const groupVisitantes = sidebarEl.querySelector('[data-sb="grupo_visitantes"]');
 const groupVales = sidebarEl.querySelector('[data-sb="grupo_vales"]');
 const groupGuardia = sidebarEl.querySelector('[data-sb="grupo_guardia"]');
 const groupReportes = sidebarEl.querySelector('[data-sb="grupo_reportes"]');
 
 if(dashProveedores)  dashProveedores.style.display  = hasPerm('ver_dashboard') && !isAnfitrionOnly() ? '' : 'none';
 if(dashVisitantes)  dashVisitantes.style.display  = hasPerm('ver_dashboard') ? '' : 'none';
-if(nuevo) nuevo.style.display = canCreateAnyCita() ? '' : 'none';
+if(nuevo) nuevo.style.display = canCreateProveedorCita() && !isAnfitrionOnly() ? '' : 'none';
+if(nuevoVisitante) nuevoVisitante.style.display = canCreateVisitanteCita() ? '' : 'none';
 if(hist)  hist.style.display  = hasPerm('ver_historial') ? '' : 'none';
 if(scan)  scan.style.display  = hasPerm('escanear_qr') ? '' : 'none';
 if(vales) vales.style.display = hasPerm('ver_vales_activos') ? '' : 'none';
@@ -3210,15 +3672,20 @@ if (btnCambios) {
   btnCambios.style.display = canSeeCambios ? '' : 'none';
 }
 
-const hasOperacionItems =
-  (hasPerm('ver_dashboard')) ||
-  canCreateAnyCita() ||
+const hasProveedoresItems =
+  (hasPerm('ver_dashboard') && !isAnfitrionOnly()) ||
+  (canCreateProveedorCita() && !isAnfitrionOnly()) ||
+  (hasPerm('ver_citas_compras') && !isAnfitrionOnly());
+const hasVisitantesItems =
+  hasPerm('ver_dashboard') ||
+  canCreateVisitanteCita() ||
   hasPerm('ver_citas_compras');
 const hasValesItems = hasPerm('ver_vales_activos') || hasPerm('ver_vales_personal');
 const hasGuardiaItems = hasPerm('escanear_qr') || hasPerm('ver_bitacora_guardia') || hasPerm('rondinero_ver');
 const hasReportesItems = hasPerm('ver_historial') || hasPerm('exportar_excel') || hasPerm('ver_dashboard') || (currentUser && (currentUser.role === ROLES.ADMIN || currentUser.role === ROLES.CONTRALORIA));
 
-if(groupOperacion) groupOperacion.style.display = hasOperacionItems ? '' : 'none';
+if(groupProveedores) groupProveedores.style.display = hasProveedoresItems ? '' : 'none';
+if(groupVisitantes) groupVisitantes.style.display = hasVisitantesItems ? '' : 'none';
 if(groupVales) groupVales.style.display = hasValesItems ? '' : 'none';
 if(groupGuardia) groupGuardia.style.display = hasGuardiaItems ? '' : 'none';
 if(groupReportes) groupReportes.style.display = hasReportesItems ? '' : 'none';
@@ -3242,8 +3709,12 @@ if(!sb) return;
 
   const key = sb.dataset.sb;
 
-  if(key === 'grupo_operacion'){
-    toggleSbSub(document.getElementById('sbOperacionToggle'), sbOperacionSub);
+  if(key === 'grupo_proveedores'){
+    toggleSbSub(document.getElementById('sbProveedoresToggle'), sbProveedoresSub);
+    return;
+  }
+  if(key === 'grupo_visitantes'){
+    toggleSbSub(document.getElementById('sbVisitantesToggle'), sbVisitantesSub);
     return;
   }
   if(key === 'grupo_vales'){
@@ -3279,9 +3750,13 @@ if(!sb) return;
     return;
   }
   if(key === 'nuevo'){
-    setActiveSb(getActiveDashboardTipo() === "visitantes" ? 'dashboard_visitantes' : 'dashboard_proveedores');
     sbClose();
-    await goNuevaCita();
+    await goNuevaCita("proveedor");
+    return;
+  }
+  if(key === 'nuevo_visitante'){
+    sbClose();
+    await goNuevaCita("visitante");
     return;
   }
   if(key === 'historial'){
@@ -4170,8 +4645,12 @@ function fmt(ts){
     // -------------------------
     // Firebase: visitas CRUD
     // -------------------------
+    function colAcceso(v){
+      return isVisitante(v) ? COL_VISITANTES : COL_VISITAS;
+    }
+
     async function cloudUpsertVisita(v){
-      const ref = doc(db, COL_VISITAS, String(v.id));
+      const ref = doc(db, colAcceso(v), String(v.id));
       const oldSnap = await getDoc(ref);
       const before = oldSnap.exists() ? { id: oldSnap.id, ...oldSnap.data() } : null;
       const after = {
@@ -4188,7 +4667,8 @@ function fmt(ts){
     }
 
     async function cloudDeleteVisita(id){
-      const ref = doc(db, COL_VISITAS, String(id));
+      const local = visitas.find(v => String(v.id) === String(id));
+      const ref = doc(db, local ? colAcceso(local) : COL_VISITAS, String(id));
       const oldSnap = await getDoc(ref);
       const before = oldSnap.exists() ? { id: oldSnap.id, ...oldSnap.data() } : null;
       const batch = writeBatch(db);
@@ -4200,16 +4680,34 @@ function fmt(ts){
     async function cloudFetchByDay(dateObj){
       const { start, end } = dayBounds(dateObj);
       // Query por rango en fechaHoraTs (misma field), sin pedir índices compuestos
-      const q = query(
+      const qProveedores = query(
         collection(db, COL_VISITAS),
         where("fechaHoraTs", ">=", start),
         where("fechaHoraTs", "<", end),
         orderBy("fechaHoraTs", "desc"),
         limit(500)
       );
-      const snap = await getDocs(q);
+      const qVisitantes = query(
+        collection(db, COL_VISITANTES),
+        where("fechaHoraTs", ">=", start),
+        where("fechaHoraTs", "<", end),
+        orderBy("fechaHoraTs", "desc"),
+        limit(500)
+      );
+      const [proveedoresRes, visitantesRes] = await Promise.allSettled([getDocs(qProveedores), getDocs(qVisitantes)]);
+      if(proveedoresRes.status === "rejected" && visitantesRes.status === "rejected"){
+        throw proveedoresRes.reason || visitantesRes.reason;
+      }
       const arr = [];
-      snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
+      const snap = proveedoresRes.status === "fulfilled" ? proveedoresRes.value : null;
+      const visitantesSnap = visitantesRes.status === "fulfilled" ? visitantesRes.value : null;
+      if(proveedoresRes.status === "rejected") console.warn("No se pudo leer visitas:", proveedoresRes.reason);
+      if(visitantesRes.status === "rejected") console.warn("No se pudo leer visitantes:", visitantesRes.reason);
+      snap?.forEach(d => {
+        const data = { id: d.id, ...d.data() };
+        if(!isVisitante(data)) arr.push(data);
+      });
+      visitantesSnap?.forEach(d => arr.push({ id: d.id, ...d.data(), tipoVisita:"visitante", tipoAcceso:"visitante" }));
       return arr;
     }
 
@@ -4756,6 +5254,7 @@ function renderRegisterForm(){
       const boardList = dashboardPendingOnly ? pendingAuth : filtered.filter(v => v.status !== Status.PENDIENTE_AUTORIZACION);
 
       const { programados, llegados, dentro, despachados, finalizados } = getCounts(boardList);
+      const showDespachados = dashboardTipo !== "visitantes";
 
       const scanBtn = hasPerm("escanear_qr") ? `
         <button class="secondary"
@@ -4865,11 +5364,11 @@ ${incLabel ? `
           </div>
         </div>
       ` : `
-        <div class="grid cols-5">
+        <div class="grid ${showDespachados ? "cols-5" : "cols-4"}">
           ${col("Programados","info",programados)}
           ${col("Llegaron","warn",llegados)}
           ${col("Dentro","ok",dentro)}
-          ${col("Despachados","brand",despachados)}
+          ${showDespachados ? col("Despachados","brand",despachados) : ""}
           ${col("Finalizados","muted",finalizados)}
         </div>
       `;
@@ -4941,23 +5440,41 @@ ${incLabel ? `
 
           <div class="divider"></div>
           <div id="histWrap" style="min-height:80px;color:var(--muted);font-size:12px;">
-            Selecciona un día y presiona “Cargar día”.
+            Selecciona un día y presiona "Cargar día".
           </div>
         </div>
       `;
     }
 
 async function cloudFetchByRange(fromTs, toTs){
-  const q = query(
+  const qProveedores = query(
     collection(db, COL_VISITAS),
     where("fechaHoraTs", ">=", fromTs),
     where("fechaHoraTs", "<=", toTs),
     orderBy("fechaHoraTs", "desc"),
     limit(1000)
   );
-  const snap = await getDocs(q);
+  const qVisitantes = query(
+    collection(db, COL_VISITANTES),
+    where("fechaHoraTs", ">=", fromTs),
+    where("fechaHoraTs", "<=", toTs),
+    orderBy("fechaHoraTs", "desc"),
+    limit(1000)
+  );
+  const [proveedoresRes, visitantesRes] = await Promise.allSettled([getDocs(qProveedores), getDocs(qVisitantes)]);
+  if(proveedoresRes.status === "rejected" && visitantesRes.status === "rejected"){
+    throw proveedoresRes.reason || visitantesRes.reason;
+  }
   const arr = [];
-  snap.forEach(d => arr.push({ id: d.id, ...d.data() }));
+  const snap = proveedoresRes.status === "fulfilled" ? proveedoresRes.value : null;
+  const visitantesSnap = visitantesRes.status === "fulfilled" ? visitantesRes.value : null;
+  if(proveedoresRes.status === "rejected") console.warn("No se pudo leer visitas por rango:", proveedoresRes.reason);
+  if(visitantesRes.status === "rejected") console.warn("No se pudo leer visitantes por rango:", visitantesRes.reason);
+  snap?.forEach(d => {
+    const data = { id: d.id, ...d.data() };
+    if(!isVisitante(data)) arr.push(data);
+  });
+  visitantesSnap?.forEach(d => arr.push({ id: d.id, ...d.data(), tipoVisita:"visitante", tipoAcceso:"visitante" }));
   return arr;
 }
 
@@ -5032,7 +5549,7 @@ async function renderCitasCompras(tipoFiltro = getActiveDashboardTipo()){
             <option value="${Status.PROGRAMADO}">Programado</option>
             <option value="${Status.LLEGADO}">Llegó</option>
             <option value="${Status.DENTRO}">Dentro</option>
-            <option value="${Status.DESPACHADO}">Despachado</option>
+            ${_citasTipoFiltro === "visitantes" ? "" : `<option value="${Status.DESPACHADO}">Despachado</option>`}
             <option value="${Status.FINALIZADO}">Finalizado</option>
             <option value="${Status.CANCELADO}">Cancelado</option>
           </select>
@@ -5049,7 +5566,7 @@ async function renderCitasCompras(tipoFiltro = getActiveDashboardTipo()){
       <div class="divider"></div>
 
       <div id="ccWrap" style="overflow:auto;">
-        <div style="color:var(--muted);font-size:12px;">Presiona “Cargar”.</div>
+        <div style="color:var(--muted);font-size:12px;">Presiona "Cargar".</div>
       </div>
     </div>
   `;
@@ -6361,14 +6878,7 @@ async function renderRondinero(){
 
   const puntos = getRondineroPuntosActivos();
   const rutas = getRondineroRutasActivas();
-  const activo = getRondineroActivo();
-  const puntosActivo = activo ? getRondineroPuntosParaRondin(activo) : puntos;
-  const eventos = activo ? getRondineroEventos(activo.id) : [];
-  const visitados = new Set(eventos.filter(e => e.tipo === "scan").map(e => String(e.puntoId)));
-  const avance = puntosActivo.length ? Math.round((visitados.size / puntosActivo.length) * 100) : 0;
-  const novedades = eventos.filter(e => e.tipo === "novedad").length;
   const puedeConfigurar = hasPerm("rondinero_configurar");
-  const puedeEjecutar = hasPerm("rondinero_ejecutar");
   const puedeReportes = hasPerm("rondinero_reportes");
   const rondinesHoy = rondineroRondines.filter(r => r.fecha === todayISO());
   const eventosHoy = rondineroEventos.filter(e => e.fecha === todayISO());
@@ -6389,6 +6899,133 @@ async function renderRondinero(){
     acc[key].push(r);
     return acc;
   }, {})).map(([turno, list]) => ({ turno, ...calcRondineroStats(list, rondineroEventos.filter(e => list.some(r => r.id === e.rondinId))) }));
+  const tabs = [
+    ...(puedeConfigurar ? [
+      { key:"puntos", label:"Puntos de control" },
+      { key:"rutas", label:"Rutas" }
+    ] : []),
+    ...(puedeReportes ? [
+      { key:"cumplimiento", label:"Cumplimiento guardia" },
+      { key:"turnos", label:"Cumplimiento turno" },
+      { key:"historial", label:"Historial" }
+    ] : [])
+  ];
+  if(!tabs.some(t => t.key === rondineroAdminTab)){
+    rondineroAdminTab = tabs[0]?.key || "puntos";
+  }
+  const tabNav = `
+    <div class="divider"></div>
+    <div class="rondinero-tabs" role="tablist">
+      ${tabs.map(t => `
+        <button class="rondinero-tab ${rondineroAdminTab === t.key ? "active" : ""}" data-action="rondineroTab" data-tab="${esc(t.key)}" type="button">${esc(t.label)}</button>
+      `).join("")}
+    </div>
+  `;
+  const puntosTab = `
+    <div class="divider"></div>
+    <h3 style="margin:0 0 10px;">Puntos de control</h3>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+      <div><label>Nombre *</label><input id="rondPuntoNombre" placeholder="Ej. Caseta principal"></div>
+      <div><label>Ubicación *</label><input id="rondPuntoUbicacion" placeholder="Ej. Acceso norte"></div>
+      <div><label>Orden</label><input id="rondPuntoOrden" type="number" min="0" value="${puntos.length + 1}"></div>
+      <div style="grid-column:1/-1;"><label>Descripción</label><textarea id="rondPuntoDesc" rows="2" placeholder="Referencia breve del punto"></textarea></div>
+    </div>
+    <div class="row" style="margin-top:10px;"><button data-action="rondineroGuardarPunto">Guardar punto</button></div>
+    <div style="height:12px;"></div>
+    <div class="dashboard-pending-list">
+      ${rondineroPuntos.length ? rondineroPuntos.map(renderRondineroPuntoCard).join("") : `<div style="color:var(--muted);font-size:12px;">Sin puntos registrados.</div>`}
+    </div>
+  `;
+  const rutasTab = `
+    <div class="divider"></div>
+    <h3 style="margin:0 0 10px;">Rutas de rondín</h3>
+    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
+      <div><label>Nombre de ruta *</label><input id="rondRutaNombre" placeholder="Ej. Ruta nocturna patio"></div>
+      <div><label>Turno</label><select id="rondRutaTurno"><option>Día</option><option>Tarde</option><option>Noche</option><option>Mixto</option></select></div>
+      <div style="grid-column:1/-1;"><label>Descripción</label><textarea id="rondRutaDesc" rows="2" placeholder="Referencia breve de la ruta"></textarea></div>
+    </div>
+    <div style="height:10px;"></div>
+    <label>Puntos de la ruta *</label>
+    <div class="dashboard-pending-list" style="max-height:260px;overflow:auto;">
+      ${puntos.length ? puntos.map(p => `
+        <label class="tarjeta history-card" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;">
+          <input type="checkbox" class="rondRutaPunto" value="${esc(p.id)}" style="width:auto;margin-top:3px;">
+          <span><strong>${esc(p.nombre)}</strong><small>${esc(p.ubicacion || "")}</small></span>
+        </label>
+      `).join("") : `<div style="color:var(--muted);font-size:12px;">Registra puntos activos antes de crear rutas.</div>`}
+    </div>
+    <div class="row" style="margin-top:10px;"><button data-action="rondineroGuardarRuta" ${puntos.length ? "" : "disabled"}>Guardar ruta</button></div>
+    <div style="height:12px;"></div>
+    <div class="dashboard-pending-list">
+      ${rondineroRutas.length ? rondineroRutas.map(renderRondineroRutaCard).join("") : `<div style="color:var(--muted);font-size:12px;">Sin rutas registradas.</div>`}
+    </div>
+  `;
+  const cumplimientoTab = `
+    <div class="divider"></div>
+    <h3 style="margin:0 0 10px;">Cumplimiento por guardia</h3>
+    <div class="dashboard-pending-list">
+      ${porGuardia.slice(0, 20).map(g => `
+        <div class="tarjeta history-card">
+          <strong>${esc(g.guardia)}</strong>
+          <div class="meta">
+            <span class="pill">${esc(g.total)} rondines</span>
+            <span class="pill"><span class="dot ok"></span>${esc(g.cumplimiento)}%</span>
+            <span class="pill">${esc(g.completados)} completos</span>
+            <span class="pill">${esc(g.incompletos)} incompletos</span>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <button class="secondary" data-action="rondineroDetalle" data-id="${esc(g.latestId)}" data-no-sb="true" ${g.latestId ? "" : "disabled"}>Detalle</button>
+          </div>
+        </div>
+      `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin datos por guardia.</div>`}
+    </div>
+  `;
+  const turnosTab = `
+    <div class="divider"></div>
+    <h3 style="margin:0 0 10px;">Cumplimiento por turno</h3>
+    <div class="dashboard-pending-list">
+      ${porTurno.map(t => `
+        <div class="tarjeta history-card">
+          <strong>${esc(t.turno)}</strong>
+          <div class="meta">
+            <span class="pill">${esc(t.total)} rondines</span>
+            <span class="pill"><span class="dot ok"></span>${esc(t.cumplimiento)}%</span>
+            <span class="pill">${esc(t.completados)} completos</span>
+            <span class="pill">${esc(t.incompletos)} incompletos</span>
+            <span class="pill">${esc(t.puntosOmitidos)} omitidos</span>
+            <span class="pill">${esc(t.tiempoProm)} min prom.</span>
+          </div>
+        </div>
+      `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin datos por turno.</div>`}
+    </div>
+  `;
+  const historialTab = `
+    <div class="divider"></div>
+    <h3 style="margin:0 0 10px;">Historial reciente</h3>
+    <div class="dashboard-pending-list">
+      ${rondineroRondines.slice().sort((a,b)=>(b.createdTs||0)-(a.createdTs||0)).slice(0,20).map(r => `
+        <div class="tarjeta history-card">
+          <strong>${esc(r.guardiaNombre || "Guardia")}</strong>
+          <small>${esc(r.rutaNombre || "Ruta")} • ${esc(r.turno || "Sin turno")} • ${esc(new Date(r.inicioTs || r.createdTs || Date.now()).toLocaleString())}</small>
+          <div class="meta">
+            <span class="pill"><span class="dot ${r.status === "completado" ? "ok" : r.status === "incompleto" ? "bad" : "info"}"></span>${esc(r.status || "")}</span>
+            <span class="pill">${esc((r.puntoIdsVisitados || []).length)}/${esc((r.puntoIdsEsperados || []).length)} puntos</span>
+            <span class="pill">${esc(r.novedadesCount || 0)} novedades</span>
+          </div>
+          <div class="row" style="margin-top:10px;">
+            <button class="secondary" data-action="rondineroDetalle" data-id="${esc(r.id)}" data-no-sb="true">Detalle</button>
+          </div>
+        </div>
+      `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin rondines registrados.</div>`}
+    </div>
+  `;
+  const activeTabContent = {
+    puntos: puntosTab,
+    rutas: rutasTab,
+    cumplimiento: cumplimientoTab,
+    turnos: turnosTab,
+    historial: historialTab
+  }[rondineroAdminTab] || "";
 
   appEl.innerHTML = `
     <div class="card">
@@ -6415,152 +7052,8 @@ async function renderRondinero(){
         <div class="tarjeta"><strong>${statsTotal.novedades}</strong><small>Novedades</small></div>
       </div>
 
-      <div class="divider"></div>
-
-      ${activo ? `
-        <div class="tarjeta history-card">
-          <div class="row" style="justify-content:space-between;align-items:flex-start;">
-            <div>
-              <strong>Rondín en curso</strong>
-              <small>${esc(activo.rutaNombre || "Ruta")} • ${esc(activo.turno || "Sin turno")} • ${esc(new Date(activo.inicioTs || Date.now()).toLocaleString())}</small>
-            </div>
-            <span class="pill"><span class="dot info"></span>${visitados.size}/${puntosActivo.length} puntos</span>
-          </div>
-          <div style="height:10px;"></div>
-          <div style="height:10px;border-radius:999px;background:rgba(148,163,184,.22);overflow:hidden;">
-            <div style="width:${avance}%;height:100%;background:var(--accent);"></div>
-          </div>
-          <div class="row" style="margin-top:12px;">
-            ${puedeEjecutar ? `<button data-action="rondineroScan">Escanear punto</button>` : ""}
-            ${puedeEjecutar ? `<button class="secondary" data-action="rondineroNovedad">Reportar novedad</button>` : ""}
-            ${puedeEjecutar ? `<button class="ok" data-action="rondineroCerrar">Cerrar rondín</button>` : ""}
-          </div>
-        </div>
-      ` : `
-        <div class="tarjeta history-card">
-          <strong>Sin rondín en curso</strong>
-          <small>${puntos.length ? "Inicia un recorrido para registrar puntos." : "Primero registra puntos de control."}</small>
-          <div class="row" style="margin-top:12px;">
-            ${puedeEjecutar ? `<button data-action="rondineroIniciar" ${puntos.length ? "" : "disabled"}>Iniciar rondín</button>` : ""}
-          </div>
-        </div>
-      `}
-
-      ${activo ? `
-        <div class="divider"></div>
-        <h3 style="margin:0 0 10px;">Avance del recorrido</h3>
-        <div class="dashboard-pending-list">
-          ${puntosActivo.map(p => {
-            const evento = eventos.find(e => e.tipo === "scan" && String(e.puntoId) === String(p.id));
-            return `
-              <div class="tarjeta history-card">
-                <strong>${esc(p.nombre)}</strong>
-                <small>${esc(p.ubicacion || "")}</small>
-                <div class="meta">
-                  <span class="pill"><span class="dot ${evento ? "ok" : "info"}"></span>${evento ? "Visitado" : "Pendiente"}</span>
-                  ${evento ? `<span class="pill">${esc(new Date(evento.createdTs).toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}))}</span>` : ""}
-                </div>
-              </div>
-            `;
-          }).join("")}
-          ${novedades ? `<div class="tarjeta history-card"><strong>${novedades} novedades reportadas</strong><small>Registradas durante este rondín.</small></div>` : ""}
-        </div>
-      ` : ""}
-
-      ${puedeConfigurar ? `
-        <div class="divider"></div>
-        <h3 style="margin:0 0 10px;">Rutas de rondín</h3>
-        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
-          <div><label>Nombre de ruta *</label><input id="rondRutaNombre" placeholder="Ej. Ruta nocturna patio"></div>
-          <div><label>Turno</label><select id="rondRutaTurno"><option>Día</option><option>Tarde</option><option>Noche</option><option>Mixto</option></select></div>
-          <div style="grid-column:1/-1;"><label>Descripción</label><textarea id="rondRutaDesc" rows="2" placeholder="Referencia breve de la ruta"></textarea></div>
-        </div>
-        <div style="height:10px;"></div>
-        <label>Puntos de la ruta *</label>
-        <div class="dashboard-pending-list" style="max-height:260px;overflow:auto;">
-          ${puntos.length ? puntos.map(p => `
-            <label class="tarjeta history-card" style="display:flex;gap:10px;align-items:flex-start;cursor:pointer;">
-              <input type="checkbox" class="rondRutaPunto" value="${esc(p.id)}" style="width:auto;margin-top:3px;">
-              <span><strong>${esc(p.nombre)}</strong><small>${esc(p.ubicacion || "")}</small></span>
-            </label>
-          `).join("") : `<div style="color:var(--muted);font-size:12px;">Registra puntos activos antes de crear rutas.</div>`}
-        </div>
-        <div class="row" style="margin-top:10px;"><button data-action="rondineroGuardarRuta" ${puntos.length ? "" : "disabled"}>Guardar ruta</button></div>
-        <div style="height:12px;"></div>
-        <div class="dashboard-pending-list">
-          ${rondineroRutas.length ? rondineroRutas.map(renderRondineroRutaCard).join("") : `<div style="color:var(--muted);font-size:12px;">Sin rutas registradas.</div>`}
-        </div>
-
-        <div class="divider"></div>
-        <h3 style="margin:0 0 10px;">Puntos de control</h3>
-        <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));">
-          <div><label>Nombre *</label><input id="rondPuntoNombre" placeholder="Ej. Caseta principal"></div>
-          <div><label>Ubicación *</label><input id="rondPuntoUbicacion" placeholder="Ej. Acceso norte"></div>
-          <div><label>Orden</label><input id="rondPuntoOrden" type="number" min="0" value="${puntos.length + 1}"></div>
-          <div style="grid-column:1/-1;"><label>Descripción</label><textarea id="rondPuntoDesc" rows="2" placeholder="Referencia breve del punto"></textarea></div>
-        </div>
-        <div class="row" style="margin-top:10px;"><button data-action="rondineroGuardarPunto">Guardar punto</button></div>
-        <div style="height:12px;"></div>
-        <div class="dashboard-pending-list">
-          ${rondineroPuntos.length ? rondineroPuntos.map(renderRondineroPuntoCard).join("") : `<div style="color:var(--muted);font-size:12px;">Sin puntos registrados.</div>`}
-        </div>
-      ` : ""}
-
-      ${puedeReportes ? `
-        <div class="divider"></div>
-        <h3 style="margin:0 0 10px;">Cumplimiento por guardia</h3>
-        <div class="dashboard-pending-list">
-          ${porGuardia.slice(0, 20).map(g => `
-            <div class="tarjeta history-card">
-              <strong>${esc(g.guardia)}</strong>
-              <div class="meta">
-                <span class="pill">${esc(g.total)} rondines</span>
-                <span class="pill"><span class="dot ok"></span>${esc(g.cumplimiento)}%</span>
-                <span class="pill">${esc(g.completados)} completos</span>
-                <span class="pill">${esc(g.incompletos)} incompletos</span>
-              </div>
-              <div class="row" style="margin-top:10px;">
-                <button class="secondary" data-action="rondineroDetalle" data-id="${esc(g.latestId)}" data-no-sb="true" ${g.latestId ? "" : "disabled"}>Detalle</button>
-              </div>
-            </div>
-          `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin datos por guardia.</div>`}
-        </div>
-
-        <div style="height:14px;"></div>
-        <h3 style="margin:0 0 10px;">Cumplimiento por turno</h3>
-        <div class="dashboard-pending-list">
-          ${porTurno.map(t => `
-            <div class="tarjeta history-card">
-              <strong>${esc(t.turno)}</strong>
-              <div class="meta">
-                <span class="pill">${esc(t.total)} rondines</span>
-                <span class="pill"><span class="dot ok"></span>${esc(t.cumplimiento)}%</span>
-                <span class="pill">${esc(t.puntosOmitidos)} omitidos</span>
-                <span class="pill">${esc(t.tiempoProm)} min prom.</span>
-              </div>
-            </div>
-          `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin datos por turno.</div>`}
-        </div>
-
-        <div style="height:14px;"></div>
-        <h3 style="margin:0 0 10px;">Historial reciente</h3>
-        <div class="dashboard-pending-list">
-          ${rondineroRondines.slice().sort((a,b)=>(b.createdTs||0)-(a.createdTs||0)).slice(0,20).map(r => `
-            <div class="tarjeta history-card">
-              <strong>${esc(r.guardiaNombre || "Guardia")}</strong>
-              <small>${esc(r.rutaNombre || "Ruta")} • ${esc(r.turno || "Sin turno")} • ${esc(new Date(r.inicioTs || r.createdTs || Date.now()).toLocaleString())}</small>
-              <div class="meta">
-                <span class="pill"><span class="dot ${r.status === "completado" ? "ok" : r.status === "incompleto" ? "bad" : "info"}"></span>${esc(r.status || "")}</span>
-                <span class="pill">${esc((r.puntoIdsVisitados || []).length)}/${esc((r.puntoIdsEsperados || []).length)} puntos</span>
-                <span class="pill">${esc(r.novedadesCount || 0)} novedades</span>
-              </div>
-              <div class="row" style="margin-top:10px;">
-                <button class="secondary" data-action="rondineroDetalle" data-id="${esc(r.id)}" data-no-sb="true">Detalle</button>
-              </div>
-            </div>
-          `).join("") || `<div style="color:var(--muted);font-size:12px;">Sin rondines registrados.</div>`}
-        </div>
-      ` : ""}
+      ${tabNav}
+      ${activeTabContent}
     </div>
   `;
 }
@@ -6738,21 +7231,49 @@ async function toggleRondineroRuta(id){
   await renderRondinero();
 }
 
+
+
 function renderRondineroQR(id){
   if(!requirePerm("rondinero_ver","Tu rol no puede ver Rondinero.")) return;
   const p = rondineroPuntos.find(x => String(x.id) === String(id));
   if(!p) return renderRondinero();
   currentView = "rondinero_qr";
+  const qrText = p.qrCode || rondineroQrText(p.id);
   appEl.innerHTML = `
-    <div class="card printable">
-      <h2 style="margin:0 0 6px;">QR de punto Rondinero</h2>
-      <p style="margin:0 0 10px;color:var(--muted);font-size:12px;">${esc(p.nombre)} • ${esc(p.ubicacion || "")}</p>
-      <div id="qrcode" style="background:white; padding:10px; border-radius:14px; display:inline-block;"></div>
-      <div class="divider"></div>
-      <div style="font-family:monospace;font-size:12px;word-break:break-all;">${esc(p.qrCode || rondineroQrText(p.id))}</div>
+    <div class="rondinero-print-shell">
+      <div class="printable rondinero-wall-card">
+        <div class="rondinero-wall-band">
+          <div class="rondinero-wall-brand">
+            <strong>Rondinero</strong>
+            <span>Control de seguridad</span>
+          </div>
+          <div class="rondinero-wall-badge">PUNTO DE CONTROL</div>
+        </div>
+        <div class="rondinero-wall-body">
+          <div>
+            <h2 class="rondinero-wall-title">${esc(p.nombre || "Punto de control")}</h2>
+            <p class="rondinero-wall-location">${esc(p.ubicacion || "Ubicacion no especificada")}</p>
+            ${p.descripcion ? `<p class="rondinero-wall-desc">${esc(p.descripcion)}</p>` : ""}
+            <div class="rondinero-wall-steps">
+              <div class="rondinero-wall-step"><b>1</b><span>Escanea este codigo con la app.</span></div>
+              <div class="rondinero-wall-step"><b>2</b><span>Confirma que el punto fue registrado.</span></div>
+              <div class="rondinero-wall-step"><b>3</b><span>Reporta novedad si encuentras alguna anomalia.</span></div>
+            </div>
+          </div>
+          <div class="rondinero-wall-qr">
+            <div id="qrcode" class="rondinero-wall-qr-box"></div>
+            <div class="rondinero-wall-code">${esc(qrText)}</div>
+          </div>
+        </div>
+        <div class="rondinero-wall-footer">
+          <span>Control de Accesos Unificado</span>
+          <span>ID: ${esc(p.id)}</span>
+        </div>
+      </div>
       <div class="divider"></div>
       <div class="row">
         <button class="secondary" data-action="rondinero">Volver</button>
+        <button class="secondary" id="btnGuardarRondineroQR" type="button">Guardar PNG</button>
         <button class="secondary" data-action="print">Imprimir</button>
       </div>
     </div>
@@ -6761,12 +7282,26 @@ function renderRondineroQR(id){
   if(box && window.QRCode){
     box.innerHTML = "";
     new QRCode(box, {
-      text: p.qrCode || rondineroQrText(p.id),
+      text: qrText,
       width: 220,
       height: 220,
       correctLevel: QRCode.CorrectLevel.M
     });
   }
+  setTimeout(() => {
+    const btn = document.getElementById("btnGuardarRondineroQR");
+    if(!btn) return;
+    btn.onclick = () => {
+      const canvas = box?.querySelector("canvas");
+      const img = box?.querySelector("img");
+      const qrDataUrl = canvas?.toDataURL("image/png") || img?.src || null;
+      if(!qrDataUrl) return alert("No se pudo generar el QR");
+      const a = document.createElement("a");
+      a.href = qrDataUrl;
+      a.download = `RONDINERO-${String(p.nombre || p.id).replace(/[^\w-]+/g,"_")}.png`;
+      a.click();
+    };
+  }, 80);
 }
 
 async function iniciarRondinero(){
@@ -7656,6 +8191,7 @@ async function cancelarCitaCompras(id){
         dashboardTipoMatches(v, histTipo)
       );
       const { programados, llegados, dentro, despachados, finalizados } = getCounts(list);
+      const showDespachados = histTipo !== "visitantes";
 
       const wrap = document.getElementById("histWrap");
       const col = (title, dotClass, items) => `
@@ -7692,19 +8228,19 @@ async function cancelarCitaCompras(id){
           <span class="dot brand"></span> ${histTipo === "visitantes" ? "Visitantes" : "Proveedores"}: <b style="color:var(--text);">${d.toLocaleDateString()}</b>
         </div>
 
-        <div class="grid cols-5 history-grid" style="margin-bottom:18px">
+        <div class="grid ${showDespachados ? "cols-5" : "cols-4"} history-grid" style="margin-bottom:18px">
           <div class="card"><h3>Programados</h3><div class="big">${programados.length}</div></div>
           <div class="card"><h3>Llegaron</h3><div class="big">${llegados.length}</div></div>
           <div class="card"><h3>Dentro</h3><div class="big">${dentro.length}</div></div>
-          <div class="card"><h3>Despachados</h3><div class="big">${despachados.length}</div></div>
+          ${showDespachados ? `<div class="card"><h3>Despachados</h3><div class="big">${despachados.length}</div></div>` : ""}
           <div class="card"><h3>Finalizados</h3><div class="big">${finalizados.length}</div></div>
         </div>
 
-        <div class="grid cols-5 history-grid">
+        <div class="grid ${showDespachados ? "cols-5" : "cols-4"} history-grid">
           ${col("Programados","info",programados)}
           ${col("Llegaron","warn",llegados)}
           ${col("Dentro","ok",dentro)}
-          ${col("Despachados","brand",despachados)}
+          ${showDespachados ? col("Despachados","brand",despachados) : ""}
           ${col("Finalizados","muted",finalizados)}
         </div>
 
@@ -8133,7 +8669,7 @@ function openNoShowModal(){
     `Regla: cita vencida > ${rep.graceMin ?? "—"} min sin llegada | Total: ${rows.length}`;
 
   if(!rows.length){
-    wrap.innerHTML = `<div class="pill"><span class="dot muted"></span>No hay “No asistieron” para los filtros actuales.</div>`;
+    wrap.innerHTML = `<div class="pill"><span class="dot muted"></span>No hay "No asistieron" para los filtros actuales.</div>`;
   }else{
     wrap.innerHTML = `
       <table class="table">
@@ -8287,7 +8823,7 @@ function openIncCalModal(){
   };
 
   if(!rows.length){
-    wrap.innerHTML = `<div class="pill"><span class="dot muted"></span>No hay incidencias para los filtros actuales. (Presiona “Aplicar”)</div>`;
+    wrap.innerHTML = `<div class="pill"><span class="dot muted"></span>No hay incidencias para los filtros actuales. (Presiona "Aplicar")</div>`;
   } else {
     wrap.innerHTML = `
       <table class="table">
@@ -8652,21 +9188,50 @@ function renderRondineroGuardiaQR(uid){
   }
   currentView = "rondinero_guardia_qr";
   const qrText = rondineroGuardiaQrText(u);
+  const guardId = `SEG-${String(u.uid || u.id || "").slice(0,4).toUpperCase().padStart(4,"0")}`;
   appEl.innerHTML = `
-    <div class="card printable" style="max-width:520px;margin:0 auto;">
-      <h2 style="margin:0 0 6px;">Credencial Rondinero</h2>
-      <p style="margin:0 0 12px;color:var(--muted);font-size:12px;">Tarjeta QR para identificar al guardia antes de iniciar un rondín.</p>
-      <div class="tarjeta history-card" style="text-align:center;">
-        <div style="font-size:18px;font-weight:800;">${esc(u.nombre || "Guardia")}</div>
-        <div style="color:var(--muted);font-size:12px;margin-top:4px;">${esc(u.email || "")}</div>
-        <div style="height:14px;"></div>
-        <div id="qrcode" style="background:white; padding:10px; border-radius:14px; display:inline-block;"></div>
-        <div style="height:10px;"></div>
-        <span class="pill"><span class="dot ok"></span>GUARDIA</span>
+    <div class="guard-badge-shell">
+      <div class="printable guard-badge">
+        <div class="guard-badge-hole"></div>
+        <div class="guard-badge-panel">
+          <div class="guard-badge-top">
+            <div class="guard-badge-shield" aria-hidden="true">
+              <svg viewBox="0 0 96 96" role="img">
+                <path d="M48 8 82 22v22c0 22-13 37-34 48C27 81 14 66 14 44V22L48 8Z" fill="#fff"/>
+                <path d="M48 15 75 26v19c0 17-10 30-27 40-17-10-27-23-27-40V26l27-11Z" fill="none" stroke="#08284b" stroke-width="5"/>
+                <rect x="32" y="42" width="32" height="26" rx="5" fill="#08284b"/>
+                <path d="M38 42v-8c0-8 5-14 10-14s10 6 10 14v8" fill="none" stroke="#08284b" stroke-width="7" stroke-linecap="round"/>
+                <circle cx="48" cy="54" r="4" fill="#fff"/>
+                <path d="M48 58v7" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h2 class="guard-badge-title">SEGURIDAD</h2>
+            <div class="guard-badge-subtitle">PROTEGEMOS LO QUE IMPORTA</div>
+          </div>
+          <div class="guard-badge-body">
+            <div id="qrcode" class="guard-badge-qr-frame"></div>
+            <div class="guard-badge-verify">ESCANEA PARA VERIFICAR</div>
+            <div class="guard-badge-divider"><span>*</span></div>
+            <h3 class="guard-badge-role">Personal de seguridad</h3>
+            <div class="guard-badge-name">${esc(u.nombre || "Guardia")} ${u.email ? `&middot; ${esc(u.email)}` : ""}</div>
+            <div class="guard-badge-meta">
+              <div class="guard-badge-access">
+              <div class="guard-badge-mini-shield">OK</div>
+                <div>
+                  <strong>ACCESO AUTORIZADO</strong>
+                  <span>USO OBLIGATORIO DE GAFETE</span>
+                </div>
+              </div>
+              <div class="guard-badge-id"><b>ID:</b> ${esc(guardId)}</div>
+            </div>
+          </div>
+          <div class="guard-badge-footer"><span>Disciplina - Vigilancia - Compromiso</span></div>
+        </div>
       </div>
       <div class="divider"></div>
       <div class="row">
         <button class="secondary" data-action="adminRoles">Volver</button>
+        <button class="secondary" id="btnGuardarGuardiaQR" type="button">Guardar QR PNG</button>
         <button class="secondary" data-action="print">Imprimir</button>
       </div>
     </div>
@@ -8681,6 +9246,20 @@ function renderRondineroGuardiaQR(uid){
       correctLevel: QRCode.CorrectLevel.M
     });
   }
+  setTimeout(() => {
+    const btn = document.getElementById("btnGuardarGuardiaQR");
+    if(!btn) return;
+    btn.onclick = () => {
+      const canvas = box?.querySelector("canvas");
+      const img = box?.querySelector("img");
+      const qrDataUrl = canvas?.toDataURL("image/png") || img?.src || null;
+      if(!qrDataUrl) return alert("No se pudo generar el QR");
+      const a = document.createElement("a");
+      a.href = qrDataUrl;
+      a.download = `GAFETE-GUARDIA-${String(u.nombre || guardId).replace(/[^\w-]+/g,"_")}.png`;
+      a.click();
+    };
+  }, 80);
 }
 
 function openUserModal(uid){
@@ -8908,15 +9487,20 @@ function renderAgendaVisual(dateISO = ""){
   `;
 }
 
-async function renderNuevo(){
-  if(!canCreateAnyCita()){
+async function renderNuevo(tipoCita = "proveedor"){
+  const tipoNuevo = tipoCita === "visitante" ? "visitante" : "proveedor";
+  const esVisitanteNuevo = tipoNuevo === "visitante";
+  if(esVisitanteNuevo && !canCreateVisitanteCita()){
+    toast("Acceso denegado","Tu rol no puede crear citas de visitante.","bad",2600);
+    return;
+  }
+  if(!esVisitanteNuevo && !canCreateProveedorCita()){
     toast("Acceso denegado","Tu rol no puede crear citas.","bad",2600);
     return;
   }
-  currentView = "nuevo";
-  const soloVisitante = !canCreateProveedorCita() && canCreateVisitanteCita();
+  currentView = esVisitanteNuevo ? "nuevo_visitante" : "nuevo";
 
-  if(canCreateProveedorCita() && !proveedoresCache.length){
+  if(!esVisitanteNuevo && !proveedoresCache.length){
     await loadProveedores().catch(()=>{});
   }
 
@@ -8924,23 +9508,13 @@ async function renderNuevo(){
     <div class="card nueva-cita-card">
       <div class="nueva-cita-head">
         <div>
-          <h2 style="margin:0 0 6px;">Nueva Cita</h2>
+          <h2 style="margin:0 0 6px;">${esVisitanteNuevo ? "Nueva cita visitante" : "Nueva cita proveedor"}</h2>
           <p style="margin:0;color:var(--muted);font-size:12px;">
             Captura datos mínimos.
           </p>
         </div>
       </div>
-
-      
-      <div class="two">
-        <div>
-          <label>Tipo de Cita</label>
-          <select id="tipoVisita" ${soloVisitante ? "disabled" : ""}>
-          ${canCreateProveedorCita() ? `<option value="proveedor">Proveedor</option>` : ""}
-          ${canCreateVisitanteCita() ? `<option value="visitante" ${soloVisitante ? "selected" : ""}>Visitante</option>` : ""}
-          </select>
-        </div>
-      </div>
+      <input type="hidden" id="tipoVisita" value="${esc(tipoNuevo)}">
        <div class="divider"></div>
 
       <div class="two">
@@ -9655,9 +10229,14 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
       let v = visitas.find(x => String(x.id) === qrText);
       if(!v && navigator.onLine){
         try{
-          const snap = await getDoc(doc(db, COL_VISITAS, qrText));
+          const visitanteSnap = await getDoc(doc(db, COL_VISITANTES, qrText));
+          const snap = visitanteSnap.exists() ? visitanteSnap : await getDoc(doc(db, COL_VISITAS, qrText));
           if(snap.exists()){
             v = { id: snap.id, ...snap.data() };
+            if(visitanteSnap.exists()){
+              v.tipoVisita = "visitante";
+              v.tipoAcceso = "visitante";
+            }
             visitas = mergeById(visitas, [v]);
             saveVisitasLocal();
           }
@@ -9680,7 +10259,7 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
   const now = Date.now();
   const diffMin = Math.round((now - v.fechaHoraTs) / 60000);
 
-  // ⛔ BLOQUEO DURO POR RETRASO > 30 MIN
+  // BLOQUEO BLOQUEO DURO POR RETRASO > 30 MIN
  if(diffMin > QR_LATE_BLOCK_MIN){
   v.qrActivo = false;
 
@@ -9964,7 +10543,7 @@ ${incLabel ? `
     return renderDashboardHoy();
   }
 
-  // ⛔ Bloqueo por QR desactivado
+  // BLOQUEO Bloqueo por QR desactivado
  if(!v.qrActivo){
   // ✅ Si fue desactivado por retraso, muestra el toast con minutos
   if(v.qrDesactivadoMotivo === "RETRASO"){
@@ -9987,7 +10566,7 @@ ${incLabel ? `
   return renderDashboardHoy();
 }
 
-  // ⛔ Bloqueo por retraso > 30 min (y desactivar QR)
+  // BLOQUEO Bloqueo por retraso > 30 min (y desactivar QR)
   const delayMin = Math.round((Date.now() - v.fechaHoraTs) / 60000);
   if(delayMin > QR_LATE_BLOCK_MIN){
 
@@ -10072,7 +10651,7 @@ ${incLabel ? `
     return renderDashboardHoy();
   }
 
-  // ⛔ Bloqueo por retraso > 30 min (y desactivar QR)
+  // BLOQUEO Bloqueo por retraso > 30 min (y desactivar QR)
   const delayMin = Math.round((Date.now() - v.fechaHoraTs) / 60000);
   if(delayMin > QR_LATE_BLOCK_MIN){
 
@@ -10231,7 +10810,7 @@ ${incLabel ? `
       "warn",
       4200
     );
-    return; // ⛔ no cambia estatus, no guarda
+    return; // BLOQUEO no cambia estatus, no guarda
   }
 
   // -------------------------
@@ -10894,6 +11473,10 @@ function renderProveedores(lista){
           await renderRondinero();
           break;
         case "rondineroGuardarPunto": await guardarRondineroPunto(); break;
+        case "rondineroTab":
+          rondineroAdminTab = el.dataset.tab || "puntos";
+          await renderRondinero();
+          break;
         case "rondineroTogglePunto": await toggleRondineroPunto(id); break;
         case "rondineroGuardarRuta": await guardarRondineroRuta(); break;
         case "rondineroToggleRuta": await toggleRondineroRuta(id); break;
@@ -10913,7 +11496,8 @@ function renderProveedores(lista){
         case "autorizarValePersonal": await autorizarValePersonal(id); break;
         case "cancelarValePersonal": await cancelarValePersonal(id); break;
 
-        case "nuevo": await goNuevaCita(); break;
+        case "nuevo": await goNuevaCita("proveedor"); break;
+        case "nuevoVisitante": await goNuevaCita("visitante"); break;
 
         case "guardarProveedor": await guardarProveedor(); break;
         case "guardarMiPin": await guardarMiPin(); break;
@@ -11222,8 +11806,3 @@ window.addEventListener("offline",updateNet);
 </script>
 </body>
 </html>
-
-
-
-
-
