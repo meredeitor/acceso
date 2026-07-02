@@ -195,20 +195,31 @@ export function toast(message, type = "info"){
 
 export function setupKioskoTheme(buttonId = "btnTheme"){
   const KEY = "ui_theme";
+  const THEMES = ["dark", "light", "mint", "desert", "copper"];
+  const LABELS = {
+    dark: "Tema: Oscuro",
+    light: "Tema: Claro",
+    mint: "Tema: Menta",
+    desert: "Tema: Desierto",
+    copper: "Tema: Cobre"
+  };
   const btn = document.getElementById(buttonId);
   const apply = (mode) => {
-    document.documentElement.dataset.theme = mode;
-    try{ localStorage.setItem(KEY, mode); }catch{}
-    if(btn) btn.textContent = mode === "light" ? "Oscuro" : "Tema";
+    const nextMode = THEMES.includes(mode) ? mode : "dark";
+    document.documentElement.dataset.theme = nextMode;
+    try{ localStorage.setItem(KEY, nextMode); }catch{}
+    if(btn) btn.textContent = LABELS[nextMode] || "Tema";
   };
 
   let saved = "dark";
   try{ saved = localStorage.getItem(KEY) || "dark"; }catch{}
-  apply(saved === "light" ? "light" : "dark");
+  apply(saved);
 
   if(btn){
     btn.addEventListener("click", () => {
-      const next = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      const current = document.documentElement.dataset.theme || "dark";
+      const idx = Math.max(0, THEMES.indexOf(current));
+      const next = THEMES[(idx + 1) % THEMES.length];
       apply(next);
     });
   }

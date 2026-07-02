@@ -2,7 +2,7 @@
 
 Aplicacion PWA para control operativo de accesos, citas, vales, bitacora de guardias, reportes y rondines de seguridad.
 
-Version actual visible en la app: `control-acceso-v103`.
+Version actual visible en la app: `control-acceso-v105`.
 
 ## Modulos principales
 
@@ -324,8 +324,8 @@ Esto fuerza a los equipos a descargar la nueva version de la app.
 
 Version actual:
 
-- Sidebar: `control-acceso-v103`
-- Service Worker: `control-acceso-v103`
+- Sidebar: `control-acceso-v105`
+- Service Worker: `control-acceso-v105`
 
 ## Mantenimiento recomendado
 
