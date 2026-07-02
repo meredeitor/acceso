@@ -1,4 +1,4 @@
-const CACHE_NAME = "control-acceso-v84";
+const CACHE_NAME = "control-acceso-v103";
 
 // Archivos base que siempre quieres offline
 const STATIC_ASSETS = [
@@ -13,7 +13,8 @@ const STATIC_ASSETS = [
   "./icon-512-cobre.png",
   "https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js",
   "https://unpkg.com/html5-qrcode",
-  "https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.min.js"
+  "https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.min.js",
+  "https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"
 ];
 
 // 🚀 INSTALL

@@ -278,7 +278,9 @@ export const fetchValeActivoAutorizadores = fetchValeAutorizadores;
 export async function crearSolicitudCita(data){
   const user = await ensureKioskoAuth();
   const id = `K-${Date.now()}`;
-  const ref = doc(db, "visitas", id);
+  const tipo = String(data.tipoVisita || data.tipoAcceso || "proveedor").toLowerCase();
+  const coleccion = tipo === "visitante" ? "visitantes" : "visitas";
+  const ref = doc(db, coleccion, id);
   const fechaHoraTs = new Date(data.fechaHora).getTime();
   const payload = {
     id,

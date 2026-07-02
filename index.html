@@ -254,6 +254,76 @@
       gap:12px;
     }
     .vale-qr-fields > div{ min-width:0; overflow-wrap:anywhere; }
+    .permit-pass-actions{
+      width:min(100%,580px);
+      margin:0 auto 12px;
+      display:grid;
+      grid-template-columns:repeat(4, minmax(0, 1fr));
+      gap:10px;
+    }
+    .permit-pass-actions button{ min-height:42px; }
+    .permit-pass{
+      width:min(100%,580px);
+      margin:0 auto;
+      overflow:hidden;
+      border-radius:24px;
+      background:#f8fafc;
+      color:#0f172a;
+      border:1px solid rgba(15,23,42,.12);
+      box-shadow:0 24px 54px rgba(2,6,23,.24);
+      text-align:left;
+    }
+    .permit-hero{
+      position:relative;
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:16px;
+      min-height:220px;
+      padding:30px 32px 56px;
+      color:#fff;
+      background:linear-gradient(135deg, rgba(3,18,37,.98), rgba(8,40,75,.96) 58%, rgba(34,197,94,.75));
+    }
+    .permit-hero::before{ content:""; position:absolute; inset:0; background:linear-gradient(120deg, transparent 0 42%, rgba(255,255,255,.05) 43% 45%, transparent 46%); opacity:.8; }
+    .permit-hero::after{ content:""; position:absolute; left:-8%; right:-8%; bottom:-32px; height:66px; background:#f8fafc; transform:skewY(4deg); transform-origin:left top; }
+    .permit-brand,.permit-title,.permit-kind{ position:relative; z-index:1; }
+    .permit-brand{ display:flex; align-items:center; gap:12px; margin-bottom:26px; }
+    .permit-logo{ width:46px; height:46px; border-radius:14px; display:grid; place-items:center; font-weight:900; color:#09213d; background:linear-gradient(135deg,#d6a64c,#f6d58a); }
+    .permit-brand strong{ display:block; font-size:13px; letter-spacing:4px; text-transform:uppercase; }
+    .permit-brand span{ display:block; margin-top:4px; color:rgba(255,255,255,.72); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; }
+    .permit-title h2{ margin:0; color:#fff; font-size:38px; line-height:1; letter-spacing:2px; text-transform:uppercase; }
+    .permit-title h2:empty{ display:none; }
+    .permit-kind{ min-width:160px; padding-top:42px; text-align:right; }
+    .permit-kind small{ display:block; color:rgba(255,255,255,.72); font-size:13px; letter-spacing:3px; text-transform:uppercase; }
+    .permit-kind b{ display:block; margin-top:9px; color:#fff; font-size:22px; letter-spacing:1px; text-transform:uppercase; }
+    .permit-kind i{ display:block; width:48px; height:3px; margin:16px 0 0 auto; background:#60a5fa; border-radius:999px; }
+    .permit-body{ position:relative; z-index:2; padding:0 32px; margin-top:-24px; }
+    .permit-person{ display:grid; grid-template-columns:68px 1fr minmax(150px,.75fr); gap:18px; align-items:center; padding-bottom:18px; border-bottom:1px solid rgba(15,23,42,.16); }
+    .permit-avatar,.permit-icon{ display:grid; place-items:center; border-radius:50%; color:#16a34a; background:#f8fafc; border:2px solid #dcfce7; font-weight:900; }
+    .permit-avatar{ width:68px; height:68px; font-size:26px; }
+    .permit-icon{ width:48px; height:48px; }
+    .permit-label{ color:#475569; font-size:11px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase; }
+    .permit-name{ margin-top:6px; color:#0f172a; font-size:26px; line-height:1.05; font-weight:900; overflow-wrap:anywhere; }
+    .permit-sub{ margin-top:7px; color:#475569; font-size:13px; font-weight:700; overflow-wrap:anywhere; }
+    .permit-role{ border-left:1px solid rgba(15,23,42,.16); padding-left:18px; }
+    .permit-role b{ display:block; margin-top:9px; color:#0f172a; font-size:16px; overflow-wrap:anywhere; }
+    .permit-role span{ display:block; margin-top:6px; color:#2563eb; font-size:13px; font-weight:800; overflow-wrap:anywhere; }
+    .permit-facts{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; padding:20px 0 14px; }
+    .permit-fact{ display:grid; grid-template-columns:48px 1fr; gap:10px; align-items:center; min-width:0; }
+    .permit-fact b{ display:block; margin-top:4px; color:#0f172a; font-size:15px; overflow-wrap:anywhere; }
+    .permit-fact span{ display:block; margin-top:4px; color:#16a34a; font-size:13px; font-weight:900; overflow-wrap:anywhere; }
+    .permit-qr-zone{ display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:center; padding:10px 0 14px; }
+    .permit-side{ display:grid; justify-items:center; gap:9px; color:#0f172a; text-align:center; font-size:11px; font-weight:900; text-transform:uppercase; }
+    .permit-side div{ white-space:pre-line; }
+    .permit-side i{ width:38px; height:3px; background:#22c55e; border-radius:999px; }
+    .permit-qr-card{ display:grid; justify-items:center; }
+    .permit-qr{ display:inline-block; padding:12px; border-radius:16px; background:#fff; box-shadow:0 14px 34px rgba(15,23,42,.14); }
+    .permit-code{ margin-top:10px; color:#16a34a; font-size:15px; font-weight:900; letter-spacing:2px; text-align:center; overflow-wrap:anywhere; }
+    .permit-code small{ display:block; margin-top:4px; color:#475569; font-size:10px; letter-spacing:2px; text-transform:uppercase; }
+    .permit-instructions{ display:grid; grid-template-columns:44px 1fr; gap:14px; align-items:center; margin:0 -14px; padding:15px 18px; border-radius:20px 20px 0 0; background:#e9f8ef; color:#334155; }
+    .permit-instructions b{ display:block; color:#0f172a; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+    .permit-instructions p{ margin:4px 0 0; font-size:12px; line-height:1.35; }
+    .permit-footer{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 32px; color:#fff; background:#020d1a; font-size:12px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; }
+    .permit-footer b{ color:#60a5fa; }
     @media (max-width:720px){
       .container{ padding:12px 10px 72px; }
       .app-watermark{ right:10px; bottom:8px; font-size:10px; }
@@ -294,6 +364,23 @@
       .vale-qr-box #qrcode{
         max-width:100%;
       }
+      .permit-pass-actions,
+      .permit-person,
+      .permit-facts,
+      .permit-qr-zone{
+        grid-template-columns:1fr;
+      }
+      .permit-hero{
+        grid-template-columns:1fr;
+        min-height:auto;
+        padding:24px 22px 50px;
+      }
+      .permit-kind{ min-width:0; padding-top:0; text-align:left; }
+      .permit-kind i{ margin-left:0; }
+      .permit-title h2{ font-size:30px; }
+      .permit-body{ padding:0 22px; }
+      .permit-role{ border-left:0; border-top:1px solid rgba(15,23,42,.16); padding:14px 0 0; }
+      .permit-footer{ display:grid; padding:14px 22px; }
     }
     @media (max-width:420px){
       .pill{ width:100%; justify-content:center; text-align:center; }
@@ -1483,6 +1570,353 @@ html[data-theme="light"] .pill.info *{
 /* ============================
    TARJETA QR VENCIDO + TEMAS EXTRA
    ============================ */
+.appointment-pass-wrap{
+  display:flex;
+  justify-content:center;
+}
+.appointment-pass{
+  width:min(100%, 520px);
+  overflow:hidden;
+  border-radius:24px;
+  background:#f8fafc !important;
+  color:#0f172a !important;
+  border:1px solid rgba(15,23,42,.12);
+  box-shadow:0 28px 70px rgba(2,6,23,.32);
+}
+.appointment-pass *{ box-sizing:border-box; }
+.appointment-pass-hero{
+  position:relative;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:14px;
+  min-height:170px;
+  padding:26px 28px 48px;
+  color:#fff;
+  background:
+    linear-gradient(135deg, rgba(3,18,37,.98), rgba(8,40,75,.96) 58%, rgba(7,94,191,.88)),
+    radial-gradient(circle at 72% 20%, rgba(96,165,250,.24), transparent 36%);
+}
+.appointment-pass-hero::after{
+  content:"";
+  position:absolute;
+  left:-8%;
+  right:-8%;
+  bottom:-30px;
+  height:62px;
+  background:#f8fafc;
+  transform:skewY(4deg);
+  transform-origin:left top;
+}
+.appointment-pass-brand{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:20px;
+}
+.appointment-pass-brand img{
+  width:42px;
+  height:42px;
+  border-radius:12px;
+  object-fit:cover;
+  box-shadow:0 12px 26px rgba(0,0,0,.26);
+}
+.appointment-pass-brand strong{
+  display:block;
+  font-size:13px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+}
+.appointment-pass-brand span{
+  display:block;
+  margin-top:3px;
+  color:rgba(255,255,255,.72);
+  font-size:8px;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.appointment-pass-title{
+  position:relative;
+  z-index:1;
+}
+.appointment-pass-title h2{
+  margin:0;
+  color:#fff;
+  font-size:30px;
+  line-height:1;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.appointment-pass-status{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-top:12px;
+  color:#60a5fa;
+  font-size:15px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.appointment-pass-status svg,
+.appointment-pass-icon svg{
+  width:24px;
+  height:24px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2.4;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.appointment-pass-number{
+  position:relative;
+  z-index:1;
+  min-width:120px;
+  text-align:left;
+  padding-top:28px;
+}
+.appointment-pass-number small{
+  display:block;
+  color:rgba(255,255,255,.70);
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.appointment-pass-number b{
+  display:block;
+  margin-top:10px;
+  color:#fff;
+  font-size:22px;
+  letter-spacing:1px;
+}
+.appointment-pass-number i{
+  display:block;
+  width:46px;
+  height:3px;
+  margin-top:14px;
+  background:#3b82f6;
+  border-radius:999px;
+}
+.appointment-pass-body{
+  position:relative;
+  z-index:2;
+  padding:0 28px 0;
+  margin-top:-22px;
+}
+.appointment-pass-person{
+  display:grid;
+  grid-template-columns:54px 1fr;
+  gap:14px;
+  align-items:center;
+  padding-bottom:16px;
+  border-bottom:1px solid rgba(15,23,42,.16);
+}
+.appointment-pass-avatar{
+  display:grid;
+  place-items:center;
+  width:54px;
+  height:54px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#dbeafe,#eff6ff);
+  color:#1d4ed8;
+  border:1px solid rgba(37,99,235,.18);
+}
+.appointment-pass-avatar svg{
+  width:28px;
+  height:28px;
+  stroke:currentColor;
+  fill:none;
+  stroke-width:2.2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+.appointment-pass-label{
+  color:#475569;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+}
+.appointment-pass-name{
+  margin-top:6px;
+  color:#0f172a;
+  font-size:24px;
+  line-height:1.05;
+  font-weight:900;
+  overflow-wrap:anywhere;
+}
+.appointment-pass-sub{
+  margin-top:7px;
+  color:#475569;
+  font-size:13px;
+  font-weight:700;
+  overflow-wrap:anywhere;
+}
+.appointment-pass-facts{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  padding:16px 0 10px;
+}
+.appointment-pass-fact{
+  display:grid;
+  grid-template-columns:44px 1fr;
+  gap:10px;
+  align-items:center;
+  min-width:0;
+}
+.appointment-pass-icon{
+  display:grid;
+  place-items:center;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  color:#2563eb;
+  background:#f8fafc;
+  border:2px solid #dbe4f0;
+}
+.appointment-pass-fact b{
+  display:block;
+  margin-top:4px;
+  color:#0f172a;
+  font-size:14px;
+  overflow-wrap:anywhere;
+}
+.appointment-pass-fact span{
+  display:block;
+  margin-top:3px;
+  color:#2563eb;
+  font-size:12px;
+  font-weight:800;
+  overflow-wrap:anywhere;
+}
+.appointment-pass-qr-zone{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  gap:16px;
+  align-items:center;
+  padding:10px 0 14px;
+}
+.appointment-pass-side{
+  display:grid;
+  justify-items:center;
+  gap:8px;
+  color:#0f172a;
+  text-align:center;
+  font-size:10px;
+  font-weight:900;
+  text-transform:uppercase;
+}
+.appointment-pass-side .appointment-pass-icon{
+  width:40px;
+  height:40px;
+}
+.appointment-pass-side i{
+  width:36px;
+  height:3px;
+  background:#2563eb;
+  border-radius:999px;
+}
+.appointment-pass-qr-card{
+  display:grid;
+  justify-items:center;
+}
+.appointment-pass-qr{
+  display:inline-block;
+  padding:12px;
+  border-radius:16px;
+  background:#fff;
+  box-shadow:0 14px 34px rgba(15,23,42,.14);
+}
+.appointment-pass-code{
+  margin-top:10px;
+  color:#2563eb;
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-align:center;
+}
+.appointment-pass-code small{
+  display:block;
+  margin-top:4px;
+  color:#475569;
+  font-size:10px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.appointment-pass-docs{
+  margin:0 0 14px;
+  padding:10px 12px;
+  border-radius:14px;
+  color:#334155;
+  background:#eef4fb;
+  border:1px solid rgba(37,99,235,.12);
+  font-size:12px;
+  font-weight:700;
+}
+.appointment-pass-doc-row{
+  display:grid;
+  grid-template-columns:72px 1fr;
+  gap:10px;
+  align-items:start;
+  padding:3px 0;
+}
+.appointment-pass-doc-row b{ color:#0f172a; }
+.appointment-pass-doc-row span{ color:#334155; overflow-wrap:anywhere; }
+.appointment-pass-instructions{
+  display:grid;
+  grid-template-columns:44px 1fr;
+  gap:14px;
+  align-items:center;
+  margin:0 -14px;
+  padding:14px 18px;
+  border-radius:20px 20px 0 0;
+  background:#e8eef7;
+  color:#334155;
+}
+.appointment-pass-instructions b{
+  display:block;
+  color:#0f172a;
+  font-size:12px;
+  letter-spacing:1px;
+  text-transform:uppercase;
+}
+.appointment-pass-instructions p{
+  margin:4px 0 0;
+  font-size:13px;
+  line-height:1.35;
+}
+.appointment-pass-footer{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 28px;
+  color:#fff;
+  background:#020d1a;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:2px;
+  text-transform:uppercase;
+}
+.appointment-pass-actions{
+  justify-content:center;
+  margin:14px auto 0;
+  max-width:520px;
+}
+@media (max-width:720px){
+  .appointment-pass{ border-radius:22px; }
+  .appointment-pass-hero{ grid-template-columns:1fr; padding:26px 22px 54px; }
+  .appointment-pass-brand{ margin-bottom:18px; }
+  .appointment-pass-title h2{ font-size:30px; }
+  .appointment-pass-number{ padding-top:0; }
+  .appointment-pass-body{ padding:0 22px; }
+  .appointment-pass-person{ grid-template-columns:1fr; text-align:center; justify-items:center; }
+  .appointment-pass-facts,
+  .appointment-pass-qr-zone{ grid-template-columns:1fr; }
+  .appointment-pass-side{ display:none; }
+  .appointment-pass-footer{ padding:16px 22px; font-size:11px; letter-spacing:1.3px; }
+}
 .tarjeta.qr-vencido{
   position:relative;
   overflow:hidden;
@@ -1745,7 +2179,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="sb-logo"><img src="icon-192-cobre.png" alt="Control de Acceso"></div>
     <div class="sb-title">
       <b>Control de Acceso</b>
-      <span>Version control-acceso-v84</span>
+      <span>Version control-acceso-v103</span>
     </div>
   </div>
   <div class="sb-section">
@@ -2054,7 +2488,7 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
   const COL_SESIONES = "presence";
   const COL_USERS = "users";
   const COL_RESUMEN_DIARIO = "resumen_diario";
-  const QR_LATE_BLOCK_MIN = 30; // BLOQUEO bloqueo duro por retraso
+  const QR_LATE_BLOCK_MIN = 15; // BLOQUEO bloqueo duro por retraso
   const VALES_ACTIVOS_LOOKBACK_DAYS = 30;
 
   const CLOUD_READ_TTL = {
@@ -2678,15 +3112,43 @@ function getTipoVisitaLabel(v={}){
 }
 
 function getNombreAcceso(v={}){
-  return isVisitante(v)
-    ? (v.nombreVisitante || v.proveedor || "Visitante")
-    : (v.proveedor || "Proveedor");
+  if(!isVisitante(v)) return v.proveedor || "Proveedor";
+  const list = getVisitantesLista(v);
+  return v.nombreVisitante || list[0] || v.proveedor || "Visitante";
 }
 
 function getEmpresaAcceso(v={}){
   return isVisitante(v)
     ? (v.empresa || "Visitante")
     : (v.empresa || "");
+}
+
+function getVisitantesLista(v={}){
+  if(Array.isArray(v.visitantesLista)){
+    return v.visitantesLista.map(x => String(x || "").trim()).filter(Boolean);
+  }
+  const raw = String(v.visitantesTexto || v.listaVisitantes || "").trim();
+  return raw ? raw.split(/\r?\n|,/).map(x => x.trim()).filter(Boolean) : [];
+}
+
+function getVisitanteResumen(v={}){
+  const list = getVisitantesLista(v);
+  if(list.length > 1) return `${list.length} visitantes`;
+  return getNombreAcceso(v);
+}
+
+function renderVisitanteExtraPills(v={}){
+  if(!isVisitante(v)) return "";
+  const list = getVisitantesLista(v);
+  return `
+    ${v.empresa ? `<span class="pill"><span class="dot info"></span>Empresa: ${esc(v.empresa)}</span>` : ""}
+    ${v.personaVisita ? `<span class="pill"><span class="dot brand"></span>Visita a: ${esc(v.personaVisita)}</span>` : ""}
+    ${list.length > 1 ? `<span class="pill"><span class="dot info"></span>${list.length} visitantes</span>` : ""}
+    ${list.length > 1 ? `<span class="pill" title="${esc(list.join(", "))}"><span class="dot info"></span>${esc(list.slice(0,3).join(", "))}${list.length > 3 ? "..." : ""}</span>` : ""}
+    ${v.motivo ? `<span class="pill"><span class="dot warn"></span>${esc(v.motivo)}</span>` : ""}
+    <span class="pill"><span class="dot ${v.qrActivo ? "ok" : "bad"}"></span>${v.qrActivo ? "QR Activo" : "QR Inactivo"}</span>
+    <span class="pill"><span class="dot info"></span>ID: ${esc(v.id)}</span>
+  `;
 }
 
 function getSearchTextVisita(v={}){
@@ -2696,6 +3158,7 @@ function getSearchTextVisita(v={}){
     getEmpresaAcceso(v),
     v.proveedorCodigo,
     v.personaVisita,
+    ...(isVisitante(v) ? getVisitantesLista(v) : []),
     v.area,
     v.motivo,
     v.id
@@ -5462,12 +5925,13 @@ const showInc = !!incLabel && incKey !== "SIN_INCIDENCIAS";
         return `
           <div class="tarjeta history-card tipo-${esc(tipo)} ${qrVencido ? "qr-vencido" : ""}" data-action="ficha" data-id="${esc(v.id)}">
             ${qrVencido ? `<div class="qr-banda-inactivo">QR inactivo por retraso</div>` : ""}
-            <strong>${esc(nombreAcceso)}</strong>
+            <strong>${esc(isVisitante(v) ? getVisitanteResumen(v) : nombreAcceso)}</strong>
             <small>${esc(empresaAcceso || tipoLabel)}</small>
             <div class="meta">
               <span class="pill"><span class="dot ${tipo === "visitante" ? "brand" : "info"}"></span>${esc(tipoLabel)}</span>
-              <span class="pill"><span class="dot info"></span>${esc(v.area || "Área")}</span>
+              ${tipo === "proveedor" ? `<span class="pill"><span class="dot info"></span>${esc(v.area || "Área")}</span>` : ""}
               <span class="pill"><span class="dot warn"></span>${esc(cita)}</span>
+              ${renderVisitanteExtraPills(v)}
               ${v.status === Status.PENDIENTE_AUTORIZACION ? `<span class="pill warn"><span class="dot warn"></span>Pendiente autorización</span>` : ""}
               ${tipo === "proveedor" ? `<span class="pill"><span class="dot ${docColor}"></span>Docs</span>` : ""}
               ${v.ocNo ? `
@@ -6122,7 +6586,6 @@ function renderValeActivoCard(v){
       <small>${esc(v.descripcion || "Activo sin descripción")}</small>
       <div class="meta">
         <span class="pill"><span class="dot ${valeStatusDot(v.status)}"></span>${esc(valeStatusLabel(v.status))}</span>
-        <span class="pill"><span class="dot info"></span>${esc(v.planta || "Planta")}</span>
         <span class="pill"><span class="dot info"></span>${esc(v.departamento || "Departamento")}</span>
         <span class="pill"><span class="dot warn"></span>${esc(fecha)}</span>
         ${v.nombre ? `<span class="pill"><span class="dot brand"></span>${esc(v.nombre)}</span>` : ""}
@@ -6159,10 +6622,6 @@ function renderValeActivoModal(){
             <div>
               <label>Fecha *</label>
               <input id="valeFecha" type="date" value="${new Date().toISOString().slice(0,10)}">
-            </div>
-            <div>
-              <label>Planta *</label>
-              <input id="valePlanta" placeholder="Planta">
             </div>
             <div>
               <label>Folio</label>
@@ -6251,7 +6710,6 @@ function closeValeModal(){
 
 function createValeActivoFromModal(){
   const fecha = document.getElementById("valeFecha")?.value || "";
-  const planta = document.getElementById("valePlanta")?.value.trim() || "";
   const folioRaw = document.getElementById("valeFolio")?.value.trim() || "";
   const departamento = document.getElementById("valeDepartamento")?.value.trim() || "";
   const tipoActivo = document.getElementById("valeTipoActivo")?.value || "";
@@ -6268,8 +6726,8 @@ function createValeActivoFromModal(){
   const autorizadorNombre = autorizadorOption?.dataset?.nombre || "";
   const autorizadorRole = autorizadorOption?.dataset?.role || "";
 
-  if(!fecha || !planta || !departamento || !tipoActivo || !motivo || !nombre || !descripcion || !autorizadorUid){
-    toast("Campos obligatorios","Fecha, planta, departamento, tipo, motivo, nombre, descripción y autorizador.","warn");
+  if(!fecha || !departamento || !tipoActivo || !motivo || !nombre || !descripcion || !autorizadorUid){
+    toast("Campos obligatorios","Fecha, departamento, tipo, motivo, nombre, descripción y autorizador.","warn");
     return null;
   }
 
@@ -6280,7 +6738,7 @@ function createValeActivoFromModal(){
     id,
     folio,
     fecha,
-    planta,
+    planta: "",
     departamento,
     tipoActivo,
     motivo,
@@ -6399,6 +6857,158 @@ async function cancelarValeActivo(id){
   await renderValesActivos();
 }
 
+function valePassInitials(name){
+  return String(name || "P")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0,2)
+    .map(x => x[0])
+    .join("")
+    .toUpperCase() || "P";
+}
+
+function valePassDate(value){
+  if(!value) return "";
+  const d = new Date(`${value}T00:00:00`);
+  if(Number.isNaN(d.getTime())) return "";
+  return d.toLocaleDateString("es-MX", { day:"2-digit", month:"short", year:"numeric" });
+}
+
+function renderValePermisoPass({
+  tipo, payload, folio, nombre, dato1, dato2, rol, depto, tipoPermiso, fecha, fechaSub, autoriza,
+  instrucciones, volverAction, title = "", kindLabel = "Permiso de", personLabel = "Solicitado por",
+  roleLabel = "Rol / relacion", factTypeLabel = "Tipo de permiso", leftSide = "Solicitud\ngenerada",
+  rightSide = "Presentar\nen acceso"
+}){
+  return `
+    <div class="permit-pass-actions">
+      <button class="secondary" data-action="${esc(volverAction)}">Volver</button>
+      <button class="secondary" data-action="print">Imprimir</button>
+      <button id="btnGuardarValePass" class="secondary" type="button">Guardar pase</button>
+      <button id="btnCompartirValePass" class="secondary" type="button">Compartir QR</button>
+    </div>
+    <div class="permit-pass printable" id="valePermisoPass">
+      <div class="permit-hero">
+        <div>
+          <div class="permit-brand">
+            <div class="permit-logo">CA</div>
+            <div><strong>Control de Acceso</strong><span>Seguridad - Confianza - Registro</span></div>
+          </div>
+          <div class="permit-title"><h2>${esc(title)}</h2></div>
+        </div>
+        <div class="permit-kind"><small>${esc(kindLabel)}</small><b>${esc(tipo)}</b><i></i></div>
+      </div>
+      <div class="permit-body">
+        <div class="permit-person">
+          <div class="permit-avatar">${esc(valePassInitials(nombre))}</div>
+          <div>
+            <div class="permit-label">${esc(personLabel)}</div>
+            <div class="permit-name">${esc(nombre || "")}</div>
+            <div class="permit-sub">${esc(dato1 || "")}</div>
+            <div class="permit-sub">${esc(dato2 || "")}</div>
+          </div>
+          <div class="permit-role">
+            <div class="permit-label">${esc(roleLabel)}</div>
+            <b>${esc(rol || "")}</b>
+            <span>${esc(depto || "")}</span>
+          </div>
+        </div>
+        <div class="permit-facts">
+          <div class="permit-fact"><div class="permit-icon">IN</div><div><div class="permit-label">${esc(factTypeLabel)}</div><b>${esc(tipoPermiso || "")}</b><span></span></div></div>
+          <div class="permit-fact"><div class="permit-icon">CAL</div><div><div class="permit-label">Fecha</div><b>${esc(fecha || "")}</b><span>${esc(fechaSub || "")}</span></div></div>
+          <div class="permit-fact"><div class="permit-icon">OK</div><div><div class="permit-label">Autoriza</div><b>${esc(autoriza || "")}</b><span></span></div></div>
+        </div>
+        <div class="permit-qr-zone">
+          <div class="permit-side"><div class="permit-icon">OK</div><div>${esc(leftSide)}</div><i></i></div>
+          <div class="permit-qr-card"><div id="qrcode" class="permit-qr"></div><div class="permit-code"><span>${esc(String(payload).replace(/(.{4})/g, "$1 ").trim().toUpperCase())}</span><small>Codigo de verificacion</small></div></div>
+          <div class="permit-side"><div class="permit-icon">QR</div><div>${esc(rightSide)}</div><i></i></div>
+        </div>
+        <div class="permit-instructions"><div class="permit-icon">i</div><div><b>Instrucciones</b><p>${esc(instrucciones || "Muestra este codigo QR en el acceso.")}</p></div></div>
+      </div>
+      <div class="permit-footer"><span>Seguridad, control y confianza</span><span>Folio: <b>${esc(folio || "")}</b></span></div>
+    </div>
+  `;
+}
+
+function setupValePassActions({ payload, folio, filename, shareText }){
+  setTimeout(() => {
+    try{
+      const box = document.getElementById("qrcode");
+      if(box && window.QRCode){
+        box.innerHTML = "";
+        new QRCode(box, {
+          text: payload,
+          width: 260,
+          height: 260,
+          colorDark: "#111827",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      }
+    }catch(e){
+      console.warn(e);
+      toast("QR","No se pudo generar el QR del vale.","bad",3200);
+    }
+
+    async function passBlob(){
+      const pass = document.getElementById("valePermisoPass");
+      if(pass && window.html2canvas){
+        const canvas = await window.html2canvas(pass, {
+          backgroundColor:"#f8fafc",
+          scale:Math.min(2, window.devicePixelRatio || 1.5),
+          useCORS:false,
+          allowTaint:false
+        });
+        return new Promise(resolve => canvas.toBlob(resolve, "image/png", 0.95));
+      }
+      return null;
+    }
+
+    const btnGuardar = document.getElementById("btnGuardarValePass");
+    if(btnGuardar){
+      btnGuardar.onclick = async () => {
+        const blob = await passBlob();
+        if(!blob) return alert("No se pudo generar el pase");
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename || `PERMISO-${String(folio || "QR")}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+      };
+    }
+
+    const btnCompartir = document.getElementById("btnCompartirValePass");
+    if(btnCompartir){
+      btnCompartir.onclick = async () => {
+        const text = shareText || "";
+        const blob = await passBlob();
+        if(!navigator.share){
+          try{
+            await navigator.clipboard?.writeText(text);
+            toast("Compartir","Texto copiado. Guarda el pase y adjuntalo manualmente.","ok",3200);
+          }catch{
+            toast("Compartir","Guarda el pase y comparte la imagen manualmente.","warn",3200);
+          }
+          return;
+        }
+        try{
+          if(blob){
+            const file = new File([blob], filename || `PERMISO-${String(folio || "QR")}.png`, { type:"image/png" });
+            if(!navigator.canShare || navigator.canShare({ files:[file] })){
+              await navigator.share({ title:"Permiso de acceso", text, files:[file] });
+              return;
+            }
+          }
+          await navigator.share({ title:"Permiso de acceso", text });
+        }catch(e){
+          console.warn("Compartir cancelado o falló:", e);
+        }
+      };
+    }
+  }, 50);
+}
+
 function renderValeQR(id){
   if(!requirePerm("ver_vales_activos","Tu rol no puede ver vales.")) return;
   currentView = "vale_qr";
@@ -6409,85 +7019,48 @@ function renderValeQR(id){
     return renderValesActivos();
   }
 
-  appEl.innerHTML = `
-    <div class="card printable">
-      <div class="row" style="justify-content:space-between; align-items:flex-start;">
-        <div>
-          <h2 style="margin:0 0 6px;">Vale de salida de activo</h2>
-          <div style="color:var(--muted);font-size:12px;">Folio <b style="color:var(--text);">${esc(v.folio || v.id)}</b></div>
-        </div>
-        <div class="row">
-          <button class="secondary" data-action="valesActivos">Volver</button>
-          <button class="secondary" data-action="print">Imprimir</button>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="row vale-qr-layout">
-        <div class="vale-qr-box">
-          <div id="qrcode" style="background:white; padding:10px; border-radius:14px; display:inline-block;"></div>
-        </div>
-        <div class="qr-info" style="flex:1; min-width:220px;">
-          <div class="pill" style="margin-bottom:10px;">
-            <span class="dot ${valeStatusDot(v.status)}"></span>${esc(valeStatusLabel(v.status))}
-          </div>
-          <div class="card qr-detail-card" style="box-shadow:none;">
-            <div style="color:var(--muted);font-size:12px;">Activo</div>
-            <div style="font-weight:800;">${esc(v.descripcion)}</div>
-            <div style="height:8px"></div>
-            <div class="vale-qr-fields">
-              <div><small>Tipo</small><b style="display:block;">${esc(v.tipoActivo || "-")}</b></div>
-              <div><small>Motivo</small><b style="display:block;">${esc(v.motivo || "-")}</b></div>
-              <div><small>Planta</small><b style="display:block;">${esc(v.planta || "-")}</b></div>
-              <div><small>Departamento</small><b style="display:block;">${esc(v.departamento || "-")}</b></div>
-              <div><small>No. serie</small><b style="display:block;">${esc(v.noSerie || "-")}</b></div>
-              <div><small>Código / Lote</small><b style="display:block;">${esc(v.codigoLote || "-")}</b></div>
-              <div><small>Solicitante</small><b style="display:block;">${esc(v.nombre || "-")}</b></div>
-              <div><small>Fecha retorno</small><b style="display:block;">${esc(v.fechaRetorno || "-")}</b></div>
-              <div><small>Autoriza</small><b style="display:block;">${esc(v.autorizadorNombre || v.autorizadorEmail || "-")}</b></div>
-              <div><small>Autorizado por</small><b style="display:block;">${esc(v.autorizadoPorNombre || v.autorizadoPor || "-")}</b></div>
-              <div><small>Tipo autorización</small><b style="display:block;">${esc(v.autorizacionPorRespaldo ? "Respaldo" : (v.autorizadoTs ? "Asignada" : "Pendiente"))}</b></div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="row">
-        <button id="btnGuardarValeQR" class="secondary">Guardar QR</button>
-      </div>
-    </div>
-  `;
+  const payload = `VALE_ACTIVO:${String(v.id)}`;
+  const folio = v.folio || v.id;
+  const depto = v.departamento || "";
+  const shareText = [
+    "Vale de salida de activo",
+    `Folio: ${folio}`,
+    `Solicitante: ${v.nombre || ""}`,
+    `Activo: ${v.tipoActivo || ""}`,
+    `Descripcion: ${v.descripcion || ""}`,
+    `Fecha: ${valePassDate(v.fecha)}`,
+    `Autoriza: ${v.autorizadorNombre || v.autorizadorEmail || ""}`
+  ].join("\n");
 
-  setTimeout(()=>{
-    try{
-      const box = document.getElementById("qrcode");
-      if(!box || !window.QRCode) return;
-      box.innerHTML = "";
-      new QRCode(box, {
-        text: `VALE_ACTIVO:${String(v.id)}`,
-        width: 260,
-        height: 260,
-        colorDark: "#111827",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-      });
-      const btn = document.getElementById("btnGuardarValeQR");
-      if(btn){
-        btn.onclick = () => {
-          const canvas = box.querySelector("canvas");
-          const img = box.querySelector("img");
-          const qrDataUrl = canvas?.toDataURL("image/png") || img?.src || null;
-          if(!qrDataUrl) return alert("No se pudo generar el QR");
-          const a = document.createElement("a");
-          a.href = qrDataUrl;
-          a.download = `QR-VALE-${String(v.folio || v.id)}.png`;
-          a.click();
-        };
-      }
-    }catch(e){
-      console.warn(e);
-      toast("QR","No se pudo generar el QR del vale.","bad",3200);
-    }
-  }, 50);
+  appEl.innerHTML = renderValePermisoPass({
+    title:"Vale de activo",
+    kindLabel:"Vale de activo",
+    tipo:folio,
+    payload,
+    folio,
+    personLabel:"Descripcion del activo",
+    nombre:v.descripcion || "Vale de activo",
+    dato1:v.noSerie ? `Numero de serie: ${v.noSerie}` : "",
+    dato2:[v.tipoActivo, v.codigoLote ? `Codigo/Lote: ${v.codigoLote}` : ""].filter(Boolean).join(" | "),
+    roleLabel:"Solicitado por",
+    rol:v.nombre || "",
+    depto,
+    factTypeLabel:"Motivo",
+    tipoPermiso:v.motivo || "Salida de activo",
+    fecha:valePassDate(v.fecha),
+    fechaSub:v.fechaRetorno ? `Retorno: ${valePassDate(v.fechaRetorno)}` : "",
+    autoriza:v.autorizadorNombre || v.autorizadorEmail || "",
+    leftSide:"Vale\ngenerado",
+    rightSide:"Salida\nde activo",
+    instrucciones:"Presenta este vale en el acceso al salir. El activo debe coincidir con la descripcion. Este vale es personal e intransferible.",
+    volverAction:"valesActivos"
+  });
+  setupValePassActions({
+    payload,
+    folio,
+    filename:`PERMISO-ACTIVO-${String(folio)}.png`,
+    shareText
+  });
 }
 
 function parseTiempoAutorizadoMin(value=""){
@@ -6613,6 +7186,7 @@ async function renderValesPersonal(){
         <div style="color:var(--muted);font-size:12px;">Control de permisos del día en curso, salida, regreso y tiempo autorizado.</div>
       </div>
       <div class="row">
+        ${hasPerm("crear_vale_personal") ? `<button data-action="openValePersonalModal">Nuevo vale</button>` : ""}
         ${hasPerm("escanear_qr") ? `<button class="secondary" data-action="scan" data-from="vales_personal">Escanear QR</button>` : ""}
       </div>
     </div>
@@ -8005,94 +8579,44 @@ function renderValePersonalQR(id){
     return renderValesPersonal();
   }
 
-  const usadoMin = calcValePersonalTiempo(v);
-  const autorizadoMin = parseTiempoAutorizadoMin(v.tiempoAutorizado);
+  const payload = `VALE_PERSONAL:${String(v.id)}`;
+  const folio = v.folio || v.id;
   const esEntrada = isValePersonalEntrada(v);
-  const entradaMin = calcEntrada815Min(v);
-  const llegadaTxt = v.llegadaTs ? new Date(v.llegadaTs).toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" }) : "-";
+  const shareText = [
+    "Permiso de personal",
+    `Folio: ${folio}`,
+    `Colaborador: ${v.nombreColaborador || ""}`,
+    `Nomina: ${v.nomina || ""}`,
+    `Departamento: ${v.departamento || ""}`,
+    `Tipo: ${v.tipoPermiso || ""}`,
+    `Fecha: ${valePassDate(v.fecha)}`,
+    `Autoriza: ${v.autorizadorNombre || v.autorizadorEmail || ""}`
+  ].join("\n");
 
-  appEl.innerHTML = `
-    <div class="card printable">
-      <div class="row" style="justify-content:space-between; align-items:flex-start;">
-        <div>
-          <h2 style="margin:0 0 6px;">Vale de salida de personal</h2>
-          <div style="color:var(--muted);font-size:12px;">Folio <b style="color:var(--text);">${esc(v.folio || v.id)}</b></div>
-        </div>
-        <div class="row">
-          <button class="secondary" data-action="valesPersonal">Volver</button>
-          <button class="secondary" data-action="print">Imprimir</button>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="row vale-qr-layout">
-        <div class="vale-qr-box">
-          <div id="qrcode" style="background:white; padding:10px; border-radius:14px; display:inline-block;"></div>
-        </div>
-        <div class="qr-info" style="flex:1; min-width:220px;">
-          <div class="pill" style="margin-bottom:10px;">
-            <span class="dot ${valeStatusDot(v.status)}"></span>${esc(valeStatusLabel(v.status))}
-          </div>
-          <div class="card qr-detail-card" style="box-shadow:none;">
-            <div style="color:var(--muted);font-size:12px;">Colaborador</div>
-            <div style="font-weight:800;">${esc(v.nombreColaborador)}</div>
-            <div style="height:8px"></div>
-            <div class="vale-qr-fields">
-              <div><small>Nómina</small><b style="display:block;">${esc(v.nomina || "-")}</b></div>
-              <div><small>Departamento</small><b style="display:block;">${esc(v.departamento || "-")}</b></div>
-              <div><small>Tipo permiso</small><b style="display:block;">${esc(v.tipoPermiso || "-")}</b></div>
-              <div><small>Tiempo autorizado</small><b style="display:block;">${esc(v.tiempoAutorizado || "-")}</b></div>
-              <div><small>Autoriza</small><b style="display:block;">${esc(v.autorizadorNombre || v.autorizadorEmail || "-")}</b></div>
-              <div><small>Autorizado por</small><b style="display:block;">${esc(v.autorizadoPorNombre || v.autorizadoPor || "-")}</b></div>
-              ${esEntrada ? `
-                <div><small>Hora de llegada</small><b style="display:block;">${esc(llegadaTxt)}</b></div>
-                <div><small>Diferencia vs 8:15</small><b style="display:block;">${esc(entradaMin !== null ? formatMinutes(entradaMin) : "-")}</b></div>
-              ` : `
-                <div><small>Tiempo usado</small><b style="display:block;">${esc(usadoMin !== null ? formatMinutes(usadoMin) : "-")}</b></div>
-                <div><small>Límite</small><b style="display:block;">${esc(autorizadoMin !== null ? formatMinutes(autorizadoMin) : v.tiempoAutorizado || "-")}</b></div>
-              `}
-            </div>
-            ${v.observaciones ? `<div style="height:8px"></div><small>Observaciones</small><div>${esc(v.observaciones)}</div>` : ""}
-          </div>
-        </div>
-      </div>
-      <div class="divider"></div>
-      <div class="row">
-        <button id="btnGuardarValePersonalQR" class="secondary">Guardar QR</button>
-      </div>
-    </div>
-  `;
-
-  setTimeout(()=>{
-    try{
-      const box = document.getElementById("qrcode");
-      if(!box || !window.QRCode) return;
-      box.innerHTML = "";
-      new QRCode(box, {
-        text: `VALE_PERSONAL:${String(v.id)}`,
-        width: 260,
-        height: 260,
-        colorDark: "#111827",
-        colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-      });
-      const btn = document.getElementById("btnGuardarValePersonalQR");
-      if(btn){
-        btn.onclick = () => {
-          const canvas = box.querySelector("canvas");
-          const img = box.querySelector("img");
-          const qrDataUrl = canvas?.toDataURL("image/png") || img?.src || null;
-          if(!qrDataUrl) return alert("No se pudo generar el QR");
-          const a = document.createElement("a");
-          a.href = qrDataUrl;
-          a.download = `QR-VALE-PERSONAL-${String(v.folio || v.id)}.png`;
-          a.click();
-        };
-      }
-    }catch(e){
-      console.warn(e);
-      toast("QR","No se pudo generar el QR del vale de personal.","bad",3200);
-    }
-  }, 50);
+  appEl.innerHTML = renderValePermisoPass({
+    tipo:"Entrada / Salida",
+    payload,
+    folio,
+    nombre:v.nombreColaborador || "",
+    dato1:v.nomina ? `Nomina: ${v.nomina}` : "",
+    dato2:v.observaciones || "Permiso de personal",
+    rol:"Empleado",
+    depto:v.departamento || "",
+    tipoPermiso:v.tipoPermiso || "",
+    fecha:valePassDate(v.fecha),
+    fechaSub:v.tiempoAutorizado || "",
+    autoriza:v.autorizadorNombre || v.autorizadorEmail || "",
+    instrucciones: esEntrada
+      ? "Muestra este codigo QR en el acceso. Este permiso es personal e intransferible."
+      : "Muestra este codigo QR en caseta. Este permiso es personal e intransferible.",
+    volverAction:"valesPersonal"
+  });
+  setupValePassActions({
+    payload,
+    folio,
+    filename:`PERMISO-PERSONAL-${String(folio)}.png`,
+    shareText
+  });
 }
 
 async function renderEditarCitaCompras(id){
@@ -8367,11 +8891,12 @@ async function cancelarCitaCompras(id){
         return `
           <div class="tarjeta history-card tipo-${esc(tipo)} ${qrVencido ? "qr-vencido" : ""}" data-action="ficha" data-id="${esc(v.id)}">
             ${qrVencido ? `<div class="qr-banda-inactivo">QR inactivo por retraso</div>` : ""}
-            <strong>${esc(nombreAcceso)}</strong>
+            <strong>${esc(isVisitante(v) ? getVisitanteResumen(v) : nombreAcceso)}</strong>
             <small>${esc(empresaAcceso || tipoLabel)}</small>
             <div class="meta">
               <span class="pill"><span class="dot ${tipo === "visitante" ? "brand" : "info"}"></span>${esc(tipoLabel)}</span>
               <span class="pill"><span class="dot warn"></span>${esc(cita)}</span>
+              ${renderVisitanteExtraPills(v)}
               <span class="badge-dictamen ${esc(dict)}"><span class="bdot"></span> ${esc(dictLabel)}</span>
             </div>
           </div>
@@ -9663,7 +10188,7 @@ async function renderNuevo(tipoCita = "proveedor"){
     <div class="card nueva-cita-card">
       <div class="nueva-cita-head">
         <div>
-          <h2 style="margin:0 0 6px;">${esVisitanteNuevo ? "Nueva cita visitante" : "Nueva cita proveedor"}</h2>
+          <h2 style="margin:0 0 6px;">${esVisitanteNuevo ? "Nueva cita" : "Nueva cita proveedor"}</h2>
           <p style="margin:0;color:var(--muted);font-size:12px;">
             Captura datos mínimos.
           </p>
@@ -9674,9 +10199,17 @@ async function renderNuevo(tipoCita = "proveedor"){
 
       <div class="two">
 <div>
-  <label>Nombre visitante</label>
-<input id="nombreVisitante" placeholder="Nombre completo">
+  <label>Nombre del visitante (individual)</label>
+<input id="nombreVisitante" placeholder="Opcional si es grupal">
   </div>
+        <div id="visitantesListaWrap" style="grid-column:1/-1;">
+          <label>Lista de visitantes (cita grupal)</label>
+          <textarea id="visitantesTexto" rows="5" placeholder="Un visitante por línea&#10;Ej:&#10;Juan Pérez&#10;Ana López&#10;Carlos Gómez"></textarea>
+        </div>
+        <div id="empresaVisitanteWrap">
+          <label>Empresa</label>
+          <input id="empresaVisitante" placeholder="Empresa">
+        </div>
         <div>  
           <label>Proveedor *</label>
           <input id="proveedorSearch" placeholder="Escribe nombre o código…" autocomplete="off"/>
@@ -9839,6 +10372,14 @@ async function renderNuevo(tipoCita = "proveedor"){
       </div>  
       <div class="divider"></div>
       <div class="two">
+        <div id="fechaVisitanteWrap">
+          <label>Fecha</label>
+          <input type="date" id="fechaVisitante"/>
+        </div>
+        <div id="horaVisitanteWrap">
+          <label>Hora</label>
+          <input type="time" id="horaVisitante"/>
+        </div>
         <div>
           <label>Fecha y hora *</label>
           <input type="datetime-local" id="fechaHora"/>
@@ -9852,8 +10393,9 @@ async function renderNuevo(tipoCita = "proveedor"){
 
       <div class="divider"></div>
       <div class="row">
-        <button data-action="guardar">Guardar y Generar QR</button>
-        <button class="secondary" data-action="home">Cancelar</button>
+        <button data-action="guardar">${esVisitanteNuevo ? "Crear cita" : "Guardar y Generar QR"}</button>
+        ${esVisitanteNuevo ? `<button class="secondary" data-action="limpiarNuevaCita">Limpiar</button>` : ""}
+        <button class="secondary" data-action="home">${esVisitanteNuevo ? "Volver" : "Cancelar"}</button>
       </div>
     </div>
   `;
@@ -9866,13 +10408,17 @@ if(tipoSel){
 
     // ✅ CAMPOS VISITANTE
     toggleBlock("nombreVisitante", esVisitante);
+    toggleBlock("visitantesTexto", esVisitante);
+    toggleBlock("empresaVisitante", esVisitante);
     toggleBlock("persona", true);
     toggleBlock("motivo", true);
-    toggleBlock("fechaHora", true);
+    toggleBlock("fechaVisitante", esVisitante);
+    toggleBlock("horaVisitante", esVisitante);
+    toggleBlock("fechaHora", !esVisitante);
 
     // ✅ CAMPOS PROVEEDOR
     toggleBlock("proveedorSearch", !esVisitante);
-    toggleBlock("area", true);
+    toggleBlock("area", !esVisitante);
     toggleBlock("materialRecibir", !esVisitante);
 
     // ✅ FACTURAS / OC
@@ -9894,10 +10440,15 @@ if(tipoSel){
       if(proveedor) proveedor.value = "";
 
       const area = document.getElementById("area");
-      if(area) area.value = "";
+      if(area) area.value = "Visitantes";
 
       const material = document.getElementById("materialRecibir");
       if(material) material.value = "";
+    }else{
+      const fechaVisitante = document.getElementById("fechaVisitante");
+      const horaVisitante = document.getElementById("horaVisitante");
+      if(fechaVisitante) fechaVisitante.value = "";
+      if(horaVisitante) horaVisitante.value = "";
     }
   });
 
@@ -9949,6 +10500,19 @@ document.getElementById("area")
 
 document.getElementById("fechaHora")
   ?.addEventListener("change", refreshAgendaNuevo);
+
+function syncFechaHoraVisitante(){
+  const fecha = document.getElementById("fechaVisitante")?.value || "";
+  const hora = document.getElementById("horaVisitante")?.value || "";
+  const fechaHora = document.getElementById("fechaHora");
+  if(fechaHora) fechaHora.value = fecha && hora ? `${fecha}T${hora}` : "";
+}
+
+document.getElementById("fechaVisitante")
+  ?.addEventListener("change", syncFechaHoraVisitante);
+
+document.getElementById("horaVisitante")
+  ?.addEventListener("change", syncFechaHoraVisitante);
 
 await refreshAgendaNuevo();
 
@@ -10006,14 +10570,24 @@ function setupProveedorAutocomplete(){
     return null;
   }
   const nombreVisitante = (document.getElementById("nombreVisitante")?.value || "").trim();
+  const visitantesTexto = (document.getElementById("visitantesTexto")?.value || "").trim();
+  const visitantesLista = visitantesTexto
+    .split(/\r?\n/)
+    .map(x => x.trim())
+    .filter(Boolean);
+  const empresaVisitante = (document.getElementById("empresaVisitante")?.value || "").trim();
   const proveedorInput = document.getElementById("proveedorSearch");
   const proveedorCodigo = esVisitante ? "" : (proveedorInput?.dataset.codigo || "");
-  const proveedorNombre = esVisitante ? nombreVisitante : (proveedorInput?.value || "").trim();
+  const proveedorNombre = esVisitante ? (nombreVisitante || visitantesLista[0] || "") : (proveedorInput?.value || "").trim();
 
   const persona = document.getElementById("persona").value;
-  const area = document.getElementById("area").value;
+  const area = esVisitante ? "Visitantes" : document.getElementById("area").value;
   const motivo = document.getElementById("motivo").value;
-  const fechaHora = document.getElementById("fechaHora").value;
+  const fechaVisitante = document.getElementById("fechaVisitante")?.value || "";
+  const horaVisitante = document.getElementById("horaVisitante")?.value || "";
+  const fechaHora = esVisitante
+    ? (fechaVisitante && horaVisitante ? `${fechaVisitante}T${horaVisitante}` : "")
+    : document.getElementById("fechaHora").value;
   const docs = esVisitante
     ? { ocNo:"", facturaNo:"", facturasOc:[] }
     : collectFacturaOcFromDom("facturasOcEditor");
@@ -10023,8 +10597,8 @@ function setupProveedorAutocomplete(){
   const materialRecibir =
   esVisitante ? "" : document.getElementById("materialRecibir").value.trim();
 
-  if(esVisitante && !nombreVisitante){
-    toast("Campos obligatorios","Nombre del visitante, Persona, Área, Motivo y Fecha","warn");
+  if(esVisitante && !nombreVisitante && !visitantesLista.length){
+    toast("Campos obligatorios","Captura nombre del visitante o lista de visitantes.","warn");
     return null;
   }
 
@@ -10033,8 +10607,8 @@ function setupProveedorAutocomplete(){
     return null;
   }
 
-  if(!persona || !area || !motivo || !fechaHora ){
-    toast("Campos obligatorios","Persona, Área, Motivo y Fecha","warn");
+  if(!persona || !motivo || !fechaHora || (!esVisitante && !area)){
+    toast("Campos obligatorios", esVisitante ? "Persona, Motivo, Fecha y Hora" : "Persona, Área, Motivo y Fecha", "warn");
     return null;
   }
 
@@ -10046,7 +10620,7 @@ function setupProveedorAutocomplete(){
   const fechaHoraTs = new Date(fechaHora).getTime();
 
   // ✅ Bloquea solo si ya existe cita en ese horario PARA LA MISMA ÁREA
-if(existeCitaEnHorario(fechaHora, area)){
+if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
   toast("Horario no disponible", "Ya existe el máximo de citas para esa área en ese horario.", "warn");
   return null;
 }
@@ -10055,9 +10629,11 @@ if(existeCitaEnHorario(fechaHora, area)){
   tipoVisita,
   tipoAcceso: tipoVisita,
   nombreVisitante: esVisitante ? nombreVisitante : "",
+  visitantesTexto: esVisitante ? visitantesTexto : "",
+  visitantesLista: esVisitante ? visitantesLista : [],
   proveedorCodigo,
   proveedor: proveedorNombre,
-  empresa: esVisitante ? "Visitante" : "",
+  empresa: esVisitante ? empresaVisitante : "",
   personaVisita: persona,
   area,
   motivo,
@@ -10096,76 +10672,162 @@ if(existeCitaEnHorario(fechaHora, area)){
 
   const tipoLabel = getTipoVisitaLabel(v);
   const nombreAcceso = getNombreAcceso(v);
+  const nombrePase = isVisitante(v) ? getVisitanteResumen(v) : nombreAcceso;
   const empresaAcceso = getEmpresaAcceso(v);
+  const citaDate = v.fechaHora ? new Date(v.fechaHora) : null;
+  const citaFecha = citaDate && !Number.isNaN(citaDate.getTime())
+    ? citaDate.toLocaleDateString([], { day:"2-digit", month:"short", year:"numeric" })
+    : "-";
+  const citaHora = citaDate && !Number.isNaN(citaDate.getTime())
+    ? citaDate.toLocaleTimeString([], { hour:"2-digit", minute:"2-digit" })
+    : "-";
+  const folioCita = `${isVisitante(v) ? "V" : "C"}-${String(v.id).slice(-6).toUpperCase()}`;
+  const codigoVerificacion = String(v.id).replace(/(.{4})/g, "$1 ").trim().toUpperCase();
+  const docsRows = normalizeFacturasOc(v).filter(r => r.facturaNo || r.ocNos.length);
+  const docsResumen = isVisitante(v)
+    ? (getVisitantesLista(v).length > 1 ? `
+      <div class="appointment-pass-docs">
+        <div class="appointment-pass-doc-row">
+          <b>Visitantes</b>
+          <span>${esc(getVisitantesLista(v).join(", "))}</span>
+        </div>
+        ${v.empresa ? `<div class="appointment-pass-doc-row"><b>Empresa</b><span>${esc(v.empresa)}</span></div>` : ""}
+      </div>
+    ` : "")
+    : `
+      <div class="appointment-pass-docs">
+        ${(docsRows.length ? docsRows : [{ facturaNo:"-", ocNos:[] }]).map((r, idx) => `
+          <div class="appointment-pass-doc-row">
+            <b>Factura${docsRows.length > 1 ? ` ${idx + 1}` : ""}</b>
+            <span>${esc(r.facturaNo || "-")}</span>
+          </div>
+          <div class="appointment-pass-doc-row">
+            <b>OC${docsRows.length > 1 ? ` ${idx + 1}` : ""}</b>
+            <span>${esc((r.ocNos || []).join(", ") || "-")}</span>
+          </div>
+        `).join("")}
+        ${v.materialRecibir ? `<div class="appointment-pass-doc-row"><b>Material</b><span>${esc(v.materialRecibir)}</span></div>` : ""}
+      </div>
+    `;
 
   appEl.innerHTML = `
-    <div class="card printable">
-      <h2 style="margin:0 0 6px;">QR de la Cita</h2>
-      <p style="margin:0 0 10px;color:var(--muted);font-size:12px;">Escanea en recepción para el acceso.</p>
-
-      <div class="row" style="align-items:flex-start;">
-        <div style="flex:0 0 280px;">
-          <div id="qrcode" style="background:white; padding:10px; border-radius:14px; display:inline-block;"></div>
+    <div class="appointment-pass-wrap">
+      <div class="printable appointment-pass">
+        <div class="appointment-pass-hero">
+          <div>
+            <div class="appointment-pass-brand">
+              <img src="icon-192-cobre.png" alt="Control de Acceso" data-html2canvas-ignore="true">
+              <div>
+                <strong>Control de Acceso</strong>
+                <span>Seguridad - Confianza - Registro</span>
+              </div>
+            </div>
+            <div class="appointment-pass-title">
+              <h2>Cita programada</h2>
+              <div class="appointment-pass-status">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                Acceso autorizado
+              </div>
+            </div>
+          </div>
+          <div class="appointment-pass-number">
+            <small>No. de cita</small>
+            <b>${esc(folioCita)}</b>
+            <i></i>
+          </div>
         </div>
 
-        <div class="qr-info" style="flex:1; min-width:220px;">
-          <div class="pill" style="margin-bottom:10px;">
-            <span class="dot info"></span> ID:
-            <b style="color:var(--text); margin-left:6px;">${esc(String(v.id))}</b>
-          </div>
-
-          <div class="card qr-detail-card" style="box-shadow:none;">
-            <div style="color:var(--muted);font-size:12px;">${esc(tipoLabel)}</div>
-            <div style="font-weight:800;">${esc(nombreAcceso)}</div>
-
-            <div style="height:8px"></div>
-
-            <div style="color:var(--muted);font-size:12px;">Empresa</div>
-            <div style="font-weight:700;">${esc(empresaAcceso || "-")}</div>
-
-            <div style="height:8px"></div>
-
-            <div style="color:var(--muted);font-size:12px;">Cita</div>
-            <div style="font-weight:700;"><b>${esc(new Date(v.fechaHora).toLocaleString())}</b></div>
-          
-            <div style="height:10px"></div>
-
-${renderFacturasOcReadonly(v)}
-          
+        <div class="appointment-pass-body">
+          <div class="appointment-pass-person">
+            <div class="appointment-pass-avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/></svg>
             </div>
-
-          <div class="divider"></div>
-
-          <div class="pill"
-            style="
-              background: rgba(250,204,21,.15);
-              border-color: rgba(250,204,21,.45);
-              color: #fde68a;
-              font-size: 12px;
-              font-weight: 600;
-            ">
-            <span class="dot warn"></span>
-            <b>Nota:</b> No olvides traer tu <u>Orden de Compra</u> y <u>Factura</u>
+            <div>
+              <div class="appointment-pass-label">${esc(tipoLabel)}</div>
+              <div class="appointment-pass-name">${esc(nombrePase)}</div>
+              <div class="appointment-pass-sub">${esc(empresaAcceso || v.empresa || v.area || "-")}</div>
+              ${v.motivo ? `<div class="appointment-pass-sub">${esc(v.motivo)}</div>` : ""}
+            </div>
           </div>
 
-          <div class="row" style="margin-top:12px; flex-wrap:wrap;">
-            ${_returnToEditMode ? `
-              <button class="secondary" data-action="volverAEditarCita">Volver a edición</button>
-            ` : ""}
-
-            <!-- ✅ NUEVO: Guardar/Compartir QR -->
-            <button class="secondary" id="btnGuardarQR" type="button">Guardar QR</button>
-            <button class="secondary" id="btnCompartirQR" type="button">Compartir QR</button>
-
-            <button class="secondary" data-action="print">
-              Guardar / Imprimir
-            </button>
-            <button class="secondary" data-action="home">
-              Volver
-            </button>
+          <div class="appointment-pass-facts">
+            <div class="appointment-pass-fact">
+              <div class="appointment-pass-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/></svg>
+              </div>
+              <div>
+                <div class="appointment-pass-label">${isVisitante(v) ? "Anfitrión" : "Contacto"}</div>
+                <b>${esc(v.personaVisita || "-")}</b>
+                <span>${esc(isVisitante(v) ? (v.motivo || "-") : (v.area || "-"))}</span>
+              </div>
+            </div>
+            <div class="appointment-pass-fact">
+              <div class="appointment-pass-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+              </div>
+              <div>
+                <div class="appointment-pass-label">Fecha y hora</div>
+                <b>${esc(citaFecha)}</b>
+                <span>${esc(citaHora)}</span>
+              </div>
+            </div>
           </div>
+
+          <div class="appointment-pass-qr-zone">
+            <div class="appointment-pass-side">
+              <div class="appointment-pass-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 3 20 7v6c0 5-3 8-8 10-5-2-8-5-8-10V7l8-4Z"/><path d="m9 12 2 2 4-5"/></svg>
+              </div>
+              <div>Acceso<br>autorizado</div>
+              <i></i>
+            </div>
+            <div class="appointment-pass-qr-card">
+              <div id="qrcode" class="appointment-pass-qr"></div>
+              <div class="appointment-pass-code">
+                ${esc(codigoVerificacion)}
+                <small>Código de verificación</small>
+              </div>
+            </div>
+            <div class="appointment-pass-side">
+              <div class="appointment-pass-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
+              </div>
+              <div>Válido<br>30 min</div>
+              <i></i>
+            </div>
+          </div>
+
+          ${docsResumen}
+
+          <div class="appointment-pass-instructions">
+            <div class="appointment-pass-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 16v-4M12 8h.01"/></svg>
+            </div>
+            <div>
+              <b>Instrucciones</b>
+              <p>Presenta este código QR en caseta. No lo compartas con otras personas.${isVisitante(v) ? "" : " Recuerda traer orden de compra y factura cuando aplique."}</p>
+              ${isVisitante(v) ? "" : `<p><b>Nota:</b> No olvides traer tu Orden de Compra y Factura.</p>`}
+            </div>
+          </div>
+        </div>
+
+        <div class="appointment-pass-footer">
+          <span class="appointment-pass-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M12 3 20 7v6c0 5-3 8-8 10-5-2-8-5-8-10V7l8-4Z"/><path d="m9 12 2 2 4-5"/></svg>
+          </span>
+          Tu seguridad, nuestra prioridad
         </div>
       </div>
+    </div>
+
+    <div class="row appointment-pass-actions">
+      ${_returnToEditMode ? `
+        <button class="secondary" data-action="volverAEditarCita">Volver a edición</button>
+      ` : ""}
+      <button class="secondary" id="btnGuardarQR" type="button">Guardar pase</button>
+      <button class="secondary" id="btnCompartirQR" type="button">Compartir QR</button>
+      <button class="secondary" data-action="print">Guardar / Imprimir</button>
+      <button class="secondary" data-action="home">Volver</button>
     </div>
   `;
 
@@ -10181,8 +10843,8 @@ ${renderFacturasOcReadonly(v)}
     // Genera QR
     new QRCode(box, {
       text: String(v.id),
-      width: 260,
-      height: 260,
+      width: 210,
+      height: 210,
       colorDark: "#111827",
       colorLight: "#ffffff",
       correctLevel: QRCode.CorrectLevel.M
@@ -10197,27 +10859,56 @@ ${renderFacturasOcReadonly(v)}
       img?.src ||
       null;
 
+    async function appointmentPassBlob(){
+      const pass = document.querySelector(".appointment-pass");
+      if(pass && window.html2canvas){
+        const rendered = await window.html2canvas(pass, {
+          backgroundColor: "#f8fafc",
+          scale: Math.min(2, window.devicePixelRatio || 1.5),
+          useCORS: false,
+          allowTaint: false,
+          ignoreElements: (el) => el?.hasAttribute?.("data-html2canvas-ignore")
+        });
+        return new Promise(resolve => rendered.toBlob(resolve, "image/png", 0.95));
+      }
+      if(qrDataUrl) return await (await fetch(qrDataUrl)).blob();
+      return null;
+    }
+
     // 📌 Texto completo a compartir (TODOS los datos solicitados)
     const citaFmt = v.fechaHora ? new Date(v.fechaHora).toLocaleString() : "-"; // usa el mismo origen que ya muestras
-    const ocFmt = (v.ocNo && String(v.ocNo).trim()) ? String(v.ocNo).trim() : "-";
     const tipoLabel = getTipoVisitaLabel(v);
-    const provFmt = getNombreAcceso(v);
-    const docsText = isVisitante(v) ? "" : `• OC: ${ocFmt}\n`;
+    const provFmt = isVisitante(v) ? getVisitanteResumen(v) : getNombreAcceso(v);
+    const docsText = isVisitante(v) ? "" : (
+      docsRows.length
+        ? docsRows.map((r, idx) =>
+            `• Factura${docsRows.length > 1 ? ` ${idx + 1}` : ""}: ${r.facturaNo || "-"}\n` +
+            `• OC${docsRows.length > 1 ? ` ${idx + 1}` : ""}: ${(r.ocNos || []).join(", ") || "-"}\n`
+          ).join("")
+        : `• Factura: -\n• OC: -\n`
+    );
     const reminderText = isVisitante(v) ? "" : `\n⚠️ No olvides tu OC y Factura.`;
 
     const shareText =
 `✅ Datos de tu cita
 • ${tipoLabel}: ${provFmt}
+${isVisitante(v) && v.empresa ? `• Empresa: ${v.empresa}\n` : ""}${isVisitante(v) && getVisitantesLista(v).length > 1 ? `• Visitantes: ${getVisitantesLista(v).join(", ")}\n` : ""}
 ${docsText}• Horario: ${citaFmt}${reminderText}`;
 
     // Guardar QR
     const btnGuardar = document.getElementById("btnGuardarQR");
     if(btnGuardar){
-      btnGuardar.onclick = () => {
-        if(!qrDataUrl) return alert("No se pudo generar el QR");
+      btnGuardar.onclick = async () => {
+        const blob = await appointmentPassBlob();
+        if(!blob) return alert("No se pudo generar el pase");
+        const passDataUrl = await new Promise(resolve => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.readAsDataURL(blob);
+        });
         const a = document.createElement("a");
-        a.href = qrDataUrl;
-        a.download = `QR-${String(v.id)}.png`;
+        a.href = passDataUrl;
+        a.download = `CITA-${String(v.id)}.png`;
         a.click();
       };
     }
@@ -10237,7 +10928,8 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
           return;
         }
 
-        if(!qrDataUrl){
+        const passBlob = await appointmentPassBlob();
+        if(!passBlob){
           // igual comparte texto aunque no haya imagen (raro, pero posible si falla el QR)
           await navigator.share({
             title: "QR de la Cita",
@@ -10247,8 +10939,7 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
         }
 
         try{
-          const blob = await (await fetch(qrDataUrl)).blob();
-          const file = new File([blob], `QR-${String(v.id)}.png`, { type: "image/png" });
+          const file = new File([passBlob], `CITA-${String(v.id)}.png`, { type: "image/png" });
 
           // Evita fallos en dispositivos que no pueden compartir archivos
           if(navigator.canShare && !navigator.canShare({ files: [file] })){
@@ -10414,7 +11105,7 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
   const now = Date.now();
   const diffMin = Math.round((now - v.fechaHoraTs) / 60000);
 
-  // BLOQUEO BLOQUEO DURO POR RETRASO > 30 MIN
+  // BLOQUEO BLOQUEO DURO POR RETRASO > 15 MIN
  if(diffMin > QR_LATE_BLOCK_MIN){
   v.qrActivo = false;
 
@@ -10614,10 +11305,23 @@ ${incLabel ? `
 
           <div class="two">
             <div>
+              ${isVisitante(v) && v.empresa ? `
+                <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Empresa</span><b style="color:var(--text)">${esc(v.empresa)}</b></div>
+                <div style="height:8px;"></div>
+              ` : ""}
+              ${isVisitante(v) && getVisitantesLista(v).length > 1 ? `
+                <div class="pill" style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
+                  <span style="color:var(--muted)">Visitantes</span>
+                  <b style="color:var(--text); text-align:right;">${esc(getVisitantesLista(v).join(", "))}</b>
+                </div>
+                <div style="height:8px;"></div>
+              ` : ""}
               <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Visita a</span><b style="color:var(--text)">${esc(v.personaVisita || "-")}</b></div>
               <div style="height:8px;"></div>
-              <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Área</span><b style="color:var(--text)">${esc(v.area || "-")}</b></div>
-              <div style="height:8px;"></div>
+              ${!isVisitante(v) ? `
+                <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Área</span><b style="color:var(--text)">${esc(v.area || "-")}</b></div>
+                <div style="height:8px;"></div>
+              ` : ""}
               <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Motivo</span><b style="color:var(--text)">${esc(v.motivo || "-")}</b></div>
             </div>
 
@@ -10721,7 +11425,7 @@ ${incLabel ? `
   return renderDashboardHoy();
 }
 
-  // BLOQUEO Bloqueo por retraso > 30 min (y desactivar QR)
+  // BLOQUEO Bloqueo por retraso > 15 min (y desactivar QR)
   const delayMin = Math.round((Date.now() - v.fechaHoraTs) / 60000);
   if(delayMin > QR_LATE_BLOCK_MIN){
 
@@ -10806,7 +11510,7 @@ ${incLabel ? `
     return renderDashboardHoy();
   }
 
-  // BLOQUEO Bloqueo por retraso > 30 min (y desactivar QR)
+  // BLOQUEO Bloqueo por retraso > 15 min (y desactivar QR)
   const delayMin = Math.round((Date.now() - v.fechaHoraTs) / 60000);
   if(delayMin > QR_LATE_BLOCK_MIN){
 
@@ -11601,6 +12305,12 @@ function renderProveedores(lista){
           lockView = false;
           dashboardPendingOnly = false;
           renderHome();
+          break;
+        case "limpiarNuevaCita":
+          document.querySelectorAll(".nueva-cita-card input, .nueva-cita-card textarea, .nueva-cita-card select").forEach(input => {
+            if(input.id === "tipoVisita") return;
+            input.value = "";
+          });
           break;
         case "togglePendingAuth": dashboardPendingOnly = !dashboardPendingOnly; renderActiveDashboard(); break;
         case "historial": await renderHistorial(); break;

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Kiosko Vales</title>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
   <script>
     try{ document.documentElement.dataset.theme = localStorage.getItem("ui_theme") || "dark"; }catch{}
   </script>
@@ -49,6 +50,54 @@
     .qr-card{ margin-top:14px; text-align:center; }
     #qrcode{ display:inline-block; background:white; padding:10px; border-radius:14px; }
     .folio{ color:var(--muted); font-size:12px; margin-top:10px; overflow-wrap:anywhere; }
+    .pass-actions{ width:min(100%,580px); margin:0 auto 12px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+    .pass-actions .theme-btn{ width:100%; min-height:44px; }
+    .permit-pass{ width:min(100%,580px); margin:0 auto; overflow:hidden; border-radius:24px; background:#f8fafc; color:#0f172a; border:1px solid rgba(15,23,42,.12); box-shadow:0 24px 54px rgba(2,6,23,.24); text-align:left; }
+    .permit-hero{ position:relative; display:grid; grid-template-columns:1fr auto; gap:16px; min-height:220px; padding:30px 32px 56px; color:#fff; background:linear-gradient(135deg, rgba(3,18,37,.98), rgba(8,40,75,.96) 58%, rgba(34,197,94,.75)); }
+    .permit-hero::before{ content:""; position:absolute; inset:0; background:linear-gradient(120deg, transparent 0 42%, rgba(255,255,255,.05) 43% 45%, transparent 46%); opacity:.8; }
+    .permit-hero::after{ content:""; position:absolute; left:-8%; right:-8%; bottom:-32px; height:66px; background:#f8fafc; transform:skewY(4deg); transform-origin:left top; }
+    .permit-brand,.permit-title,.permit-kind{ position:relative; z-index:1; }
+    .permit-brand{ display:flex; align-items:center; gap:12px; margin-bottom:26px; }
+    .permit-logo{ width:46px; height:46px; border-radius:14px; display:grid; place-items:center; font-weight:900; color:#fff; background:linear-gradient(135deg,#d6a64c,#f6d58a); color:#09213d; }
+    .permit-brand strong{ display:block; font-size:13px; letter-spacing:4px; text-transform:uppercase; }
+    .permit-brand span{ display:block; margin-top:4px; color:rgba(255,255,255,.72); font-size:8px; letter-spacing:1.5px; text-transform:uppercase; }
+    .permit-title h2{ margin:0; color:#fff; font-size:38px; line-height:1; letter-spacing:2px; text-transform:uppercase; }
+    .permit-status{ margin-top:16px; color:#4ade80; font-size:17px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; }
+    .permit-title h2:empty,
+    .permit-status:empty{ display:none; }
+    .is-hidden{ display:none !important; }
+    .permit-kind{ min-width:160px; padding-top:42px; text-align:right; }
+    .permit-kind small{ display:block; color:rgba(255,255,255,.72); font-size:13px; letter-spacing:3px; text-transform:uppercase; }
+    .permit-kind b{ display:block; margin-top:9px; color:#fff; font-size:22px; letter-spacing:1px; text-transform:uppercase; }
+    .permit-kind i{ display:block; width:48px; height:3px; margin:16px 0 0 auto; background:#60a5fa; border-radius:999px; }
+    .permit-body{ position:relative; z-index:2; padding:0 32px; margin-top:-24px; }
+    .permit-person{ display:grid; grid-template-columns:68px 1fr minmax(150px,.75fr); gap:18px; align-items:center; padding-bottom:18px; border-bottom:1px solid rgba(15,23,42,.16); }
+    .permit-avatar,.permit-icon{ display:grid; place-items:center; border-radius:50%; color:#16a34a; background:#f8fafc; border:2px solid #dcfce7; font-weight:900; }
+    .permit-avatar{ width:68px; height:68px; font-size:26px; }
+    .permit-icon{ width:48px; height:48px; }
+    .permit-label{ color:#475569; font-size:11px; font-weight:900; letter-spacing:1.6px; text-transform:uppercase; }
+    .permit-name{ margin-top:6px; color:#0f172a; font-size:26px; line-height:1.05; font-weight:900; overflow-wrap:anywhere; }
+    .permit-sub{ margin-top:7px; color:#475569; font-size:13px; font-weight:700; overflow-wrap:anywhere; }
+    .permit-role{ border-left:1px solid rgba(15,23,42,.16); padding-left:18px; }
+    .permit-role b{ display:block; margin-top:9px; color:#0f172a; font-size:16px; overflow-wrap:anywhere; }
+    .permit-role span{ display:block; margin-top:6px; color:#2563eb; font-size:13px; font-weight:800; overflow-wrap:anywhere; }
+    .permit-facts{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; padding:20px 0 14px; }
+    .permit-fact{ display:grid; grid-template-columns:48px 1fr; gap:10px; align-items:center; min-width:0; }
+    .permit-fact b{ display:block; margin-top:4px; color:#0f172a; font-size:15px; overflow-wrap:anywhere; }
+    .permit-fact span{ display:block; margin-top:4px; color:#16a34a; font-size:13px; font-weight:900; overflow-wrap:anywhere; }
+    .permit-qr-zone{ display:grid; grid-template-columns:1fr auto 1fr; gap:16px; align-items:center; padding:10px 0 14px; }
+    .permit-side{ display:grid; justify-items:center; gap:9px; color:#0f172a; text-align:center; font-size:11px; font-weight:900; text-transform:uppercase; }
+    .permit-side div{ white-space:pre-line; }
+    .permit-side i{ width:38px; height:3px; background:#22c55e; border-radius:999px; }
+    .permit-qr-card{ display:grid; justify-items:center; }
+    .permit-qr{ display:inline-block; padding:12px; border-radius:16px; background:#fff; box-shadow:0 14px 34px rgba(15,23,42,.14); }
+    .permit-code{ margin-top:10px; color:#16a34a; font-size:15px; font-weight:900; letter-spacing:2px; text-align:center; overflow-wrap:anywhere; }
+    .permit-code small{ display:block; margin-top:4px; color:#475569; font-size:10px; letter-spacing:2px; text-transform:uppercase; }
+    .permit-instructions{ display:grid; grid-template-columns:44px 1fr; gap:14px; align-items:center; margin:0 -14px; padding:15px 18px; border-radius:20px 20px 0 0; background:#e9f8ef; color:#334155; }
+    .permit-instructions b{ display:block; color:#0f172a; font-size:13px; letter-spacing:1px; text-transform:uppercase; }
+    .permit-instructions p{ margin:4px 0 0; font-size:12px; line-height:1.35; }
+    .permit-footer{ display:flex; align-items:center; justify-content:space-between; gap:12px; padding:16px 32px; color:#fff; background:#020d1a; font-size:12px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; }
+    .permit-footer b{ color:#60a5fa; }
     .toast{ position:fixed; left:12px; right:12px; bottom:14px; display:none; border-radius:14px; padding:12px; border:1px solid var(--border); background:rgba(17,28,51,.98); color:var(--text); box-shadow:0 18px 44px rgba(0,0,0,.35); }
     .toast.show{ display:block; }
     .toast.ok{ border-color:rgba(34,197,94,.45); }
@@ -59,7 +108,20 @@
     html[data-theme="light"] select,
     html[data-theme="light"] textarea{ background:#ffffff; color:var(--text); }
     html[data-theme="light"] .toast{ background:#ffffff; box-shadow:0 18px 44px rgba(15,23,42,.14); }
-    @media (max-width:720px){ main{ padding:14px 10px 74px; } .head{ display:grid; } .badge{ width:max-content; } .selector,.grid,.auth-row{ grid-template-columns:1fr; } h1{ font-size:20px; } }
+    @media (max-width:720px){
+      main{ padding:14px 10px 74px; }
+      .head{ display:grid; }
+      .badge{ width:max-content; }
+      .selector,.grid,.auth-row,.pass-actions,.permit-person,.permit-facts,.permit-qr-zone{ grid-template-columns:1fr; }
+      .permit-hero{ grid-template-columns:1fr; min-height:auto; padding:24px 22px 50px; }
+      .permit-kind{ min-width:0; padding-top:0; text-align:left; }
+      .permit-kind i{ margin-left:0; }
+      .permit-title h2{ font-size:30px; }
+      .permit-body{ padding:0 22px; }
+      .permit-role{ border-left:0; border-top:1px solid rgba(15,23,42,.16); padding:14px 0 0; }
+      .permit-footer{ display:grid; padding:14px 22px; }
+      h1{ font-size:20px; }
+    }
   </style>
 </head>
 <body>
@@ -67,7 +129,7 @@
     <div class="head">
       <div>
         <h1>Kiosko de vales de salida</h1>
-        <div class="sub">Captura la solicitud; el jefe la autoriza desde el dashboard.</div>
+        <div class="sub">Captura la solicitud y genera su QR de seguimiento.</div>
       </div>
       <div class="head-actions">
         <button class="theme-btn" id="btnTheme" type="button">Tema</button>
@@ -138,7 +200,7 @@
         <div style="grid-column:1/-1;"><label>Observaciones</label><textarea id="pObservaciones" placeholder="Ej. Entrada posterior a 8:15, cita medica, asunto personal..."></textarea></div>
       </div>
       <div class="divider"></div>
-      <p class="hint">La solicitud queda pendiente hasta que el jefe la autorice.</p>
+      <p class="hint">La solicitud se registra y genera un QR para seguimiento en acceso.</p>
       <button id="btnPersonal" class="personal-btn" type="submit">Enviar solicitud</button>
     </form>
 
@@ -146,7 +208,6 @@
       <h2>Solicitud de vale de salida de activo</h2>
       <div class="grid">
         <div><label>Fecha *</label><input id="aFecha" type="date" required></div>
-        <div><label>Planta *</label><input id="aPlanta" required></div>
         <div><label>Departamento *</label><input id="aDepartamento" required></div>
         <div><label>Nombre / solicitante *</label><input id="aNombre" autocomplete="name" required></div>
         <div>
@@ -185,16 +246,59 @@
         </div>
       </div>
       <div class="divider"></div>
-      <p class="hint">La solicitud queda pendiente hasta que el jefe la autorice.</p>
+      <p class="hint">La solicitud se registra y genera un QR para seguimiento en acceso.</p>
       <button id="btnActivo" type="submit">Enviar solicitud</button>
     </form>
 
-    <section class="card qr-card" id="qrCard">
-      <h2>Solicitud enviada</h2>
-      <div id="qrcode"></div>
-      <div class="folio" id="folioTxt"></div>
-      <p class="hint">Estado inicial: pendiente por autorizar.</p>
-      <button class="secondary" type="button" id="btnOtro" style="margin-top:12px;">Crear otro vale</button>
+    <section class="qr-card" id="qrCard">
+      <div class="pass-actions">
+        <button id="btnCompartirQR" type="button">Compartir QR</button>
+        <button id="btnGuardarQR" class="theme-btn" type="button">Guardar QR</button>
+        <button id="btnOtro" class="theme-btn" type="button">Crear otro vale</button>
+      </div>
+      <div class="permit-pass" id="permisoPass">
+        <div class="permit-hero">
+          <div>
+            <div class="permit-brand">
+              <div class="permit-logo">CA</div>
+              <div><strong>Control de Acceso</strong><span>Seguridad - Confianza - Registro</span></div>
+            </div>
+            <div class="permit-title">
+              <h2 id="passTitulo"></h2>
+              <div class="permit-status" id="passEstatus"></div>
+            </div>
+          </div>
+          <div class="permit-kind"><small id="passKindLabel">Permiso de</small><b id="passTipoGrande">Entrada / Salida</b><i></i></div>
+        </div>
+        <div class="permit-body">
+          <div class="permit-person">
+            <div class="permit-avatar" id="passAvatar">P</div>
+            <div>
+              <div class="permit-label" id="passSolicitadoLabel">Solicitado por</div>
+              <div class="permit-name" id="passNombre"></div>
+              <div class="permit-sub" id="passDato1"></div>
+              <div class="permit-sub" id="passDato2"></div>
+            </div>
+            <div class="permit-role">
+              <div class="permit-label" id="passRolLabel">Rol / relacion</div>
+              <b id="passRol"></b>
+              <span id="passDepto"></span>
+            </div>
+          </div>
+          <div class="permit-facts">
+            <div class="permit-fact"><div class="permit-icon">IN</div><div><div class="permit-label" id="passTipoLabel">Tipo de permiso</div><b id="passTipo"></b><span id="passTipoEstado" class="is-hidden"></span></div></div>
+            <div class="permit-fact"><div class="permit-icon">CAL</div><div><div class="permit-label">Fecha</div><b id="passFecha"></b><span id="passFechaSub"></span></div></div>
+            <div class="permit-fact"><div class="permit-icon">OK</div><div><div class="permit-label">Autoriza</div><b id="passAutoriza"></b><span id="passAutorizaSub" class="is-hidden"></span></div></div>
+          </div>
+          <div class="permit-qr-zone">
+            <div class="permit-side"><div class="permit-icon">OK</div><div id="passSideLeft">Solicitud<br>generada</div><i></i></div>
+            <div class="permit-qr-card"><div id="qrcode" class="permit-qr"></div><div class="permit-code"><span id="passCodigo"></span><small>Codigo de verificacion</small></div></div>
+            <div class="permit-side"><div class="permit-icon">QR</div><div id="passVigencia">Presentar<br>en acceso</div><i></i></div>
+          </div>
+          <div class="permit-instructions"><div class="permit-icon">i</div><div><b>Instrucciones</b><p id="passInstrucciones">Muestra este codigo QR en el acceso. Este permiso es personal e intransferible.</p></div></div>
+        </div>
+        <div class="permit-footer"><span>Seguridad, control y confianza</span><span>Folio: <b id="passFolio"></b></span></div>
+      </div>
     </section>
   </main>
   <div id="toast" class="toast"></div>
@@ -218,10 +322,12 @@
     const formPersonal = document.getElementById("formPersonal");
     const qrCard = document.getElementById("qrCard");
     const qrBox = document.getElementById("qrcode");
-    const folioTxt = document.getElementById("folioTxt");
     const autorizadorActivoSelect = document.getElementById("aAutorizador");
     const autorizadorPersonalSelect = document.getElementById("pAutorizador");
     const cards = [...document.querySelectorAll(".type-card")];
+    const selector = document.getElementById("selector");
+    let currentVale = null;
+    let currentPrefix = "";
 
     function value(id){
       return document.getElementById(id).value.trim();
@@ -232,6 +338,7 @@
       formActivo.classList.toggle("show", type === "activo");
       formPersonal.classList.toggle("show", type === "personal");
       qrCard.classList.remove("show");
+      selector.style.display = "";
       if(type === "activo") loadAutorizadores(autorizadorActivoSelect, "activo");
       if(type === "personal") loadAutorizadores(autorizadorPersonalSelect, "personal");
     }
@@ -262,28 +369,162 @@
       }
     }
 
+    function initials(name){
+      return String(name || "P")
+        .split(/\s+/)
+        .filter(Boolean)
+        .slice(0,2)
+        .map(x => x[0])
+        .join("")
+        .toUpperCase() || "P";
+    }
+
+    function fmtDate(value){
+      const d = new Date(`${value || ""}T00:00:00`);
+      if(Number.isNaN(d.getTime())) return "";
+      return d.toLocaleDateString("es-MX", { day:"2-digit", month:"short", year:"numeric" });
+    }
+
+    function setText(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value || "";
+    }
+
     function renderSolicitud(prefix, vale){
+      currentVale = vale;
+      currentPrefix = prefix;
+      const esPersonal = prefix === "VALE_PERSONAL";
+      const folio = vale.folio || vale.id;
+      const nombre = esPersonal ? vale.nombreColaborador : vale.nombre;
+      const tipo = esPersonal ? vale.tipoPermiso : "Salida de activo";
+      const depto = esPersonal ? vale.departamento : (vale.departamento || "");
+      const dato1 = esPersonal ? (vale.nomina ? `Nomina: ${vale.nomina}` : "") : (vale.tipoActivo ? `Activo: ${vale.tipoActivo}` : "");
+      const dato2 = esPersonal ? (vale.observaciones || "Permiso de personal") : (vale.descripcion || "Vale de activo");
+      const payload = `${prefix}:${vale.id}`;
+
       qrBox.innerHTML = "";
       new QRCode(qrBox, {
-        text: `${prefix}:${vale.id}`,
+        text: payload,
         width: 260,
         height: 260,
         colorDark: "#111827",
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.M
       });
-      folioTxt.textContent = `Folio: ${vale.folio || vale.id} - Pendiente por autorizar`;
+      setText("passTitulo", "");
+      setText("passEstatus", "");
+      setText("passKindLabel", esPersonal ? "Permiso de" : "Vale de activo");
+      setText("passTipoGrande", esPersonal ? "Entrada / Salida" : folio);
+      setText("passAvatar", initials(nombre));
+      setText("passSolicitadoLabel", esPersonal ? "Solicitado por" : "Descripcion del activo");
+      setText("passNombre", esPersonal ? nombre : (vale.descripcion || "Vale de activo"));
+      setText("passDato1", esPersonal ? dato1 : (vale.noSerie ? `Numero de serie: ${vale.noSerie}` : ""));
+      setText("passDato2", esPersonal ? dato2 : [vale.tipoActivo, vale.codigoLote ? `Codigo/Lote: ${vale.codigoLote}` : ""].filter(Boolean).join(" | "));
+      setText("passRolLabel", esPersonal ? "Rol / relacion" : "Solicitado por");
+      setText("passRol", esPersonal ? "Empleado" : (vale.nombre || ""));
+      setText("passDepto", depto);
+      setText("passTipoLabel", esPersonal ? "Tipo de permiso" : "Motivo");
+      setText("passTipo", esPersonal ? tipo : (vale.motivo || "Salida de activo"));
+      setText("passTipoEstado", "");
+      setText("passFecha", fmtDate(vale.fecha));
+      setText("passFechaSub", esPersonal ? (vale.tiempoAutorizado || "") : (vale.fechaRetorno ? `Retorno: ${fmtDate(vale.fechaRetorno)}` : ""));
+      setText("passAutoriza", vale.autorizadorNombre || vale.autorizadorEmail || "");
+      setText("passAutorizaSub", "");
+      setText("passCodigo", String(payload).replace(/(.{4})/g, "$1 ").trim().toUpperCase());
+      setText("passSideLeft", esPersonal ? "Solicitud\ngenerada" : "Vale\ngenerado");
+      setText("passVigencia", esPersonal ? "Presentar\nen acceso" : "Salida\nde activo");
+      setText("passInstrucciones", esPersonal
+        ? "Muestra este codigo QR en el acceso. Este permiso es personal e intransferible."
+        : "Presenta este vale en el acceso al salir. El activo debe coincidir con la descripcion. Este vale es personal e intransferible.");
+      setText("passFolio", folio);
+      selector.style.display = "none";
+      formActivo.classList.remove("show");
+      formPersonal.classList.remove("show");
       qrCard.classList.add("show");
-      qrCard.scrollIntoView({ behavior:"smooth", block:"start" });
+      window.scrollTo({ top:0, behavior:"smooth" });
+    }
+
+    function shareText(){
+      if(!currentVale) return "";
+      const esPersonal = currentPrefix === "VALE_PERSONAL";
+      return [
+        esPersonal ? "Permiso de personal" : "Vale de salida de activo",
+        `Folio: ${currentVale.folio || currentVale.id}`,
+        `Solicitante: ${esPersonal ? currentVale.nombreColaborador : currentVale.nombre}`,
+        `Departamento: ${currentVale.departamento || ""}`,
+        `Tipo: ${esPersonal ? currentVale.tipoPermiso : currentVale.tipoActivo}`,
+        `Fecha: ${fmtDate(currentVale.fecha)}`,
+        `Autoriza: ${currentVale.autorizadorNombre || currentVale.autorizadorEmail || ""}`
+      ].join("\n");
+    }
+
+    async function passBlob(){
+      const pass = document.getElementById("permisoPass");
+      if(!window.html2canvas) throw new Error("html2canvas no esta disponible.");
+      const canvas = await window.html2canvas(pass, {
+        backgroundColor:"#f8fafc",
+        scale:2,
+        useCORS:false,
+        allowTaint:false,
+        logging:false
+      });
+      return new Promise((resolve, reject) => {
+        canvas.toBlob(blob => blob ? resolve(blob) : reject(new Error("No se pudo generar la imagen.")), "image/png", 0.95);
+      });
+    }
+
+    async function guardarQR(){
+      if(!currentVale) return;
+      try{
+        const blob = await passBlob();
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `permiso-${String(currentVale.id).slice(-8)}.png`;
+        a.click();
+        URL.revokeObjectURL(url);
+        toast("Tarjeta guardada.", "ok");
+      }catch(err){
+        console.error(err);
+        toast(err?.message || "No se pudo guardar el QR.", "bad");
+      }
+    }
+
+    async function compartirQR(){
+      if(!currentVale) return;
+      try{
+        const text = shareText();
+        const blob = await passBlob();
+        const file = new File([blob], `permiso-${String(currentVale.id).slice(-8)}.png`, { type:"image/png" });
+        if(navigator.canShare?.({ files:[file] })){
+          await navigator.share({ title:"Permiso de acceso", text, files:[file] });
+        }else if(navigator.share){
+          await navigator.share({ title:"Permiso de acceso", text });
+          toast("Se compartio el texto. Guarda el QR y adjuntalo si tu equipo no permite archivos.", "ok");
+        }else{
+          await navigator.clipboard?.writeText(text);
+          toast("Texto copiado. Guarda el QR y adjuntalo manualmente.", "ok");
+        }
+      }catch(err){
+        console.warn(err);
+        toast("No se pudo compartir. Puedes guardar el QR.", "bad");
+      }
     }
 
     cards.forEach(card => card.addEventListener("click", () => showType(card.dataset.type)));
       loadAutorizadores(autorizadorPersonalSelect, "personal");
 
     document.getElementById("btnOtro").addEventListener("click", () => {
+      currentVale = null;
+      currentPrefix = "";
       qrCard.classList.remove("show");
+      selector.style.display = "";
+      const activeType = document.querySelector(".type-card.active")?.dataset?.type || "personal";
+      showType(activeType);
       window.scrollTo({ top:0, behavior:"smooth" });
     });
+    document.getElementById("btnGuardarQR").addEventListener("click", guardarQR);
+    document.getElementById("btnCompartirQR").addEventListener("click", compartirQR);
 
     formActivo.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -300,7 +541,7 @@
         const vale = await crearSolicitudValeActivo({
           folio: `KVA-${Date.now()}`,
           fecha: value("aFecha"),
-          planta: value("aPlanta"),
+          planta: "",
           departamento: value("aDepartamento"),
           nombre: value("aNombre"),
           tipoActivo: value("aTipoActivo"),
@@ -318,7 +559,7 @@
         renderSolicitud("VALE_ACTIVO", vale);
         formActivo.reset();
         document.getElementById("aFecha").value = today;
-        toast("Solicitud enviada. Pendiente por autorizar.", "ok");
+        toast("Solicitud enviada. QR generado.", "ok");
       }catch(err){
         console.error(err);
         toast(err?.message || "No se pudo enviar la solicitud.", "bad");
@@ -358,7 +599,7 @@
         renderSolicitud("VALE_PERSONAL", vale);
         formPersonal.reset();
         document.getElementById("pFecha").value = today;
-        toast("Solicitud enviada. Pendiente por autorizar.", "ok");
+        toast("Solicitud enviada. QR generado.", "ok");
       }catch(err){
         console.error(err);
         toast(err?.message || "No se pudo enviar la solicitud.", "bad");
