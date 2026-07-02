@@ -2,7 +2,7 @@
 
 Aplicacion PWA para control operativo de accesos, citas, vales, bitacora de guardias y rondines de seguridad.
 
-Version actual visible en la app: `proveedores-v77`.
+Version actual visible en la app: `control-acceso-v84`.
 
 ## Modulos principales
 
@@ -153,8 +153,8 @@ Esto fuerza a los equipos a descargar la nueva version de la app.
 
 Version actual:
 
-- Sidebar: `proveedores-v77`
-- Service Worker: `proveedores-v77`
+- Sidebar: `control-acceso-v84`
+- Service Worker: `control-acceso-v84`
 
 ## Mantenimiento recomendado
 

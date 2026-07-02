@@ -46,11 +46,32 @@
      box-shadow:0 10px 22px rgba(37,99,235,.18);
      display:flex; align-items:center; justify-content:center;
      font-weight:900; letter-spacing:.5px; color:#fff;
+     overflow:hidden;
    }
+    .logo img,
+    .sidebar .sb-logo img{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
+      border-radius:inherit;
+    }
     .title h1{ font-size:16px; margin:0; line-height:1.1; }
     .title small{ display:block; color:var(--muted); font-size:12px; margin-top:2px; }
     .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
     .container{ max-width:1250px; margin:0 auto; padding:16px 14px 80px; }
+    .app-watermark{
+      position:fixed;
+      right:16px;
+      bottom:12px;
+      z-index:6;
+      pointer-events:none;
+      color:rgba(226,232,240,.42);
+      font-size:11px;
+      font-weight:700;
+      letter-spacing:.2px;
+      text-shadow:0 1px 2px rgba(0,0,0,.28);
+    }
     .card{
       background: linear-gradient(180deg, rgba(17,28,51,.95), rgba(15,23,42,.92));
       border:1px solid var(--border);
@@ -235,6 +256,7 @@
     .vale-qr-fields > div{ min-width:0; overflow-wrap:anywhere; }
     @media (max-width:720px){
       .container{ padding:12px 10px 72px; }
+      .app-watermark{ right:10px; bottom:8px; font-size:10px; }
       .card{ padding:12px; }
       .col{ padding:10px; }
       .vale-dashboard-head{
@@ -303,6 +325,7 @@
     .table td code{ color:#93c5fd; }
 
     @media print{
+      .app-watermark{ display:none !important; }
       html, body, .app-shell, main, #app{
         background:#fff !important;
         background-color:#fff !important;
@@ -350,6 +373,7 @@ height: 100vh;
   box-shadow:0 12px 26px rgba(59,130,246,.22);
   display:flex; align-items:center; justify-content:center;
   font-weight:900; letter-spacing:.5px;
+  overflow:hidden;
 }
 .sidebar .sb-title{ line-height:1.1; }
 .sidebar .sb-title b{ display:block; font-size:13px; }
@@ -613,7 +637,7 @@ height: 100vh;
   overflow-wrap:anywhere;
 }
 .guard-badge-shell{
-  max-width:430px;
+  max-width:350px;
   margin:0 auto;
 }
 .guard-badge{
@@ -630,20 +654,20 @@ height: 100vh;
   position:absolute;
   inset:0;
   pointer-events:none;
-  border:10px solid rgba(15,23,42,.10);
+  border:7px solid rgba(15,23,42,.10);
   border-radius:22px;
 }
 .guard-badge-hole{
-  width:96px;
-  height:22px;
-  margin:18px auto 14px;
+  width:78px;
+  height:16px;
+  margin:12px auto 10px;
   border-radius:999px;
   background:#020617;
   box-shadow:inset 0 0 0 4px rgba(255,255,255,.82), 0 0 0 2px rgba(15,23,42,.18);
 }
 .guard-badge-panel{
   position:relative;
-  margin:0 20px 20px;
+  margin:0 14px 14px;
   overflow:hidden;
   border-radius:18px;
   background:#fff;
@@ -652,8 +676,8 @@ height: 100vh;
   position:relative;
   display:grid;
   justify-items:center;
-  gap:10px;
-  padding:28px 24px 62px;
+  gap:7px;
+  padding:18px 18px 44px;
   color:#fff;
   background:linear-gradient(135deg,#031a34 0%,#08284b 58%,#075ebf 100%);
 }
@@ -662,8 +686,8 @@ height: 100vh;
   position:absolute;
   left:-8%;
   right:-8%;
-  bottom:-34px;
-  height:82px;
+  bottom:-28px;
+  height:62px;
   background:#fff;
   transform:skewY(10deg);
   transform-origin:left top;
@@ -671,33 +695,33 @@ height: 100vh;
 .guard-badge-shield{
   position:relative;
   z-index:1;
-  width:84px;
-  height:84px;
+  width:58px;
+  height:58px;
   display:grid;
   place-items:center;
 }
 .guard-badge-shield svg{
-  width:84px;
-  height:84px;
+  width:58px;
+  height:58px;
   display:block;
 }
 .guard-badge-title{
   position:relative;
   z-index:1;
   margin:0;
-  font-size:42px;
+  font-size:31px;
   line-height:.95;
   font-weight:900;
-  letter-spacing:8px;
+  letter-spacing:5px;
   color:#fff;
   text-shadow:0 2px 12px rgba(0,0,0,.28);
 }
 .guard-badge-subtitle{
   position:relative;
   z-index:1;
-  font-size:13px;
+  font-size:10px;
   font-weight:800;
-  letter-spacing:5px;
+  letter-spacing:3px;
   color:rgba(255,255,255,.88);
 }
 .guard-badge-body{
@@ -705,24 +729,24 @@ height: 100vh;
   z-index:2;
   display:grid;
   justify-items:center;
-  padding:0 28px 24px;
-  margin-top:-34px;
+  padding:0 20px 16px;
+  margin-top:-26px;
 }
 .guard-badge-qr-frame{
   display:inline-block;
-  padding:12px;
-  border:4px solid #08284b;
-  border-radius:18px;
+  padding:9px;
+  border:3px solid #08284b;
+  border-radius:15px;
   background:#fff;
   box-shadow:0 10px 24px rgba(15,23,42,.18);
 }
 .guard-badge-verify{
-  margin-top:12px;
+  margin-top:9px;
   border-radius:999px;
-  padding:8px 18px;
+  padding:6px 14px;
   background:#08284b;
   color:#fff;
-  font-size:13px;
+  font-size:11px;
   font-weight:900;
   letter-spacing:1.5px;
 }
@@ -730,9 +754,9 @@ height: 100vh;
   display:grid;
   grid-template-columns:1fr auto 1fr;
   align-items:center;
-  gap:14px;
+  gap:10px;
   width:100%;
-  margin:22px 0 12px;
+  margin:15px 0 9px;
   color:#08284b;
 }
 .guard-badge-divider::before,
@@ -745,28 +769,28 @@ height: 100vh;
 .guard-badge-divider span{
   display:grid;
   place-items:center;
-  width:36px;
-  height:42px;
+  width:28px;
+  height:32px;
   color:#fff;
   background:#08284b;
   clip-path:polygon(50% 0, 88% 18%, 78% 82%, 50% 100%, 22% 82%, 12% 18%);
-  font-size:18px;
+  font-size:14px;
   font-weight:900;
 }
 .guard-badge-role{
   margin:0;
   color:#08284b;
-  font-size:25px;
+  font-size:18px;
   line-height:1.05;
   font-weight:900;
-  letter-spacing:1.5px;
+  letter-spacing:1px;
   text-align:center;
   text-transform:uppercase;
 }
 .guard-badge-name{
-  margin-top:8px;
+  margin-top:6px;
   color:#334155;
-  font-size:14px;
+  font-size:12px;
   font-weight:800;
   text-align:center;
   overflow-wrap:anywhere;
@@ -774,47 +798,47 @@ height: 100vh;
 .guard-badge-meta{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:16px;
+  gap:12px;
   align-items:center;
   width:100%;
-  margin-top:24px;
+  margin-top:14px;
 }
 .guard-badge-access{
   display:grid;
   grid-template-columns:auto 1fr;
-  gap:10px;
+  gap:8px;
   align-items:center;
   min-width:0;
 }
 .guard-badge-mini-shield{
   display:grid;
   place-items:center;
-  width:42px;
-  height:48px;
+  width:32px;
+  height:36px;
   color:#fff;
   background:#08284b;
   clip-path:polygon(50% 0, 88% 18%, 78% 82%, 50% 100%, 22% 82%, 12% 18%);
-  font-size:18px;
+  font-size:13px;
   font-weight:900;
 }
 .guard-badge-access strong{
   display:block;
   color:#08284b;
-  font-size:13px;
+  font-size:10px;
   line-height:1.05;
 }
 .guard-badge-access span{
   display:block;
   color:#334155;
-  font-size:10px;
+  font-size:8px;
   font-weight:800;
   line-height:1.2;
 }
 .guard-badge-id{
   border-left:2px solid #08284b;
-  padding-left:18px;
+  padding-left:12px;
   color:#0f172a;
-  font-size:17px;
+  font-size:13px;
   font-weight:800;
   overflow-wrap:anywhere;
 }
@@ -824,13 +848,13 @@ height: 100vh;
 .guard-badge-footer{
   position:relative;
   overflow:hidden;
-  padding:15px 20px;
+  padding:10px 16px;
   background:#08284b;
   color:#fff;
   text-align:center;
-  font-size:11px;
+  font-size:9px;
   font-weight:900;
-  letter-spacing:4px;
+  letter-spacing:2.5px;
   text-transform:uppercase;
 }
 .guard-badge-footer::after{
@@ -872,11 +896,11 @@ height: 100vh;
   .rondinero-wall-body{ grid-template-columns:1fr; padding:18px; }
   .rondinero-wall-title{ font-size:28px; }
   .rondinero-wall-footer{ flex-direction:column; }
-  .guard-badge-shell{ max-width:380px; }
-  .guard-badge-title{ font-size:34px; letter-spacing:5px; }
-  .guard-badge-subtitle{ letter-spacing:3px; }
+  .guard-badge-shell{ max-width:330px; }
+  .guard-badge-title{ font-size:29px; letter-spacing:4px; }
+  .guard-badge-subtitle{ letter-spacing:2px; }
   .guard-badge-meta{ grid-template-columns:1fr; }
-  .guard-badge-id{ border-left:0; border-top:2px solid #08284b; padding:12px 0 0; text-align:center; }
+  .guard-badge-id{ border-left:0; border-top:2px solid #08284b; padding:9px 0 0; text-align:center; }
 }
 .factura-oc-editor{
   display:flex;
@@ -1344,6 +1368,12 @@ html[data-theme="light"] .list,
 html[data-theme="light"] .panel{
   background: transparent !important;
 }
+html[data-theme="light"] .app-watermark,
+html[data-theme="desert"] .app-watermark,
+html[data-theme="mint"] .app-watermark{
+  color:rgba(15,23,42,.34);
+  text-shadow:0 1px 1px rgba(255,255,255,.65);
+}
 
 /* ---------- SIDEBAR BOTONES CLAROS ---------- */
 html[data-theme="light"] .sb-btn{
@@ -1712,10 +1742,10 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
 <div class="sb-overlay" id="sbOverlay"></div>
 <aside class="sidebar" id="sidebar">
   <div class="sb-brand">
-    <div class="sb-logo">PV</div>
+    <div class="sb-logo"><img src="icon-192-cobre.png" alt="Control de Acceso"></div>
     <div class="sb-title">
-      <b>Control de Acesso</b>
-      <span>Version proveedores-v77</span>
+      <b>Control de Acceso</b>
+      <span>Version control-acceso-v84</span>
     </div>
   </div>
   <div class="sb-section">
@@ -1902,10 +1932,10 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
 <header>
   <div class="topbar">
     <div class="title">
-      <div class="logo">PV</div>
+      <div class="logo"><img src="icon-192-cobre.png" alt="Control de Acceso"></div>
       <div>
         <h1>Control de Acceso</h1>
-        <small>Dashboard  • Historial por día • Usuarios • Offline-first</small>
+        <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
     <div class="actions" id="actionsBar">
@@ -1928,6 +1958,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
 </div>
 
 <div class="toast-wrap" id="toasts"></div>
+<div class="app-watermark">Desarrollado por: Hermenegildo Pérez</div>
   </div>
 </div>
 <script type="module">
@@ -2311,6 +2342,7 @@ const PIN_SESSION_KEY = "adminPinOkTs";
     const LS_RONDINERO_RUTAS_KEY = "rondinero_rutas_v1";
     const LS_RONDINERO_RONDINES_KEY = "rondinero_rondines_v1";
     const LS_RONDINERO_EVENTOS_KEY = "rondinero_eventos_v1";
+    const LS_LAST_VISITAS_PUSH_TS = "visitas_last_cloud_push_ts_v1";
 
     const Status = {
       PROGRAMADO:"programado",
@@ -4051,6 +4083,23 @@ function fmt(ts){
       return typeof v.createdTs === "number" ? v.createdTs : null;
     }
 
+    function getRegistroPurgeTs(row={}){
+      const byDate = parseLocalDateEndTs(row.fecha);
+      if(byDate !== null) return byDate;
+      const candidates = [row.fechaHoraTs, row.inicioTs, row.finTs, row.updatedTs, row.createdTs];
+      for(const value of candidates){
+        const ts = Number(value);
+        if(Number.isFinite(ts) && ts > 0) return ts;
+      }
+      return null;
+    }
+
+    function getFechaKeyForPurge(row={}){
+      if(row.fecha) return String(row.fecha).slice(0,10);
+      const ts = getRegistroPurgeTs(row);
+      return typeof ts === "number" ? localDateKeyFromTs(ts) : null;
+    }
+
     function getValeDisplayTs(v={}){
       const byDate = parseLocalDateStartTs(v.fecha);
       if(byDate !== null) return byDate;
@@ -4282,6 +4331,10 @@ function fmt(ts){
       }, { merge: true });
     }
 
+    async function cloudDeleteBitacora(id){
+      await deleteDoc(doc(db, COL_BITACORA, String(id)));
+    }
+
     async function cloudFetchBitacoraByDate(fechaISO){
       const q = query(
         collection(db, COL_BITACORA),
@@ -4386,6 +4439,19 @@ function fmt(ts){
         updatedTs: Date.now(),
         updatedAt: serverTimestamp()
       }, { merge: true });
+    }
+
+    async function cloudDeleteRondineroRondin(id){
+      await deleteDoc(doc(db, COL_RONDINERO_RONDINES, String(id)));
+    }
+
+    async function cloudDeleteRondineroEvento(id){
+      await deleteDoc(doc(db, COL_RONDINERO_EVENTOS, String(id)));
+    }
+
+    async function cloudDeleteResumenDiario(fechaKey){
+      if(!fechaKey) return;
+      await deleteDoc(doc(db, COL_RESUMEN_DIARIO, String(fechaKey)));
     }
 
     async function syncRondinero(force = false){
@@ -4767,10 +4833,17 @@ async function pushRecentToCloud(){
 
   try{
     const sorted = [...visitas].sort((a,b)=>((b.updatedTs||b.createdTs||0)-(a.updatedTs||a.createdTs||0)));
-    const top = sorted.slice(0, 10);
+    const lastPushTs = Number(localStorage.getItem(LS_LAST_VISITAS_PUSH_TS) || 0);
+    const changed = lastPushTs
+      ? sorted.filter(v => Number(v.updatedTs || v.createdTs || 0) > lastPushTs)
+      : sorted.slice(0, 10);
+    const top = changed.slice(0, 10);
+    if(!top.length) return;
 
     // IMPORTANTE: sanitiza antes de mandar
     await Promise.all(top.map(v => cloudUpsertVisita(sanitizeForFirestore(v))));
+    const maxSentTs = Math.max(lastPushTs, ...top.map(v => Number(v.updatedTs || v.createdTs || 0)).filter(Boolean));
+    localStorage.setItem(LS_LAST_VISITAS_PUSH_TS, String(maxSentTs || Date.now()));
   }catch(e){
   console.warn("pushRecentToCloud (ignorado):", e?.code, e?.message);
 
@@ -4786,10 +4859,15 @@ async function depurarBaseHastaHoy() {
   const ok = confirm(
     "⚠️ DEPURACIÓN DE BASE DE DATOS\n\n" +
     "Se eliminarán TODOS los registros con fecha ≤ HOY en:\n" +
-    "• Citas\n" +
+    "• Citas de proveedores\n" +
+    "• Citas de visitantes\n" +
     "• Vales de salida de activos\n" +
-    "• Vales de salida de personal\n\n" +
+    "• Vales de salida de personal\n" +
+    "• Bitácora de novedades\n" +
+    "• Rondines y eventos del Rondinero\n" +
+    "• Resúmenes diarios relacionados\n\n" +
     "✅ Se conservarán SOLO registros futuros.\n\n" +
+    "No se borrarán usuarios, proveedores, puntos QR ni rutas.\n\n" +
     "¿Deseas continuar?"
   );
   if (!ok) return;
@@ -4800,6 +4878,8 @@ async function depurarBaseHastaHoy() {
     typeof v.fechaHoraTs === "number" &&
     v.fechaHoraTs <= hoyTs
   );
+  const proveedoresBorrar = citasBorrar.filter(v => !isVisitante(v)).length;
+  const visitantesBorrar = citasBorrar.filter(v => isVisitante(v)).length;
   const valesActivosBorrar = valesActivos.filter(v => {
     const ts = getValePurgeTs(v);
     return typeof ts === "number" && ts <= hoyTs;
@@ -4808,7 +4888,22 @@ async function depurarBaseHastaHoy() {
     const ts = getValePurgeTs(v);
     return typeof ts === "number" && ts <= hoyTs;
   });
-  const totalBorrar = citasBorrar.length + valesActivosBorrar.length + valesPersonalBorrar.length;
+  const bitacoraBorrar = bitacoraGuardia.filter(entry => {
+    const ts = getRegistroPurgeTs(entry);
+    return typeof ts === "number" && ts <= hoyTs;
+  });
+  const rondinesBorrar = rondineroRondines.filter(r => {
+    const ts = getRegistroPurgeTs(r);
+    return typeof ts === "number" && ts <= hoyTs;
+  });
+  const eventosBorrar = rondineroEventos.filter(ev => {
+    const ts = getRegistroPurgeTs(ev);
+    return typeof ts === "number" && ts <= hoyTs;
+  });
+  const resumenKeysBorrar = Array.from(new Set(
+    citasBorrar.map(getFechaKeyForPurge).filter(Boolean)
+  ));
+  const totalBorrar = citasBorrar.length + valesActivosBorrar.length + valesPersonalBorrar.length + bitacoraBorrar.length + rondinesBorrar.length + eventosBorrar.length + resumenKeysBorrar.length;
 
   if (!totalBorrar) {
     toast("Depuración", "No hay registros a eliminar.", "info");
@@ -4829,7 +4924,11 @@ async function depurarBaseHastaHoy() {
       [
         ...citasBorrar.map(v => cloudDeleteVisita(v.id).catch(() => {})),
         ...valesActivosBorrar.map(v => cloudDeleteValeActivo(v.id).catch(() => {})),
-        ...valesPersonalBorrar.map(v => cloudDeleteValePersonal(v.id).catch(() => {}))
+        ...valesPersonalBorrar.map(v => cloudDeleteValePersonal(v.id).catch(() => {})),
+        ...bitacoraBorrar.map(entry => cloudDeleteBitacora(entry.id).catch(() => {})),
+        ...rondinesBorrar.map(r => cloudDeleteRondineroRondin(r.id).catch(() => {})),
+        ...eventosBorrar.map(ev => cloudDeleteRondineroEvento(ev.id).catch(() => {})),
+        ...resumenKeysBorrar.map(fechaKey => cloudDeleteResumenDiario(fechaKey).catch(() => {}))
       ]
     );
   }
@@ -4847,14 +4946,28 @@ async function depurarBaseHastaHoy() {
     const ts = getValePurgeTs(v);
     return !(typeof ts === "number" && ts <= hoyTs);
   });
+  bitacoraGuardia = bitacoraGuardia.filter(entry => {
+    const ts = getRegistroPurgeTs(entry);
+    return !(typeof ts === "number" && ts <= hoyTs);
+  });
+  rondineroRondines = rondineroRondines.filter(r => {
+    const ts = getRegistroPurgeTs(r);
+    return !(typeof ts === "number" && ts <= hoyTs);
+  });
+  rondineroEventos = rondineroEventos.filter(ev => {
+    const ts = getRegistroPurgeTs(ev);
+    return !(typeof ts === "number" && ts <= hoyTs);
+  });
 
   saveVisitasLocal();
   saveValesActivosLocal();
   saveValesPersonalLocal();
+  saveBitacoraLocal();
+  saveRondineroLocal();
 
   toast(
     "Depuración completa",
-    `Se eliminaron ${totalBorrar} registros: ${citasBorrar.length} citas, ${valesActivosBorrar.length} vales de activos y ${valesPersonalBorrar.length} vales de personal.`,
+    `Se eliminaron ${totalBorrar} registros: ${proveedoresBorrar} proveedores, ${visitantesBorrar} visitantes, ${valesActivosBorrar.length} vales de activos, ${valesPersonalBorrar.length} vales de personal, ${bitacoraBorrar.length} bitácora, ${rondinesBorrar.length} rondines, ${eventosBorrar.length} eventos y ${resumenKeysBorrar.length} resúmenes.`,
     "ok",
     3000
   );
@@ -4872,10 +4985,15 @@ async function depurarBaseRetencion30Dias() {
   const confirmacion = confirm(
     `⚠️ DEPURACIÓN DE BASE DE DATOS\n\n` +
     `Se eliminarán TODOS los registros con más de ${RETENCION_DIAS} días en:\n` +
-    `• Citas\n` +
+    `• Citas de proveedores\n` +
+    `• Citas de visitantes\n` +
     `• Vales de salida de activos\n` +
-    `• Vales de salida de personal\n\n` +
+    `• Vales de salida de personal\n` +
+    `• Bitácora de novedades\n` +
+    `• Rondines y eventos del Rondinero\n` +
+    `• Resúmenes diarios relacionados\n\n` +
     `✅ Se conservará historial desde los últimos ${RETENCION_DIAS} días (incluye futuros).\n\n` +
+    `No se borrarán usuarios, proveedores, puntos QR ni rutas.\n\n` +
     `¿Deseas continuar?`
   );
   if (!confirmacion) return;
@@ -4884,6 +5002,8 @@ async function depurarBaseRetencion30Dias() {
     typeof v.fechaHoraTs === "number" &&
     v.fechaHoraTs < limiteTs
   );
+  const proveedoresEliminar = citasEliminar.filter(v => !isVisitante(v)).length;
+  const visitantesEliminar = citasEliminar.filter(v => isVisitante(v)).length;
   const valesActivosEliminar = valesActivos.filter(v => {
     const ts = getValePurgeTs(v);
     return typeof ts === "number" && ts < limiteTs;
@@ -4892,7 +5012,24 @@ async function depurarBaseRetencion30Dias() {
     const ts = getValePurgeTs(v);
     return typeof ts === "number" && ts < limiteTs;
   });
-  const totalEliminar = citasEliminar.length + valesActivosEliminar.length + valesPersonalEliminar.length;
+  const bitacoraEliminar = bitacoraGuardia.filter(entry => {
+    const ts = getRegistroPurgeTs(entry);
+    return typeof ts === "number" && ts < limiteTs;
+  });
+  const rondinesEliminar = rondineroRondines.filter(r => {
+    const ts = getRegistroPurgeTs(r);
+    return typeof ts === "number" && ts < limiteTs;
+  });
+  const eventosEliminar = rondineroEventos.filter(ev => {
+    const ts = getRegistroPurgeTs(ev);
+    return typeof ts === "number" && ts < limiteTs;
+  });
+  const resumenKeysEliminar = Array.from(new Set(
+    citasEliminar
+      .map(getFechaKeyForPurge)
+      .filter(fechaKey => fechaKey && Number(parseLocalDateEndTs(fechaKey)) < limiteTs)
+  ));
+  const totalEliminar = citasEliminar.length + valesActivosEliminar.length + valesPersonalEliminar.length + bitacoraEliminar.length + rondinesEliminar.length + eventosEliminar.length + resumenKeysEliminar.length;
 
   if (!totalEliminar) {
     toast("Depuración", "No hay registros antiguos para eliminar.", "info");
@@ -4918,7 +5055,11 @@ async function depurarBaseRetencion30Dias() {
       [
         ...citasEliminar.map(v => cloudDeleteVisita(v.id).catch(() => {})),
         ...valesActivosEliminar.map(v => cloudDeleteValeActivo(v.id).catch(() => {})),
-        ...valesPersonalEliminar.map(v => cloudDeleteValePersonal(v.id).catch(() => {}))
+        ...valesPersonalEliminar.map(v => cloudDeleteValePersonal(v.id).catch(() => {})),
+        ...bitacoraEliminar.map(entry => cloudDeleteBitacora(entry.id).catch(() => {})),
+        ...rondinesEliminar.map(r => cloudDeleteRondineroRondin(r.id).catch(() => {})),
+        ...eventosEliminar.map(ev => cloudDeleteRondineroEvento(ev.id).catch(() => {})),
+        ...resumenKeysEliminar.map(fechaKey => cloudDeleteResumenDiario(fechaKey).catch(() => {}))
       ]
     );
   }
@@ -4936,14 +5077,28 @@ async function depurarBaseRetencion30Dias() {
     const ts = getValePurgeTs(v);
     return !(typeof ts === "number" && ts < limiteTs);
   });
+  bitacoraGuardia = bitacoraGuardia.filter(entry => {
+    const ts = getRegistroPurgeTs(entry);
+    return !(typeof ts === "number" && ts < limiteTs);
+  });
+  rondineroRondines = rondineroRondines.filter(r => {
+    const ts = getRegistroPurgeTs(r);
+    return !(typeof ts === "number" && ts < limiteTs);
+  });
+  rondineroEventos = rondineroEventos.filter(ev => {
+    const ts = getRegistroPurgeTs(ev);
+    return !(typeof ts === "number" && ts < limiteTs);
+  });
 
   saveVisitasLocal();
   saveValesActivosLocal();
   saveValesPersonalLocal();
+  saveBitacoraLocal();
+  saveRondineroLocal();
 
   toast(
     "Depuración finalizada",
-    `Se eliminaron ${totalEliminar} registros: ${citasEliminar.length} citas, ${valesActivosEliminar.length} vales de activos y ${valesPersonalEliminar.length} vales de personal.`,
+    `Se eliminaron ${totalEliminar} registros: ${proveedoresEliminar} proveedores, ${visitantesEliminar} visitantes, ${valesActivosEliminar.length} vales de activos, ${valesPersonalEliminar.length} vales de personal, ${bitacoraEliminar.length} bitácora, ${rondinesEliminar.length} rondines, ${eventosEliminar.length} eventos y ${resumenKeysEliminar.length} resúmenes.`,
     "ok",
     3200
   );
@@ -7283,8 +7438,8 @@ function renderRondineroQR(id){
     box.innerHTML = "";
     new QRCode(box, {
       text: qrText,
-      width: 220,
-      height: 220,
+      width: 168,
+      height: 168,
       correctLevel: QRCode.CorrectLevel.M
     });
   }
@@ -9241,8 +9396,8 @@ function renderRondineroGuardiaQR(uid){
     box.innerHTML = "";
     new QRCode(box, {
       text: qrText,
-      width: 220,
-      height: 220,
+      width: 168,
+      height: 168,
       correctLevel: QRCode.CorrectLevel.M
     });
   }
