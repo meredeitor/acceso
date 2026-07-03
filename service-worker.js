@@ -1,4 +1,4 @@
-const CACHE_NAME = "control-acceso-v105";
+const CACHE_NAME = "control-acceso-v106";
 
 // Archivos base que siempre quieres offline
 const STATIC_ASSETS = [

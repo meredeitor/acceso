@@ -2179,7 +2179,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="sb-logo"><img src="icon-192-cobre.png" alt="Control de Acceso"></div>
     <div class="sb-title">
       <b>Control de Acceso</b>
-      <span>Version control-acceso-v105</span>
+      <span>Version control-acceso-v106</span>
     </div>
   </div>
   <div class="sb-section">
@@ -2702,6 +2702,7 @@ let valePersonalAutorizadoresTs = 0;
 const PROVEEDORES_CACHE_TTL_MS = 12 * 60 * 60 * 1000;
 let lockView = false;
 let currentView = "login";
+let moduleReturnView = "dashboard_proveedores";
 let chartAreaInstance = null;
 let chartEstadoInstance = null;
 let chartDictamenInstance = null;
@@ -3046,6 +3047,7 @@ async function goNuevaCita(){
   setActiveSb(tipo === "visitante" ? "nuevo_visitante" : "nuevo");   // ✅ CLAVE
   lockView = true;        // 🔒 bloquea auto-render
   currentView = tipo === "visitante" ? "nuevo_visitante" : "nuevo";
+  rememberModuleReturn(currentView);
   sbClose();
   await renderNuevo(tipo);
 }
@@ -3198,6 +3200,41 @@ function dashboardTipoMatches(v={}, tipo="proveedores"){
 function getActiveDashboardTipo(){
   if(currentView === "dashboard_visitantes") return "visitantes";
   return "proveedores";
+}
+
+function rememberModuleReturn(view = currentView){
+  if(view === "dashboard_visitantes" || view === "nuevo_visitante"){
+    moduleReturnView = "dashboard_visitantes";
+  }else if(view === "dashboard_proveedores" || view === "nuevo" || view === "proveedor"){
+    moduleReturnView = "dashboard_proveedores";
+  }else if(view === "vales_activos" || view === "vale_qr"){
+    moduleReturnView = "vales_activos";
+  }else if(view === "vales_personal" || view === "vale_personal_qr"){
+    moduleReturnView = "vales_personal";
+  }else if(view === "bitacora_guardia"){
+    moduleReturnView = "bitacora_guardia";
+  }else if(view === "rondinero" || view === "rondinero_detalle" || view === "rondinero_qr"){
+    moduleReturnView = "rondinero";
+  }else if(view === "rondinero_guardia" || view === "rondinero_guardia_scanner"){
+    moduleReturnView = "rondinero_guardia";
+  }
+  return moduleReturnView;
+}
+
+function rememberModuleReturnForVisita(v = {}){
+  moduleReturnView = isVisitante(v) ? "dashboard_visitantes" : "dashboard_proveedores";
+  return moduleReturnView;
+}
+
+function renderModuleHome(){
+  const target = rememberModuleReturn(moduleReturnView);
+  if(target === "dashboard_visitantes") return renderDashboardHoy("visitantes");
+  if(target === "vales_activos") return renderValesActivos();
+  if(target === "vales_personal") return renderValesPersonal();
+  if(target === "bitacora_guardia") return renderBitacoraGuardia();
+  if(target === "rondinero") return renderRondinero();
+  if(target === "rondinero_guardia") return renderRondineroGuardia();
+  return renderDashboardHoy("proveedores");
 }
 
 function isDashboardView(){
@@ -4586,7 +4623,7 @@ function fmt(ts){
     function renderCurrentAfterDepuracion(){
       if(currentView === "vales_activos") return renderValesActivos();
       if(currentView === "vales_personal") return renderValesPersonal();
-      return renderDashboardHoy();
+      return renderModuleHome();
     }
 
     // -------------------------
@@ -5843,6 +5880,7 @@ function renderRegisterForm(){
       if(!requirePerm("ver_dashboard","Tu rol no puede ver el dashboard.")) return;
       const dashboardTipo = normalizeDashboardTipo(tipoDashboard);
       currentView = dashboardTipo === "visitantes" ? "dashboard_visitantes" : "dashboard_proveedores";
+      rememberModuleReturn(currentView);
       try{ setActiveSb(currentView); }catch{}
 
       const today = new Date();
@@ -6527,6 +6565,7 @@ function canCurrentUserAuthorizeValePersonal(v={}){
 async function renderValesActivos(){
   if(!requirePerm("ver_vales_activos","Tu rol no puede ver vales de activos.")) return;
   currentView = "vales_activos";
+  rememberModuleReturn(currentView);
   await syncValesActivos(true);
   if(hasPerm("crear_vale_activo")) await ensureValeActivoAutorizadores();
 
@@ -7012,6 +7051,7 @@ function setupValePassActions({ payload, folio, filename, shareText }){
 function renderValeQR(id){
   if(!requirePerm("ver_vales_activos","Tu rol no puede ver vales.")) return;
   currentView = "vale_qr";
+  rememberModuleReturn(currentView);
   const v = valesActivos.find(x => String(x.id) === String(id));
   if(!v) return renderValesActivos();
   if(!v.qrActivo){
@@ -7143,6 +7183,7 @@ function calcEntrada815Min(v={}){
 async function renderValesPersonal(){
   if(!requirePerm("ver_vales_personal","Tu rol no puede ver vales de personal.")) return;
   currentView = "vales_personal";
+  rememberModuleReturn(currentView);
   await syncValesPersonal(true);
   await marcarValesPersonalExcedidos();
   if(hasPerm("crear_vale_personal")) await ensureValePersonalAutorizadores();
@@ -7243,6 +7284,7 @@ function renderValePersonalCard(v){
 async function renderBitacoraGuardia(fecha = todayISO()){
   if(!requirePerm("ver_bitacora_guardia","Solo ADMIN y GUARDIA pueden ver la bitácora.")) return;
   currentView = "bitacora_guardia";
+  rememberModuleReturn(currentView);
   try{ setActiveSb("bitacora_guardia"); }catch{}
   await syncBitacora(fecha);
 
@@ -7506,6 +7548,7 @@ function renderRondineroRutaCard(r){
 async function renderRondineroGuardia(){
   if(!requirePerm("rondinero_ejecutar","Tu rol no puede ejecutar rondines.")) return;
   currentView = "rondinero_guardia";
+  rememberModuleReturn(currentView);
   try{ setActiveSb("rondinero"); }catch{}
   await syncRondineroGuardia();
 
@@ -7602,6 +7645,7 @@ async function renderRondinero(){
     return renderRondineroGuardia();
   }
   currentView = "rondinero";
+  rememberModuleReturn(currentView);
   try{ setActiveSb("rondinero"); }catch{}
   await syncRondinero();
 
@@ -8572,6 +8616,7 @@ async function cancelarValePersonal(id){
 function renderValePersonalQR(id){
   if(!requirePerm("ver_vales_personal","Tu rol no puede ver vales de personal.")) return;
   currentView = "vale_personal_qr";
+  rememberModuleReturn(currentView);
   const v = valesPersonal.find(x => String(x.id) === String(id));
   if(!v) return renderValesPersonal();
   if(!v.qrActivo){
@@ -10659,6 +10704,7 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
   currentView = "qr";
   const v = visitas.find(x => x.id == id);
   if(!v) return renderHome();
+  rememberModuleReturnForVisita(v);
 
   if(!canSeeVisita(v)){
     toast("Acceso denegado","Tu rol solo puede ver QR de visitantes.","bad",2600);
@@ -10981,8 +11027,9 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
     }
     function cleanup(){ stopScanner(); }
 
-    function renderScanner(){
+    function renderScanner(fromView = ""){
       if(!requirePerm("escanear_qr","Solo GUARDIA o ADMIN pueden escanear QR.")) return;
+      rememberModuleReturn(fromView || currentView);
       currentView = "scanner";
       cleanup();
 
@@ -11043,7 +11090,8 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
         }
         if(!vale || !vale.qrActivo){
           toast("QR inválido","Vale no encontrado o desactivado.","bad",3600);
-          return renderDashboardHoy();
+          moduleReturnView = "vales_activos";
+          return renderModuleHome();
         }
         toast("QR detectado","Vale de activo encontrado.","ok",1800);
         return renderValeQR(vale.id);
@@ -11066,7 +11114,8 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
         }
         if(!vale || !vale.qrActivo){
           toast("QR inválido","Vale de personal no encontrado o desactivado.","bad",3600);
-          return renderDashboardHoy();
+          moduleReturnView = "vales_personal";
+          return renderModuleHome();
         }
         toast("QR detectado","Vale de personal encontrado.","ok",1800);
         return renderValePersonalQR(vale.id);
@@ -11092,13 +11141,15 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
       }
 
       if(v?.status === "pendiente_autorizacion"){
+        rememberModuleReturnForVisita(v);
         toast("Pendiente de autorización","Esta solicitud aún no está autorizada. No liberar acceso.", "warn", 4200);
-        return renderDashboardHoy();
+        return renderModuleHome();
       }
 
       if(!v || !v.qrActivo){
         toast("QR inválido","QR no encontrado o desactivado.","bad",3600);
-        return renderDashboardHoy();
+        if(v) rememberModuleReturnForVisita(v);
+        return renderModuleHome();
       }
 
       if(v.status === Status.PROGRAMADO){
@@ -11123,8 +11174,9 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
   toast("Acceso bloqueado",
     `Retraso de ${diffMin} min. El QR fue desactivado y requiere autorización de ADMIN.`,
     "bad", 4200
-  );
-  return renderDashboardHoy();
+   );
+  rememberModuleReturnForVisita(v);
+  return renderModuleHome();
 }
 
   // ✅ llegada NORMAL
@@ -11137,7 +11189,8 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
   }
 
   toast("Llegada registrada","Se movió a 'Llegaron'.","ok",2200);
-  return renderDashboardHoy();
+  rememberModuleReturnForVisita(v);
+  return renderModuleHome();
 }
       
 // 🟢 LLEGADO → ENTRADA (GUARDIA)
@@ -11215,11 +11268,12 @@ async function renderAdminProveedores(){
     function renderFicha(id){
       cleanup();
       const v = visitas.find(x => x.id == id);
-      if(!v) return renderDashboardHoy();
+      if(!v) return renderModuleHome();
       if(!requirePerm("ver_ficha","Tu rol no puede ver fichas.")) return;
+      rememberModuleReturnForVisita(v);
       if(!canSeeVisita(v)){
         toast("Acceso denegado","Tu rol solo puede ver citas de visitantes.","bad",2600);
-        return renderDashboardHoy();
+        return renderModuleHome();
       }
       currentView = "ficha";
 
@@ -11389,17 +11443,18 @@ ${incLabel ? `
 
   const isGuardia = currentUser?.role === ROLES.GUARDIA;
   const v = visitas.find(x => x.id == id);
+  if(v) rememberModuleReturnForVisita(v);
 
   // ✅ FIX #1: evitar crash si no existe la cita en memoria
   if(!v){
     toast("No encontrado","No se encontró la cita en memoria. Sincroniza o regresa al dashboard.","warn", 3600);
-    return renderDashboardHoy();
+    return renderModuleHome();
   }
 
   // ✅ Validación defensiva: fechaHoraTs debe existir para calcular retraso
   if(typeof v.fechaHoraTs !== "number"){
     toast("Datos incompletos","Esta cita no tiene fechaHoraTs válida. Requiere revisión por ADMIN.","warn", 4200);
-    return renderDashboardHoy();
+    return renderModuleHome();
   }
 
   // BLOQUEO Bloqueo por QR desactivado
@@ -11422,7 +11477,7 @@ ${incLabel ? `
       4200
     );
   }
-  return renderDashboardHoy();
+  return renderModuleHome();
 }
 
   // BLOQUEO Bloqueo por retraso > 15 min (y desactivar QR)
@@ -11447,7 +11502,7 @@ ${incLabel ? `
       "bad",
       4200
     );
-    return renderDashboardHoy();
+    return renderModuleHome();
   }
 
   // ✅ Si pasa validaciones, render normal del form (tu UI original)
@@ -11485,17 +11540,18 @@ ${incLabel ? `
 
   const isGuardia = currentUser?.role === ROLES.GUARDIA;
   const v = visitas.find(x => x.id == id);
+  if(v) rememberModuleReturnForVisita(v);
 
   // ✅ Evita crash si no existe la cita en memoria
   if(!v){
     toast("No encontrado","No se encontró la cita en memoria. Sincroniza o regresa al dashboard.","warn", 3600);
-    return renderDashboardHoy();
+    return renderModuleHome();
   }
 
   // ✅ Validación defensiva: se necesita fechaHoraTs para calcular retraso
   if(typeof v.fechaHoraTs !== "number"){
     toast("Datos incompletos","Esta cita no tiene fechaHoraTs válida. Requiere revisión por ADMIN.","warn", 4200);
-    return renderDashboardHoy();
+    return renderModuleHome();
   }
 
   // ⛔ QR DESACTIVADO → TOAST OBLIGATORIO AL INTENTAR REGISTRAR ENTRADA
@@ -11507,7 +11563,7 @@ ${incLabel ? `
       "bad",
       4200
     );
-    return renderDashboardHoy();
+    return renderModuleHome();
   }
 
   // BLOQUEO Bloqueo por retraso > 15 min (y desactivar QR)
@@ -11532,7 +11588,7 @@ ${incLabel ? `
       "bad",
       4200
     );
-    return renderDashboardHoy();
+    return renderModuleHome();
   }
 
   // ✅ Si pasa validaciones, render normal del form (tu UI original)
@@ -11568,8 +11624,10 @@ ${incLabel ? `
       if(!requirePerm("dictaminar","Solo CALIDAD o ADMIN pueden dictaminar.")) return;
       if(isVisitante(v)){
         toast("Flujo de visitante","Los visitantes pasan de Dentro a Finalizado, sin despachado.","info",3200);
+        rememberModuleReturnForVisita(v);
         return renderSalida(v.id);
       }
+      rememberModuleReturnForVisita(v);
       currentView = "calidad";
       cleanup();
 
@@ -11644,7 +11702,8 @@ ${incLabel ? `
   if(!requirePerm("despachar","Solo CALIDAD o ADMIN pueden despachar.")) return;
 
   const v = visitas.find(x => x.id == id);
-  if(!v) return renderDashboardHoy();
+  if(!v) return renderModuleHome();
+  rememberModuleReturnForVisita(v);
   if(isVisitante(v)){
     toast("Flujo de visitante","Los visitantes no usan despachado; registra salida para finalizar.","warn",3200);
     return renderSalida(v.id);
@@ -11708,7 +11767,7 @@ ${incLabel ? `
     2200
   );
 
-  renderDashboardHoy();
+  renderModuleHome();
 }
     
 function renderSalida(id){
@@ -11716,7 +11775,8 @@ function renderSalida(id){
       currentView = "salida";
       cleanup();
       const v = visitas.find(x => x.id == id);
-      if(!v) return renderDashboardHoy();
+      if(!v) return renderModuleHome();
+      rememberModuleReturnForVisita(v);
 
       appEl.innerHTML = `
         <div class="card">
@@ -11741,8 +11801,9 @@ async function confirmarEntrada(id) {
   const v = visitas.find(x => x.id == id);
   if (!v) {
     toast("No encontrado", "La cita no existe.", "bad");
-    return renderDashboardHoy();
+    return renderModuleHome();
     }
+  rememberModuleReturnForVisita(v);
 
   // Validar campos obligatorios
   const guardia = document.getElementById("guardia")?.value.trim();
@@ -11783,12 +11844,13 @@ async function confirmarEntrada(id) {
   }
 
   toast("Entrada registrada", `${getTipoVisitaLabel(v)} marcado como DENTRO.`, "ok", 2200);
-  renderDashboardHoy();
+  renderModuleHome();
 }
 
     async function confirmarSalida(id){
       const v = visitas.find(x => x.id == id);
-      if(!v) return renderDashboardHoy();
+      if(!v) return renderModuleHome();
+      rememberModuleReturnForVisita(v);
 
       v.incidenciasSalida = (document.getElementById("incidenciasSalida")?.value || "").trim();
       v.salidaPor = currentUser?.nombre || "";
@@ -11800,7 +11862,7 @@ async function confirmarEntrada(id) {
       await saveVisitas();
       if(navigator.onLine && currentUser.role !== ROLES.PENDIENTE) await cloudUpsertVisita(v);
       toast("Salida registrada", v.incidenciasSalida ? "Finalizado con incidencias." : "Finalizado (sin incidencias).", "ok", 2200);
-      renderDashboardHoy();
+      renderModuleHome();
     }
 
    async function reactivarQR(id){
@@ -11809,6 +11871,7 @@ async function confirmarEntrada(id) {
 
   const v = visitas.find(x => x.id == id);
   if(!v) return;
+  rememberModuleReturnForVisita(v);
 
   // ✅ Reactiva QR
   v.qrActivo = true;
@@ -11831,7 +11894,7 @@ async function confirmarEntrada(id) {
   }
 
   toast("QR reactivado","El QR volvió a estar activo.","ok",2200);
-  renderDashboardHoy();
+  renderModuleHome();
 }
 
     async function eliminarVisita(id){
@@ -11839,6 +11902,7 @@ async function confirmarEntrada(id) {
       const idx = visitas.findIndex(x => x.id == id);
       if(idx < 0) return;
       const v = visitas[idx];
+      rememberModuleReturnForVisita(v);
 
       if(v.ocFileKey){ try{ await idbDelDoc(v.ocFileKey); }catch{} }
       if(v.facturaFileKey){ try{ await idbDelDoc(v.facturaFileKey); }catch{} }
@@ -11854,7 +11918,7 @@ async function confirmarEntrada(id) {
       visitas = visitas.filter(v => v.id !== id);
       saveVisitasLocal();
 
-      renderDashboardHoy();
+      renderModuleHome();
     }
 
     async function limpiarFinalizadosHoy(){
@@ -11882,7 +11946,7 @@ async function confirmarEntrada(id) {
         visitas = visitas.filter(v => !(v.status === Status.FINALIZADO && typeof v.fechaHoraTs==="number" && isSameDay(v.fechaHoraTs, today)));
         saveVisitasLocal();
         toast("Limpieza", `Se borraron ${antes - visitas.length} finalizados.`, "ok", 2200);
-        renderDashboardHoy();
+        renderModuleHome();
       });
     }
 
@@ -12281,7 +12345,8 @@ function renderProveedores(lista){
       if(!currentUser) return renderLogin();
       if(currentUser.role === ROLES.PENDIENTE) return renderPendiente();
       if(currentUser.role === ROLES.PROVEEDOR) return renderProveedor();
-      return renderDashboardHoy(isAnfitrionOnly() ? "visitantes" : "proveedores");
+      if(isAnfitrionOnly()) return renderDashboardHoy("visitantes");
+      return renderModuleHome();
     }
 
     // -------------------------
@@ -12435,7 +12500,7 @@ function renderProveedores(lista){
   break;
 
         case "verQR": renderQR(id); break;
-        case "scan": renderScanner(); break;
+        case "scan": renderScanner(el.dataset.from || currentView); break;
 
         case "ficha": renderFicha(id); break;
         case "entrada": renderEntrada(id); break;
