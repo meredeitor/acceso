@@ -1,4 +1,4 @@
-const CACHE_NAME = "control-acceso-v106";
+const CACHE_NAME = "meresoft-access-control-v108";
 
 // Archivos base que siempre quieres offline
 const STATIC_ASSETS = [
@@ -83,3 +83,5 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
+
+

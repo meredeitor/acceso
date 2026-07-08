@@ -1,6 +1,6 @@
 ﻿{
-  "name": "Control de Acceso",
-  "short_name": "Control Acceso",
+  "name": "MereSoft Access Control",
+  "short_name": "MS Access",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1F1300",
@@ -19,3 +19,4 @@
     }
   ]
 }
+
