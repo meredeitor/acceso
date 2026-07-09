@@ -2270,7 +2270,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="sb-logo"><img src="icon-192-cobre.png" alt="MereSoft Access Control"></div>
     <div class="sb-title">
       <b>MereSoft Access Control</b>
-      <span>Version mac-v108</span>
+      <span>Version mac-v109</span>
     </div>
   </div>
   <div class="sb-section">
@@ -2459,7 +2459,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="MereSoft Access Control"></div>
       <div>
-        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v108</span></h1>
+        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v109</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -5987,9 +5987,43 @@ function renderRegisterForm(){
 
     function qrInactivoPorImpuntualidad(v){
       if(!v || v.status !== Status.PROGRAMADO) return false;
-      if(v.qrDesactivadoMotivo === "RETRASO") return true;
       if(typeof v.fechaHoraTs !== "number") return false;
-      return (Date.now() - v.fechaHoraTs) > (QR_LATE_BLOCK_MIN * 60 * 1000);
+      const limiteTs = v.fechaHoraTs + (QR_LATE_BLOCK_MIN * 60 * 1000);
+      if(typeof v.qrReactivadoTs === "number" && v.qrReactivadoTs >= limiteTs) return false;
+      if(v.qrDesactivadoMotivo === "RETRASO") return true;
+      return Date.now() > limiteTs;
+    }
+    function citaBloqueadaPorRetraso(v){
+      return qrInactivoPorImpuntualidad(v);
+    }
+
+    function fechaCreacionCita(v){
+      if(!v) return "-";
+      if(typeof v.createdTs === "number") return new Date(v.createdTs).toLocaleString();
+      if(v.createdAt?.toDate) return v.createdAt.toDate().toLocaleString();
+      if(typeof v.createdAt?.seconds === "number") return new Date(v.createdAt.seconds * 1000).toLocaleString();
+      if(v.createdAt) return new Date(v.createdAt).toLocaleString();
+      return "-";
+    }
+
+    function pillCitaCreada(v){
+      return `<span class="pill"><span class="dot info"></span>Cita creada: ${esc(fechaCreacionCita(v))}</span>`;
+    }
+
+    function buscarCitaPorId(id){
+      return visitas.find(x => String(x.id) === String(id)) || _comprasCache.find(x => String(x.id) === String(id));
+    }
+
+    function bloquearAccionCitaRetrasada(id, actionLabel="esta acción"){
+      const v = buscarCitaPorId(id);
+      if(!citaBloqueadaPorRetraso(v)) return false;
+      toast(
+        "Cita bloqueada",
+        `No se puede ${actionLabel}. Reactiva el QR desde ADMIN para desbloquear la cita.`,
+        "bad",
+        4200
+      );
+      return true;
     }
     function renderDashboardHoy(tipoDashboard = getActiveDashboardTipo()){
       if(!requirePerm("ver_dashboard","Tu rol no puede ver el dashboard.")) return;
@@ -6084,6 +6118,7 @@ const showInc = !!incLabel && incKey !== "SIN_INCIDENCIAS";
               <span class="pill"><span class="dot ${tipo === "visitante" ? "brand" : "info"}"></span>${esc(tipoLabel)}</span>
               ${tipo === "proveedor" ? `<span class="pill"><span class="dot info"></span>${esc(v.area || "Área")}</span>` : ""}
               <span class="pill"><span class="dot warn"></span>${esc(cita)}</span>
+              ${pillCitaCreada(v)}
               ${renderVisitanteExtraPills(v)}
               ${v.status === Status.PENDIENTE_AUTORIZACION ? `<span class="pill warn"><span class="dot warn"></span>Pendiente autorización</span>` : ""}
               ${tipo === "proveedor" ? `<span class="pill"><span class="dot ${docColor}"></span>Docs</span>` : ""}
@@ -6492,12 +6527,13 @@ function paintCitasComprasTable(tableList, baseList){
       <tbody>
         ${(tableList||[]).map(v=>{
           const fecha = v.fechaHora ? new Date(v.fechaHora).toLocaleString() : "-";
-          const canEdit = hasPerm("editar_cita") && v.status !== Status.CANCELADO && v.status !== Status.FINALIZADO;
-          const canCancel = hasPerm("cancelar_cita") && v.status !== Status.CANCELADO && v.status !== Status.FINALIZADO;
+          const bloqueada = citaBloqueadaPorRetraso(v);
+          const canEdit = hasPerm("editar_cita") && v.status !== Status.CANCELADO && v.status !== Status.FINALIZADO && !bloqueada;
+          const canCancel = hasPerm("cancelar_cita") && v.status !== Status.CANCELADO && v.status !== Status.FINALIZADO && !bloqueada;
 
           return `
             <tr>
-              <td>${esc(fecha)}</td>
+              <td>${esc(fecha)}<br>${pillCitaCreada(v)}</td>
               <td>${esc(getTipoVisitaLabel(v))}</td>
               <td><b>${esc(getNombreAcceso(v)||"-")}</b><br><code>${esc(v.id)}</code></td>
               <td>${esc(v.personaVisita||"-")}</td>
@@ -8788,7 +8824,12 @@ async function renderEditarCitaCompras(id){
     return renderCitasCompras(_citasTipoFiltro);
   }
 
-  const esVisitante = isVisitante(v);
+    if(citaBloqueadaPorRetraso(v)){
+    toast("Cita bloqueada","No se puede editar. Reactiva el QR desde ADMIN para desbloquear la cita.","bad",4200);
+    return renderCitasCompras(_citasTipoFiltro);
+  }
+
+const esVisitante = isVisitante(v);
   if(!esVisitante){
     await ensureProveedoresLoaded();
   }
@@ -8915,7 +8956,12 @@ async function guardarEdicionCitaCompras(id){
   const v = visitas.find(x => String(x.id) === String(id));
   if(!v) return;
 
-  const esVisitante = isVisitante(v);
+    if(citaBloqueadaPorRetraso(v)){
+    toast("Cita bloqueada","No se puede guardar cambios. Reactiva el QR desde ADMIN para desbloquear la cita.","bad",4200);
+    return;
+  }
+
+const esVisitante = isVisitante(v);
   const provInput = document.getElementById("ccProvSearch");
   const proveedorCodigo = esVisitante ? "" : (provInput?.dataset.codigo || v.proveedorCodigo || "");
   const proveedorNombre = (provInput?.value || "").trim();
@@ -8995,7 +9041,12 @@ async function cancelarCitaCompras(id){
     return;
   }
 
-  const motivo = prompt("Motivo de cancelación (opcional):") || "";
+    if(citaBloqueadaPorRetraso(v)){
+    toast("Cita bloqueada","No se puede cancelar. Reactiva el QR desde ADMIN para desbloquear la cita.","bad",4200);
+    return;
+  }
+
+const motivo = prompt("Motivo de cancelación (opcional):") || "";
 
   v.status = Status.CANCELADO;
   v.qrActivo = false;
@@ -9056,6 +9107,7 @@ async function cancelarCitaCompras(id){
             <div class="meta">
               <span class="pill"><span class="dot ${tipo === "visitante" ? "brand" : "info"}"></span>${esc(tipoLabel)}</span>
               <span class="pill"><span class="dot warn"></span>${esc(cita)}</span>
+              ${pillCitaCreada(v)}
               ${renderVisitanteExtraPills(v)}
               <span class="badge-dictamen ${esc(dict)}"><span class="bdot"></span> ${esc(dictLabel)}</span>
             </div>
@@ -11990,6 +12042,8 @@ async function confirmarEntrada(id) {
 
   // ✅ Reactiva QR
   v.qrActivo = true;
+  v.qrReactivadoTs = Date.now();
+  v.qrReactivadoPor = currentUser?.email || currentUser?.nombre || "";
 
   // ✅ Limpieza del motivo (por si fue desactivado por RETRASO u otro motivo)
   // (si no existen, delete no hace nada)
@@ -12018,6 +12072,11 @@ async function confirmarEntrada(id) {
       if(idx < 0) return;
       const v = visitas[idx];
       rememberModuleReturnForVisita(v);
+
+            if(citaBloqueadaPorRetraso(v)){
+        toast("Cita bloqueada","No se puede eliminar. Reactiva el QR desde ADMIN para desbloquear la cita.","bad",4200);
+        return;
+      }
 
       if(v.ocFileKey){ try{ await idbDelDoc(v.ocFileKey); }catch{} }
       if(v.facturaFileKey){ try{ await idbDelDoc(v.facturaFileKey); }catch{} }
@@ -12620,7 +12679,10 @@ function renderProveedores(lista){
         case "verQR": renderQR(id); break;
         case "scan": renderScanner(el.dataset.from || currentView); break;
 
-        case "ficha": renderFicha(id); break;
+        case "ficha":
+          if(bloquearAccionCitaRetrasada(id, "abrir la ficha")) break;
+          renderFicha(id);
+          break;
         case "entrada": renderEntrada(id); break;
         case "confirmarEntrada": await confirmarEntrada(id); break;
         case "despachar": await despachar(id); break;
@@ -12648,8 +12710,9 @@ function renderProveedores(lista){
         case "eliminar": {
           const v = visitas.find(x => x.id == id);
           if(!v) return;
+          if(bloquearAccionCitaRetrasada(id, "eliminar la cita")) break;
           if(!(await requireAdminPin("eliminar este registro"))) return;
-          if(confirm(`¿Eliminar el registro de "${v.proveedor}"?`)){
+          if(confirm(`¿Eliminar el registro de "${getNombreAcceso(v) || v.proveedor}"?`)){
             await eliminarVisita(id);
           }
           break;
@@ -12715,14 +12778,17 @@ function renderProveedores(lista){
   break;
 
 case "ccEdit":
+  if(bloquearAccionCitaRetrasada(id, "editar la cita")) break;
   await renderEditarCitaCompras(id);
   break;
 
 case "ccSaveEdit":
+  if(bloquearAccionCitaRetrasada(id, "guardar cambios")) break;
   await guardarEdicionCitaCompras(id);
   break;
 
 case "ccCancel":
+  if(bloquearAccionCitaRetrasada(id, "cancelar la cita")) break;
   if(confirm("¿Cancelar esta cita? El QR quedará inactivo.")){
     await cancelarCitaCompras(id);
   }
