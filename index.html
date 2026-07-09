@@ -175,6 +175,42 @@
       background: linear-gradient(180deg, rgba(124,58,237,.30), rgba(15,23,42,.94));
       border-color: rgba(196,181,253,.58);
     }
+    .tarjeta.visita-especial{
+      background: linear-gradient(135deg, rgba(0,212,255,.42), rgba(0,82,255,.38) 48%, rgba(6,12,32,.96)) !important;
+      border-color: rgba(103,232,249,.95) !important;
+      box-shadow: 0 0 0 1px rgba(125,249,255,.85), 0 0 26px rgba(0,212,255,.78), 0 0 56px rgba(0,82,255,.46) !important;
+    }
+    .tarjeta.visita-especial:hover{
+      background: linear-gradient(135deg, rgba(0,236,255,.52), rgba(0,112,255,.46) 48%, rgba(7,18,45,.98)) !important;
+      border-color: rgba(207,250,254,1) !important;
+      box-shadow: 0 0 0 1px rgba(207,250,254,1), 0 0 34px rgba(0,236,255,.92), 0 0 74px rgba(0,112,255,.58) !important;
+    }
+    .pill.visita-especial-pill{
+      background: rgba(0,212,255,.22);
+      border-color: rgba(103,232,249,.75);
+      color: #cffafe;
+      box-shadow: 0 0 16px rgba(0,212,255,.45);
+      font-weight: 900;
+    }
+    .visita-especial-toggle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-height:44px;
+      padding:10px 12px;
+      border:1px solid rgba(103,232,249,.55);
+      border-radius:12px;
+      background:rgba(0,212,255,.10);
+      color:#cffafe;
+      font-weight:900;
+      box-shadow:0 0 18px rgba(0,212,255,.20);
+      cursor:pointer;
+    }
+    .visita-especial-toggle input{
+      width:18px;
+      height:18px;
+      accent-color:#00d4ff;
+    }
     .tarjeta.tipo-proveedor{
       border-left: 3px solid rgba(56,189,248,.65);
     }
@@ -2270,7 +2306,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="sb-logo"><img src="icon-192-cobre.png" alt="MereSoft Access Control"></div>
     <div class="sb-title">
       <b>MereSoft Access Control</b>
-      <span>Version mac-v109</span>
+      <span>Version mac-v110</span>
     </div>
   </div>
   <div class="sb-section">
@@ -2459,7 +2495,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="MereSoft Access Control"></div>
       <div>
-        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v109</span></h1>
+        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v110</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -6110,12 +6146,13 @@ const showInc = !!incLabel && incKey !== "SIN_INCIDENCIAS";
         if(v.ocNo && v.facturaNo) docColor="ok";
         else if(v.ocNo || v.facturaNo) docColor="warn";
         return `
-          <div class="tarjeta history-card tipo-${esc(tipo)} ${qrVencido ? "qr-vencido" : ""}" data-action="ficha" data-id="${esc(v.id)}">
+          <div class="tarjeta history-card tipo-${esc(tipo)} ${v.visitaEspecial ? "visita-especial" : ""} ${qrVencido ? "qr-vencido" : ""}" data-action="ficha" data-id="${esc(v.id)}">
             ${qrVencido ? `<div class="qr-banda-inactivo">QR inactivo por retraso</div>` : ""}
             <strong>${esc(isVisitante(v) ? getVisitanteResumen(v) : nombreAcceso)}</strong>
             <small>${esc(empresaAcceso || tipoLabel)}</small>
             <div class="meta">
               <span class="pill"><span class="dot ${tipo === "visitante" ? "brand" : "info"}"></span>${esc(tipoLabel)}</span>
+              ${v.visitaEspecial ? `<span class="pill visita-especial-pill"><span class="dot info"></span>Visita especial</span>` : ""}
               ${tipo === "proveedor" ? `<span class="pill"><span class="dot info"></span>${esc(v.area || "Área")}</span>` : ""}
               <span class="pill"><span class="dot warn"></span>${esc(cita)}</span>
               ${pillCitaCreada(v)}
@@ -6354,6 +6391,7 @@ async function renderCitasCompras(tipoFiltro = getActiveDashboardTipo()){
           <select id="ccStatus">
             <option value="">Todos</option>
             <option value="${Status.PROGRAMADO}">Programado</option>
+            <option value="${Status.PENDIENTE_AUTORIZACION}">Pendiente autorizacion</option>
             <option value="${Status.LLEGADO}">Llegó</option>
             <option value="${Status.DENTRO}">Dentro</option>
             ${_citasTipoFiltro === "visitantes" ? "" : `<option value="${Status.DESPACHADO}">Despachado</option>`}
@@ -10592,6 +10630,14 @@ async function renderNuevo(tipoCita = "proveedor"){
           <label>Hora</label>
           <input type="time" id="horaVisitante"/>
         </div>
+        ${esVisitanteNuevo ? `
+        <div class="visita-especial-field" style="grid-column:1/-1;">
+          <label class="visita-especial-toggle" for="visitaEspecial">
+            <input type="checkbox" id="visitaEspecial">
+            <span>Visita especial</span>
+          </label>
+        </div>
+        ` : ""}
         <div>
           <label>Fecha y hora *</label>
           <input type="datetime-local" id="fechaHora"/>
@@ -10773,6 +10819,7 @@ function setupProveedorAutocomplete(){
 
   const tipoVisita = document.getElementById("tipoVisita")?.value === "visitante" ? "visitante" : "proveedor";
   const esVisitante = tipoVisita === "visitante";
+  const visitaEspecial = esVisitante && !!document.getElementById("visitaEspecial")?.checked;
   if(esVisitante && !canCreateVisitanteCita()){
     toast("Acceso denegado","Tu rol no puede crear citas de visitante.","bad",2600);
     return null;
@@ -10843,6 +10890,8 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
   nombreVisitante: esVisitante ? nombreVisitante : "",
   visitantesTexto: esVisitante ? visitantesTexto : "",
   visitantesLista: esVisitante ? visitantesLista : [],
+  visitaEspecial,
+  requiereAutorizacion: visitaEspecial,
   proveedorCodigo,
   proveedor: proveedorNombre,
   empresa: esVisitante ? empresaVisitante : "",
@@ -10855,7 +10904,7 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
   facturaNo,
   facturasOc: docs.facturasOc,
   materialRecibir,
-  status: "programado",
+  status: visitaEspecial ? Status.PENDIENTE_AUTORIZACION : Status.PROGRAMADO,
   createdByUid: currentUser.uid,
   createdByEmail: currentUser.email,
   createdTs: Date.now(),
@@ -12551,6 +12600,10 @@ function renderProveedores(lista){
         case "limpiarNuevaCita":
           document.querySelectorAll(".nueva-cita-card input, .nueva-cita-card textarea, .nueva-cita-card select").forEach(input => {
             if(input.id === "tipoVisita") return;
+            if(input.type === "checkbox"){
+              input.checked = false;
+              return;
+            }
             input.value = "";
           });
           break;
