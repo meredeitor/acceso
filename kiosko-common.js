@@ -301,6 +301,7 @@ export async function crearSolicitudCita(data){
     qrActivo: false,
     createdByUid: user.uid,
     createdByEmail: user.isAnonymous ? "kiosko_anonimo" : (user.email || ""),
+    createdByName: data.createdByName || data.createdBySource || (user.isAnonymous ? "Kiosko" : (user.email || "")),
     createdBySource: data.createdBySource || "kiosko",
     createdTs: Date.now(),
     updatedTs: Date.now(),

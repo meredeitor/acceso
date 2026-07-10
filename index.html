@@ -136,6 +136,12 @@
     .dot.bad{ background:var(--bad); }
     .dot.brand{ background:var(--brand); }
     .dot.muted{ background:var(--muted); }
+    .pill-multiline{
+      border-radius:12px;
+      align-items:flex-start;
+      white-space:normal;
+      line-height:1.25;
+    }
 
     .badge-dictamen{
       display:inline-flex; align-items:center; gap:6px;
@@ -595,13 +601,15 @@ height: 100vh;
 }
 
 .oc-pill{
-  max-width: 260px;          /* ajústalo a tu kanban */
+  max-width: 260px;
+  border-radius:12px;
   white-space: normal;       /* PERMITE salto de línea */
   word-break: break-word;    /* rompe palabras largas */
   line-height: 1.2;
 }
 .material-pill{
-  max-width: 260px;          /* mismo ancho que OC para consistencia */
+  max-width: 260px;
+  border-radius:12px;
   white-space: normal;       /* permite salto de línea */
   word-break: break-word;    /* rompe palabras largas */
   line-height: 1.2;
@@ -2244,7 +2252,312 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
       min-height:100vh;
       padding:24px;
     }
-</style>
+
+    /* Phone responsive polish */
+    @media (max-width: 680px){
+      :root{
+        --pad:12px;
+        --radius:12px;
+      }
+
+      html,
+      body{
+        min-width:0;
+        overflow-x:hidden;
+      }
+
+      .topbar{
+        padding:10px 10px 8px;
+        gap:8px;
+        flex-wrap:nowrap;
+        align-items:flex-start;
+      }
+
+      .title{
+        min-width:0;
+        flex:1 1 auto;
+        gap:8px;
+      }
+
+      .title > div:last-child{
+        min-width:0;
+      }
+
+      .title h1{
+        display:flex;
+        flex-wrap:wrap;
+        align-items:center;
+        gap:6px;
+        font-size:14px;
+        line-height:1.18;
+      }
+
+      .title small{
+        max-width:100%;
+        font-size:11px;
+        line-height:1.25;
+        overflow-wrap:anywhere;
+      }
+
+      .logo{
+        width:32px;
+        height:32px;
+        border-radius:9px;
+        flex:0 0 auto;
+      }
+
+      .version-badge{
+        padding:3px 6px;
+        font-size:10px;
+      }
+
+      .actions{
+        flex:0 0 auto;
+        justify-content:flex-end;
+        gap:6px;
+      }
+
+      .actions .pill,
+      #userPill,
+      #btnTheme{
+        display:none !important;
+      }
+
+      .hamb{
+        width:42px;
+        height:42px;
+        padding:0;
+      }
+
+      .container{
+        padding:10px 10px 64px;
+      }
+
+      .app-watermark{
+        right:10px;
+        bottom:8px;
+        max-width:calc(100vw - 20px);
+        font-size:10px;
+        text-align:right;
+      }
+
+      .card,
+      .col,
+      .tarjeta{
+        border-radius:12px;
+      }
+
+      .row{
+        gap:8px;
+        align-items:stretch;
+      }
+
+      .row > button,
+      .row > .secondary,
+      .row > .ok,
+      .row > .danger{
+        flex:1 1 150px;
+      }
+
+      button,
+      input,
+      textarea,
+      select{
+        min-height:44px;
+        font-size:16px;
+      }
+
+      button{
+        padding:11px 12px;
+        white-space:normal;
+      }
+
+      label{
+        margin-top:10px;
+      }
+
+      .meta{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:6px;
+      }
+
+      .pill,
+      .badge-dictamen,
+      .sb-chip{
+        max-width:100%;
+        white-space:normal;
+        overflow-wrap:anywhere;
+        word-break:break-word;
+        line-height:1.25;
+      }
+
+      .meta .pill,
+      .meta .badge-dictamen{
+        width:100%;
+        justify-content:flex-start;
+        text-align:left;
+      }
+
+      .grid.cols-5,
+      .grid.cols-4,
+      .grid.vales-grid,
+      .history-grid{
+        grid-template-columns:1fr !important;
+      }
+
+      .sidebar{
+        width:min(88vw, 330px);
+        padding:10px 8px calc(16px + env(safe-area-inset-bottom));
+      }
+
+      .sb-btn{
+        min-height:44px;
+        padding:10px 11px;
+      }
+
+      .sb-txt{
+        min-width:0;
+        overflow-wrap:anywhere;
+      }
+
+      .modal-overlay{
+        padding:8px;
+        align-items:stretch;
+      }
+
+      .modal{
+        width:100%;
+        max-height:calc(100dvh - 16px);
+        border-radius:14px;
+      }
+
+      .modal .modal-head{
+        padding:10px;
+        gap:8px;
+        flex-direction:column;
+      }
+
+      .modal .modal-actions{
+        width:100%;
+        flex-wrap:wrap;
+      }
+
+      .modal .modal-actions button{
+        flex:1 1 130px;
+      }
+
+      .modal .modal-body{
+        padding:10px;
+      }
+
+      .table{
+        display:block;
+        width:100%;
+        overflow-x:auto;
+        -webkit-overflow-scrolling:touch;
+        border-radius:12px;
+      }
+
+      .table th,
+      .table td{
+        padding:9px 8px;
+        vertical-align:top;
+      }
+
+      .table td{
+        min-width:120px;
+      }
+
+      .table td:last-child{
+        min-width:180px;
+      }
+
+      .table button{
+        width:100%;
+        margin:2px 0;
+      }
+
+      .nueva-cita-card,
+      .vale-dashboard-head,
+      .permit-pass{
+        max-width:100%;
+      }
+
+      .nueva-cita-head,
+      .agenda-visual-head{
+        display:grid;
+        grid-template-columns:1fr;
+      }
+
+      .agenda-slot{
+        width:100%;
+        justify-content:center;
+      }
+
+      .factura-oc-head{
+        align-items:stretch;
+      }
+
+      .factura-oc-head button{
+        width:100%;
+      }
+
+      .qr-detail-row{
+        display:grid;
+        grid-template-columns:1fr;
+        gap:4px;
+      }
+
+      .qr-detail-row > span{
+        flex:auto;
+      }
+
+      .toast-wrap{
+        left:10px;
+        right:10px;
+        bottom:10px;
+        max-width:none;
+      }
+
+      .access-auth-view{
+        min-height:100dvh;
+        padding:10px 0;
+      }
+
+      .access-auth-card{
+        min-height:0;
+        gap:12px;
+        border-radius:12px;
+      }
+
+      .access-auth-brand{
+        min-height:180px;
+        padding:18px;
+      }
+
+      .access-auth-form{
+        padding:16px;
+      }
+    }
+
+    @media (max-width: 420px){
+      .title h1{
+        font-size:13px;
+      }
+
+      .card{
+        padding:11px;
+      }
+
+      .big{
+        font-size:28px;
+      }
+
+      .access-auth-brand h2{
+        font-size:1.45rem;
+      }
+    }</style>
 </head>
 
 <body class="auth-mode">
@@ -2495,7 +2808,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="MereSoft Access Control"></div>
       <div>
-        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v110</span></h1>
+        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v112</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -5329,10 +5642,10 @@ function fmt(ts){
           createdTs: Date.now(),
           createdAt: serverTimestamp()
         }, { merge: true });
-        return { uid:user.uid, email:user.email||"", role: ROLES.PENDIENTE };
+        return { uid:user.uid, email:user.email||"", nombre:user.email||"", role: ROLES.PENDIENTE };
       }
       const data = snap.data() || {};
-      return { uid:user.uid, email:user.email||"", role: data.role || ROLES.PENDIENTE };
+      return { uid:user.uid, email:user.email||"", nombre:data.nombre || user.displayName || user.email || "", role: data.role || ROLES.PENDIENTE };
     }
 
     // -------------------------
@@ -6042,8 +6355,30 @@ function renderRegisterForm(){
       return "-";
     }
 
+    function creadorCitaNombre(v){
+      const savedName = String(v?.createdByName || v?.createdByNombre || "").trim();
+      if(savedName) return savedName;
+      return String(v?.createdByEmail || v?.createdByUid || "-").trim() || "-";
+    }
+
     function pillCitaCreada(v){
-      return `<span class="pill"><span class="dot info"></span>Cita creada: ${esc(fechaCreacionCita(v))}</span>`;
+      const creador = creadorCitaNombre(v);
+      return `
+        <span class="pill pill-multiline">
+          <span style="display:grid; gap:4px; min-width:0;">
+            <span style="display:flex; align-items:flex-start; gap:7px; min-width:0;">
+              <span class="dot info" style="margin-top:4px; flex:0 0 auto;"></span>
+              <span>Cita creada: ${esc(fechaCreacionCita(v))}</span>
+            </span>
+            ${creador && creador !== "-" ? `
+              <span style="display:flex; align-items:flex-start; gap:7px; min-width:0;">
+                <span class="dot brand" style="margin-top:4px; flex:0 0 auto;"></span>
+                <span>Creada por: ${esc(creador)}</span>
+              </span>
+            ` : ""}
+          </span>
+        </span>
+      `;
     }
 
     function buscarCitaPorId(id){
@@ -10296,6 +10631,7 @@ async function deleteUser(uid){
               <small>${esc(v.empresa)}</small>
               <div class="meta">
                 <span class="pill"><span class="dot info"></span>ID: ${esc(v.id)}</span>
+                ${pillCitaCreada(v)}
                 <span class="pill"><span class="dot ${v.qrActivo ? "ok":"bad"}"></span>${v.qrActivo ? "QR Activo":"QR Inactivo"}</span>
               </div>
             </div>
@@ -10907,6 +11243,7 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
   status: visitaEspecial ? Status.PENDIENTE_AUTORIZACION : Status.PROGRAMADO,
   createdByUid: currentUser.uid,
   createdByEmail: currentUser.email,
+  createdByName: currentUser.nombre || currentUser.email || "",
   createdTs: Date.now(),
   updatedTs: Date.now(),
   qrActivo: true
@@ -11539,6 +11876,7 @@ const showInc = !!incLabel && incKey !== "SIN_INCIDENCIAS";
                 <span class="pill"><span class="dot ${tipo === "visitante" ? "brand" : "info"}"></span>${esc(tipoLabel)}</span>
                 <span class="pill"><span class="dot ${statusDot}"></span>${esc(statusLabel)}</span>
                 <span class="pill"><span class="dot info"></span>ID: ${esc(v.id)}</span>
+                ${pillCitaCreada(v)}
                 ${v.qrActivo
                   ? `<span class="pill"><span class="dot ok"></span>QR Activo</span>`
                   : `<span class="pill"><span class="dot bad"></span>QR Desactivado</span>`
@@ -12951,7 +13289,7 @@ window.addEventListener("offline",updateNet);
         email: prof.email,
         user: prof.email,
         role: prof.role,
-        nombre: prof.email
+        nombre: prof.nombre || prof.email
       };
       
       localStorage.setItem(LS_USER, JSON.stringify(currentUser));
