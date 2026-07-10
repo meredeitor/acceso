@@ -1,4 +1,4 @@
-const CACHE_NAME = "meresoft-access-control-v115";
+const CACHE_NAME = "meresoft-access-control-v116";
 
 // Archivos base que siempre quieres offline
 const STATIC_ASSETS = [
