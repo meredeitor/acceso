@@ -2767,10 +2767,6 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 10V7a5 5 0 0 1 10 0v3"/><path d="M5 10h14v11H5z"/><path d="M12 15v2"/></svg></span>
         <span class="sb-txt">Mi PIN</span>
       </div>
-      <div class="sb-btn" data-sb="activarqr">
-        <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 5h6v6H5z"/><path d="M13 5h6v6h-6z"/><path d="M5 13h6v6H5z"/><path d="M14 14h1"/><path d="M17 13h2v2h-2z"/><path d="M13 18h6"/></svg></span>
-        <span class="sb-txt">Activar QR</span>
-      </div>
       <div class="sb-btn" data-sb="sesiones_activas">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 5h16v10H4z"/><path d="M8 19h8"/><path d="M12 15v4"/><path d="M8 9h8"/></svg></span>
         <span class="sb-txt">Usuarios logeados</span>
@@ -2808,7 +2804,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="MereSoft Access Control"></div>
       <div>
-        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v117</span></h1>
+        <h1>MereSoft Access Control <span id="appVersion" class="version-badge">v118</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -4883,16 +4879,6 @@ if(key === "sesiones_activas"){
     if(confirm('¿Borrar FINALIZADOS del día?')) limpiarFinalizadosHoy();
     return;
   }
-  if(key === 'activarqr'){
-    setActiveSb('config');
-    sbClose();
-    if(!requirePerm('reactivar_qr','Solo ADMIN puede reactivar QR.')) return;
-    if(!(await requireAdminPin('reactivar un QR por ID'))) return;
-    const id = prompt('Ingresa el ID (del QR) a reactivar:');
-    if(!id) return;
-    await reactivarQR(String(id).trim());
-    return;
-  }
   if (key === "export_excel_all") {
   sbClose();
   await exportExcelHastaHoy();
@@ -6600,6 +6586,7 @@ ${incLabel ? `
               ${v.gafeteNo ? `<span class="pill"><span class="dot info"></span>Gafete: ${esc(v.gafeteNo)}</span>` : ""}
               ${v.incidenciasSalida ? `<span class="pill"><span class="dot warn"></span>Incidencia</span>` : ""}
             </div>
+            ${qrVencido && currentUser?.role === ROLES.ADMIN ? `<button class="secondary" data-action="reactivar" data-id="${esc(v.id)}" style="margin-top:10px; width:100%;">Reactivar</button>` : ""}
           </div>
         `;
       }
@@ -9569,6 +9556,7 @@ const motivo = prompt("Motivo de cancelación (opcional):") || "";
               ${renderVisitanteExtraPills(v)}
               <span class="badge-dictamen ${esc(dict)}"><span class="bdot"></span> ${esc(dictLabel)}</span>
             </div>
+            ${qrVencido && currentUser?.role === ROLES.ADMIN ? `<button class="secondary" data-action="reactivar" data-id="${esc(v.id)}" style="margin-top:10px; width:100%;">Reactivar</button>` : ""}
           </div>
         `;
       }
@@ -12074,7 +12062,7 @@ ${incLabel ? `
             ` : ""}
             <button class="secondary" data-action="print">Imprimir</button>
 
-            ${v.status === Status.FINALIZADO && hasPerm("reactivar_qr") ? `
+            ${v.status === Status.FINALIZADO && currentUser?.role === ROLES.ADMIN ? `
               <button class="secondary" data-action="reactivar" data-id="${esc(v.id)}">Reactivar QR</button>
             ` : ""}
 
@@ -13189,9 +13177,8 @@ function renderProveedores(lista){
         case "shareCitaConQR": compartirCitaConQR(id); break;
 
         case "reactivar":
-          if(!(await requireAdminPin("reactivar el código QR"))) break;
-           await reactivarQR(id);
-           break;
+          await reactivarQR(id);
+          break;
 
         case "eliminar": {
           const v = visitas.find(x => x.id == id);
