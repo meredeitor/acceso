@@ -1,4 +1,4 @@
-# Control de Acceso Unificado
+﻿# Control de Acceso Unificado
 
 Aplicacion PWA para control operativo de accesos, citas, vales, bitacora de guardias, reportes y rondines de seguridad.
 

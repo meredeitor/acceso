@@ -1,6 +1,6 @@
 ﻿{
-  "name": "MereSoft Access Control",
-  "short_name": "MS Access",
+  "name": "Caborca Access Control",
+  "short_name": "Caborca Access",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#1F1300",
