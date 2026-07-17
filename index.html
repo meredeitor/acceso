@@ -2405,11 +2405,13 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
         justify-content:flex-start;
         text-align:left;
       }
-
       .grid.cols-5,
       .grid.cols-4,
-      .grid.vales-grid,
       .history-grid{
+        grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+      }
+
+      .grid.vales-grid{
         grid-template-columns:1fr !important;
       }
 
@@ -2545,6 +2547,14 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
 
       .access-auth-form{
         padding:16px;
+      }
+    }
+
+    @media (max-width: 500px){
+      .grid.cols-5,
+      .grid.cols-4,
+      .history-grid{
+        grid-template-columns:1fr !important;
       }
     }
 
@@ -2811,7 +2821,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v123</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v124</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -13436,6 +13446,9 @@ window.addEventListener("offline",updateNet);
 </script>
 </body>
 </html>
+
+
+
 
 
 
