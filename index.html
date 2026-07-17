@@ -5782,7 +5782,8 @@ function fmt(ts){
         const cloud = await cloudFetchByDay(d);
         visitas = mergeById(visitas, cloud);
         saveVisitasLocal();
-        rebuildResumenDiarioFromList(cacheKey, cloud).catch(e => console.warn("No se pudo reconstruir resumen diario", e));
+        // El resumen diario se mantiene con deltas en cloudUpsertVisita/cloudDeleteVisita.
+        // Reconstruirlo en cada sync genera escrituras repetidas y puede inflar la cuota gratuita.
         markCloudRead(cloudReadCache.visitasDia, cacheKey);
       }catch(e){
         console.warn(e);
@@ -12634,6 +12635,14 @@ sbConfigChip.style.borderColor =
   const hoy = new Date();
   const hoyTs = hoy.setHours(23, 59, 59, 999);
 
+  if (navigator.onLine) {
+    const continuar = confirm("Esta exportación consulta Firestore desde el inicio hasta hoy y puede consumir muchas lecturas. Para cuidar el plan gratuito, úsala solo cuando realmente la necesites. ¿Continuar?");
+    if (!continuar) {
+      toast("Exportación cancelada", "No se consultó Firestore.", "info", 2200);
+      return;
+    }
+  }
+
   toast("Exportando", "Cargando datos hasta hoy…", "info", 2000);
 
   let data = [];
@@ -13394,6 +13403,9 @@ window.addEventListener("offline",updateNet);
 </script>
 </body>
 </html>
+
+
+
 
 
 
