@@ -1218,6 +1218,13 @@ html[data-theme="light"] textarea{
   border:1px solid rgba(203,213,245,1);
 }
 
+html[data-theme="light"] .visita-especial-toggle{
+  color:#075985;
+  background:#e0f2fe;
+  border-color:#7dd3fc;
+  box-shadow:0 8px 18px rgba(2,132,199,.12);
+}
+
 /* Sidebar */
 html[data-theme="light"] .sidebar{
   background: linear-gradient(
@@ -2804,7 +2811,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v121</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v123</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -3641,8 +3648,8 @@ function getVisitantesLista(v={}){
 
 function getVisitanteResumen(v={}){
   const list = getVisitantesLista(v);
-  if(list.length > 1) return `${list.length} visitantes`;
-  return getNombreAcceso(v);
+  const principal = v.nombreVisitante || v.proveedor || "Visitante";
+  return list.length ? `${principal} + ${list.length}` : principal;
 }
 
 function renderVisitanteExtraPills(v={}){
@@ -3651,8 +3658,8 @@ function renderVisitanteExtraPills(v={}){
   return `
     ${v.empresa ? `<span class="pill"><span class="dot info"></span>Empresa: ${esc(v.empresa)}</span>` : ""}
     ${v.personaVisita ? `<span class="pill"><span class="dot brand"></span>Visita a: ${esc(v.personaVisita)}</span>` : ""}
-    ${list.length > 1 ? `<span class="pill"><span class="dot info"></span>${list.length} visitantes</span>` : ""}
-    ${list.length > 1 ? `<span class="pill" title="${esc(list.join(", "))}"><span class="dot info"></span>${esc(list.slice(0,3).join(", "))}${list.length > 3 ? "..." : ""}</span>` : ""}
+    ${list.length ? `<span class="pill"><span class="dot info"></span>${list.length} acompañante${list.length > 1 ? "s" : ""}</span>` : ""}
+    ${list.length ? `<span class="pill" title="${esc(list.join(", "))}"><span class="dot info"></span>${esc(list.slice(0,3).join(", "))}${list.length > 3 ? "..." : ""}</span>` : ""}
     ${v.motivo ? `<span class="pill"><span class="dot warn"></span>${esc(v.motivo)}</span>` : ""}
     <span class="pill"><span class="dot ${v.qrActivo ? "ok" : "bad"}"></span>${v.qrActivo ? "QR Activo" : "QR Inactivo"}</span>
     <span class="pill"><span class="dot info"></span>ID: ${esc(v.id)}</span>
@@ -10859,12 +10866,18 @@ async function renderNuevo(tipoCita = "proveedor"){
 
       <div class="two">
 <div>
-  <label>Nombre del visitante (individual)</label>
-<input id="nombreVisitante" placeholder="Opcional si es grupal">
+  <label id="nombreVisitanteLabel">Nombre del visitante principal *</label>
+<input id="nombreVisitante" placeholder="Nombre principal">
   </div>
+        <div id="visitaGrupalWrap" style="grid-column:1/-1;">
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;margin:0;">
+            <input id="visitaGrupal" type="checkbox" style="width:auto;">
+            <span>Visita grupal</span>
+          </label>
+        </div>
         <div id="visitantesListaWrap" style="grid-column:1/-1;">
-          <label>Lista de visitantes (cita grupal)</label>
-          <textarea id="visitantesTexto" rows="5" placeholder="Un visitante por línea&#10;Ej:&#10;Juan Pérez&#10;Ana López&#10;Carlos Gómez"></textarea>
+          <label>Acompañantes</label>
+          <textarea id="visitantesTexto" rows="5" placeholder="Un acompañante por línea&#10;Ej:&#10;Ana López&#10;Carlos Gómez"></textarea>
         </div>
         <div id="empresaVisitanteWrap">
           <label>Empresa</label>
@@ -11070,13 +11083,26 @@ async function renderNuevo(tipoCita = "proveedor"){
   
 const tipoSel = document.getElementById("tipoVisita");
 
+function updateVisitaGrupalUI(){
+  const esVisitante = tipoSel?.value === "visitante";
+  const grupal = esVisitante && !!document.getElementById("visitaGrupal")?.checked;
+  toggleBlock("visitaGrupal", esVisitante);
+  toggleBlock("visitantesTexto", grupal);
+  if(!grupal){
+    const visitantesTexto = document.getElementById("visitantesTexto");
+    if(visitantesTexto) visitantesTexto.value = "";
+  }
+}
+
+document.getElementById("visitaGrupal")?.addEventListener("change", updateVisitaGrupalUI);
+
 if(tipoSel){
   tipoSel.addEventListener("change", () => {
     const esVisitante = tipoSel.value === "visitante";
 
     // ✅ CAMPOS VISITANTE
     toggleBlock("nombreVisitante", esVisitante);
-    toggleBlock("visitantesTexto", esVisitante);
+    updateVisitaGrupalUI();
     toggleBlock("empresaVisitante", esVisitante);
     toggleBlock("persona", true);
     toggleBlock("motivo", true);
@@ -11241,7 +11267,8 @@ function setupProveedorAutocomplete(){
     return null;
   }
   const nombreVisitante = (document.getElementById("nombreVisitante")?.value || "").trim();
-  const visitantesTexto = (document.getElementById("visitantesTexto")?.value || "").trim();
+  const visitaGrupal = esVisitante && !!document.getElementById("visitaGrupal")?.checked;
+  const visitantesTexto = visitaGrupal ? (document.getElementById("visitantesTexto")?.value || "").trim() : "";
   const visitantesLista = visitantesTexto
     .split(/\r?\n/)
     .map(x => x.trim())
@@ -11268,8 +11295,13 @@ function setupProveedorAutocomplete(){
   const materialRecibir =
   esVisitante ? "" : document.getElementById("materialRecibir").value.trim();
 
-  if(esVisitante && !nombreVisitante && !visitantesLista.length){
-    toast("Campos obligatorios","Captura nombre del visitante o lista de visitantes.","warn");
+  if(esVisitante && !nombreVisitante){
+    toast("Campos obligatorios","Captura el nombre del visitante principal.","warn");
+    return null;
+  }
+
+  if(esVisitante && visitaGrupal && !visitantesLista.length){
+    toast("Campos obligatorios","Captura al menos un acompañante para la visita grupal.","warn");
     return null;
   }
 
@@ -11311,6 +11343,7 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
   visitantesTexto: esVisitante ? visitantesTexto : "",
   visitantesLista: esVisitante ? visitantesLista : [],
   visitaEspecial,
+  visitaGrupal,
   requiereAutorizacion: visitaEspecial,
   proveedorCodigo,
   proveedor: proveedorNombre,
@@ -11368,10 +11401,10 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
   const codigoVerificacion = String(v.id).replace(/(.{4})/g, "$1 ").trim().toUpperCase();
   const docsRows = normalizeFacturasOc(v).filter(r => r.facturaNo || r.ocNos.length);
   const docsResumen = isVisitante(v)
-    ? (getVisitantesLista(v).length > 1 ? `
+    ? (getVisitantesLista(v).length ? `
       <div class="appointment-pass-docs">
         <div class="appointment-pass-doc-row">
-          <b>Visitantes</b>
+          <b>Acompañantes</b>
           <span>${esc(getVisitantesLista(v).join(", "))}</span>
         </div>
         ${v.empresa ? `<div class="appointment-pass-doc-row"><b>Empresa</b><span>${esc(v.empresa)}</span></div>` : ""}
@@ -11575,7 +11608,7 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
     const shareText =
 `✅ Datos de tu cita
 • ${tipoLabel}: ${provFmt}
-${isVisitante(v) && v.empresa ? `• Empresa: ${v.empresa}\n` : ""}${isVisitante(v) && getVisitantesLista(v).length > 1 ? `• Visitantes: ${getVisitantesLista(v).join(", ")}\n` : ""}
+${isVisitante(v) && v.empresa ? `• Empresa: ${v.empresa}\n` : ""}${isVisitante(v) && getVisitantesLista(v).length ? `• Acompañantes: ${getVisitantesLista(v).join(", ")}\n` : ""}
 ${docsText}• Horario: ${citaFmt}${reminderText}`;
 
     // Guardar QR
@@ -12001,9 +12034,9 @@ ${incLabel ? `
                 <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Empresa</span><b style="color:var(--text)">${esc(v.empresa)}</b></div>
                 <div style="height:8px;"></div>
               ` : ""}
-              ${isVisitante(v) && getVisitantesLista(v).length > 1 ? `
+              ${isVisitante(v) && getVisitantesLista(v).length ? `
                 <div class="pill" style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px;">
-                  <span style="color:var(--muted)">Visitantes</span>
+                  <span style="color:var(--muted)">Acompañantes</span>
                   <b style="color:var(--text); text-align:right;">${esc(getVisitantesLista(v).join(", "))}</b>
                 </div>
                 <div style="height:8px;"></div>
@@ -13403,6 +13436,19 @@ window.addEventListener("offline",updateNet);
 </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
