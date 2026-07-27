@@ -433,6 +433,43 @@
     }
     #histWrap{ min-width:0; overflow-x:auto; }
 
+    .reports-filter-row{
+      display:grid;
+      grid-template-columns: minmax(180px,216px) minmax(180px,216px) minmax(220px,264px) auto;
+      gap:14px;
+      align-items:end;
+      justify-content:start;
+    }
+    .reports-filter-row button{
+      min-height:42px;
+      padding:10px 16px;
+    }
+    .reports-kpi-grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap:14px;
+      margin-bottom:18px;
+    }
+    .report-kpi-card{
+      min-height:170px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:12px;
+    }
+    .report-kpi-card h3{
+      margin:0;
+      font-size:20px;
+      line-height:1.2;
+    }
+    @media (max-width:1100px){
+      .reports-kpi-grid{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width:720px){
+      .reports-filter-row{ grid-template-columns:1fr; }
+      .reports-kpi-grid{ grid-template-columns:1fr; }
+      .report-kpi-card{ min-height:140px; }
+    }
     .two{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     @media (max-width:760px){ .two{ grid-template-columns:1fr; } }
     .divider{ height:1px; background: rgba(255,255,255,.08); margin:12px 0; }
@@ -2821,7 +2858,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v124</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v125</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -9608,6 +9645,194 @@ const motivo = prompt("Motivo de cancelación (opcional):") || "";
       `;
     }
 
+function proveedorEvalClass(score, flags={}){
+  if((flags.rechazos || 0) >= 2 || (flags.noShow || 0) >= 3 || (flags.incidenciasCalidad || 0) >= 3) return "C";
+  if((flags.rechazos || 0) >= 1 || (flags.noShow || 0) >= 2 || (flags.tardesGraves || 0) >= 3) return score >= 70 ? "B" : "C";
+  if((flags.total || 0) < 3 && score >= 95) return "A";
+  if(score >= 95) return "AA";
+  if(score >= 85) return "A";
+  if(score >= 70) return "B";
+  return "C";
+}
+
+function proveedorEvalBadge(clase){
+  const c = String(clase || "C").toUpperCase();
+  const map = {
+    AA: "background:rgba(34,197,94,.18);border-color:rgba(34,197,94,.45);color:#86efac;",
+    A: "background:rgba(56,189,248,.16);border-color:rgba(56,189,248,.42);color:#7dd3fc;",
+    B: "background:rgba(250,204,21,.16);border-color:rgba(250,204,21,.42);color:#fde68a;",
+    C: "background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.45);color:#fca5a5;"
+  };
+  return `<span class="pill" style="font-weight:900;${map[c] || map.C}"><span class="dot ${c === "C" ? "bad" : c === "B" ? "warn" : "ok"}"></span>${esc(c)}</span>`;
+}
+
+function buildEvaluacionProveedores(list, opts={}){
+  const nowTs = opts.nowTs || Date.now();
+  const graceMin = Number(opts.graceMin ?? 10);
+  const graveMin = Number(opts.graveMin ?? 30);
+  const graceMs = graceMin * 60000;
+  const graveMs = graveMin * 60000;
+  const groups = new Map();
+
+  const getKey = (v) => String(v.proveedorCodigo || v.codigoProveedor || v.proveedor || v.empresa || "SIN_PROVEEDOR").trim().toUpperCase();
+  const getName = (v) => String(v.proveedor || v.empresa || v.proveedorCodigo || "Sin proveedor").trim();
+
+  (list || []).forEach(v => {
+    if(!v || typeof v.fechaHoraTs !== "number") return;
+    if(typeof isVisitante === "function" && isVisitante(v)) return;
+    if(typeof Status !== "undefined" && v.status === Status.CANCELADO) return;
+
+    const key = getKey(v);
+    if(!groups.has(key)){
+      groups.set(key, {
+        key,
+        proveedor: getName(v),
+        empresa: v.empresa || "",
+        total:0,
+        llegadas:0,
+        aTiempo:0,
+        tardes:0,
+        tardesGraves:0,
+        noShow:0,
+        incidenciasCalidad:0,
+        rechazos:0,
+        docsIncompletos:0,
+        incidenciasSalida:0,
+        minutosTardeTotal:0,
+        score:100,
+        clase:"AA",
+        motivos:[]
+      });
+    }
+
+    const g = groups.get(key);
+    g.total += 1;
+    if(!g.empresa && v.empresa) g.empresa = v.empresa;
+
+    const hasLlegada = typeof v.llegadaTs === "number";
+    if(hasLlegada){
+      g.llegadas += 1;
+      const delay = v.llegadaTs - v.fechaHoraTs;
+      if(delay > graceMs){
+        g.tardes += 1;
+        const mins = Math.max(0, Math.round(delay / 60000));
+        g.minutosTardeTotal += mins;
+        if(delay > graveMs) g.tardesGraves += 1;
+      }else{
+        g.aTiempo += 1;
+      }
+    }else if(String(v.status).toLowerCase() === "programado" && v.fechaHoraTs < (nowTs - graceMs)){
+      g.noShow += 1;
+    }
+
+    const dictEstado = String(v.dictamen?.estado || "").toLowerCase();
+    const inc = String(v.dictamen?.incidencia || "SIN_INCIDENCIAS").trim();
+    if(dictEstado === "rechazado") g.rechazos += 1;
+    if(inc && inc !== "SIN_INCIDENCIAS") g.incidenciasCalidad += 1;
+    if(hasLlegada && (!v.ocNo || !v.facturaNo)) g.docsIncompletos += 1;
+    if(String(v.incidenciasSalida || "").trim()) g.incidenciasSalida += 1;
+  });
+
+  return Array.from(groups.values()).map(g => {
+    const descuentos =
+      (g.noShow * 20) +
+      (g.tardes * 5) +
+      (g.tardesGraves * 5) +
+      (g.incidenciasCalidad * 15) +
+      (g.rechazos * 25) +
+      (g.docsIncompletos * 3) +
+      (g.incidenciasSalida * 10);
+
+    g.score = Math.max(0, Math.min(100, 100 - descuentos));
+    g.pctAsistencia = g.total ? Math.round((g.llegadas / g.total) * 100) : 0;
+    g.pctPuntualidad = g.llegadas ? Math.round((g.aTiempo / g.llegadas) * 100) : 0;
+    g.promTarde = g.tardes ? Math.round(g.minutosTardeTotal / g.tardes) : 0;
+    g.clase = proveedorEvalClass(g.score, g);
+
+    const motivos = [];
+    if(g.noShow) motivos.push(`${g.noShow} no asist.`);
+    if(g.tardes) motivos.push(`${g.tardes} tarde${g.tardesGraves ? ` (${g.tardesGraves} graves)` : ""}`);
+    if(g.rechazos) motivos.push(`${g.rechazos} rechazo calidad`);
+    if(g.incidenciasCalidad) motivos.push(`${g.incidenciasCalidad} inc. calidad`);
+    if(g.incidenciasSalida) motivos.push(`${g.incidenciasSalida} inc. salida`);
+    if(g.docsIncompletos) motivos.push(`${g.docsIncompletos} docs incompletos`);
+    if(g.total < 3) motivos.push("muestra baja");
+    g.motivos = motivos.length ? motivos : ["Sin penalizaciones relevantes"];
+    return g;
+  }).sort((a,b) => b.score - a.score || b.total - a.total || a.proveedor.localeCompare(b.proveedor));
+}
+
+function renderEvaluacionProveedores(rows){
+  const wrap = document.getElementById("evalProvWrap");
+  const summary = document.getElementById("evalProvSummary");
+  if(!wrap) return;
+  const data = rows || [];
+  const counts = data.reduce((acc,r)=>{ acc[r.clase] = (acc[r.clase] || 0) + 1; return acc; }, {});
+  if(summary){
+    summary.innerHTML = `
+      <span class="pill"><span class="dot ok"></span>AA: <b style="color:var(--text);">${counts.AA || 0}</b></span>
+      <span class="pill"><span class="dot info"></span>A: <b style="color:var(--text);">${counts.A || 0}</b></span>
+      <span class="pill"><span class="dot warn"></span>B: <b style="color:var(--text);">${counts.B || 0}</b></span>
+      <span class="pill"><span class="dot bad"></span>C: <b style="color:var(--text);">${counts.C || 0}</b></span>
+    `;
+  }
+
+  if(!data.length){
+    wrap.innerHTML = `<div class="pill"><span class="dot muted"></span>Sin datos para evaluar proveedores en este rango.</div>`;
+    return;
+  }
+
+  wrap.innerHTML = `
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Clase</th>
+          <th>Proveedor</th>
+          <th>Score</th>
+          <th>Citas</th>
+          <th>Asistencia</th>
+          <th>Puntualidad</th>
+          <th>Tardes</th>
+          <th>No asist.</th>
+          <th>Calidad</th>
+          <th>Motivos</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.map(r => `
+          <tr>
+            <td>${proveedorEvalBadge(r.clase)}</td>
+            <td><b>${esc(r.proveedor)}</b><br><small style="color:var(--muted);">${esc(r.empresa || "")}</small></td>
+            <td><b>${r.score}</b></td>
+            <td>${r.total}</td>
+            <td>${r.pctAsistencia}%</td>
+            <td>${r.pctPuntualidad}%</td>
+            <td>${r.tardes}${r.promTarde ? ` <small style="color:var(--muted);">prom. ${r.promTarde} min</small>` : ""}</td>
+            <td>${r.noShow}</td>
+            <td>${r.incidenciasCalidad} inc. / ${r.rechazos} rech.</td>
+            <td style="min-width:220px;white-space:normal;word-break:break-word;color:var(--muted);">${esc(r.motivos.join(" · "))}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+}
+
+function exportEvaluacionProveedoresExcel(){
+  if(!requirePerm("exportar_excel", "No tienes permiso para exportar.")) return;
+  const rep = window.__repEvalProveedores || { rows: [] };
+  const rows = rep.rows || [];
+  if(!rows.length){ toast("Evaluación", "No hay datos para exportar. Presiona Aplicar primero.", "warn"); return; }
+  if(!window.XLSX){ toast("Excel", "Aún no carga XLSX. Intenta de nuevo.", "warn", 2500); return; }
+
+  const headers = ["Clase","Score","Proveedor","Empresa","Citas","Llegadas","Asistencia %","Puntualidad %","A tiempo","Tardes","Tardes graves","Prom. min tarde","No asistieron","Incidencias calidad","Rechazos calidad","Docs incompletos","Incidencias salida","Motivos"];
+  const body = rows.map(r => [r.clase,r.score,r.proveedor,r.empresa,r.total,r.llegadas,r.pctAsistencia,r.pctPuntualidad,r.aTiempo,r.tardes,r.tardesGraves,r.promTarde,r.noShow,r.incidenciasCalidad,r.rechazos,r.docsIncompletos,r.incidenciasSalida,r.motivos.join(" | ")]);
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...body]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Evaluacion proveedores");
+  XLSX.writeFile(wb, `evaluacion_proveedores_${rep.from || ""}_${rep.to || ""}.xlsx`);
+  toast("Excel", "Evaluación de proveedores exportada.", "ok", 2200);
+}
 function renderReportes(){
   if(!hasPerm("ver_dashboard")){
     toast("Acceso denegado", "No tienes permiso para ver reportes.", "bad");
@@ -9616,7 +9841,7 @@ function renderReportes(){
   currentView = "reportes";
 
   const todayISO = new Date().toISOString().slice(0,10);
-  const weekAgo  = new Date(Date.now() - 6*24*60*60*1000).toISOString().slice(0,10);
+  const monthStartISO = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().slice(0,10);
 
   // ⚙️ tolerancia para puntualidad
   const LATE_GRACE_MIN = 10;
@@ -9706,23 +9931,23 @@ function renderReportes(){
       <div class="divider"></div>
 
       <!-- Filtros -->
-      <div class="row" style="gap:12px; flex-wrap:wrap;">
-        <div style="min-width:180px;">
+      <div class="reports-filter-row">
+        <div>
           <label>Fecha inicio</label>
-          <input type="date" id="repFrom" value="${weekAgo}">
+          <input type="date" id="repFrom" value="${monthStartISO}">
         </div>
-        <div style="min-width:180px;">
+        <div>
           <label>Fecha fin</label>
           <input type="date" id="repTo" value="${todayISO}">
         </div>
-        <div style="min-width:220px;">
+        <div>
           <label>Área</label>
           <select id="repArea">
             <option value="">Todas</option>
             ${AREAS.map(a => `<option value="${a}">${a}</option>`).join("")}
           </select>
         </div>
-        <div style="align-self:flex-end;">
+        <div>
           <button id="repApply">Aplicar</button>
         </div>
       </div>
@@ -9730,12 +9955,12 @@ function renderReportes(){
       <div class="divider"></div>
 
       <!-- ✅ KPIs: auto-fit para que SIEMPRE quepan -->
-      <div style="
-        display:grid;
-        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-        gap:12px;
-        margin-bottom:18px;
-      ">
+      
+      <div class="row" style="gap:8px;margin-bottom:14px;">
+        <button class="secondary" data-action="repTab" data-tab="resumen" aria-current="page">Resumen</button>
+        <button class="secondary" data-action="repTab" data-tab="evaluacion">Evaluación proveedores</button>
+      </div>
+      <div data-report-tab-panel="resumen" class="reports-kpi-grid">
         ${kpiCard("Total visitas","kpiTotal")}
         ${kpiCard("Tiempo promedio","kpiTiempo")}
         ${kpiCard("% Rechazo","kpiRechazo")}
@@ -9746,8 +9971,43 @@ function renderReportes(){
         ${kpiCard("No asistieron (Programado)","kpiNoShow", "Solo citas vencidas sin llegada")}
       </div>
 
+      <div data-report-tab-panel="evaluacion" style="display:none;">
+
+
+      <div class="card" style="margin-bottom:18px;">
+
+
+        <div class="row" style="justify-content:space-between;align-items:flex-start;">
+
+
+          <div>
+
+
+            <h3 style="margin:0 0 4px;">Evaluación mensual de proveedores</h3>
+            <div style="color:var(--muted);font-size:12px;">Score 0-100 con clasificación AA, A, B o C según asistencia, puntualidad, calidad, documentos e incidencias.</div>
+          </div>
+          <div class="row" id="evalProvSummary" style="justify-content:flex-end;"></div>
+          <button class="secondary" data-action="repExportEvalProv">Exportar Excel</button>
+        </div>
+        <div class="divider"></div>
+                <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-bottom:12px;">
+          <div class="pill" style="border-radius:12px;align-items:flex-start;white-space:normal;"><span class="dot ok" style="margin-top:5px;"></span><span><b style="color:var(--text);">AA</b><br>Excelente: proveedor confiable, puntual y sin penalizaciones relevantes.</span></div>
+          <div class="pill" style="border-radius:12px;align-items:flex-start;white-space:normal;"><span class="dot info" style="margin-top:5px;"></span><span><b style="color:var(--text);">A</b><br>Bueno: cumple en general, con detalles menores o muestra baja.</span></div>
+          <div class="pill" style="border-radius:12px;align-items:flex-start;white-space:normal;"><span class="dot warn" style="margin-top:5px;"></span><span><b style="color:var(--text);">B</b><br>Riesgo medio: tardanzas, no asistencias o incidencias que requieren seguimiento.</span></div>
+          <div class="pill" style="border-radius:12px;align-items:flex-start;white-space:normal;"><span class="dot bad" style="margin-top:5px;"></span><span><b style="color:var(--text);">C</b><br>Riesgo alto: incumplimientos frecuentes, rechazos o incidencias críticas.</span></div>
+        </div>        <div id="evalProvWrap" style="overflow:auto;min-height:80px;color:var(--muted);font-size:12px;">
+          Presiona Aplicar para calcular la evaluación del rango seleccionado.
+        </div>
+      </div>
+
+      </div>
+
       <!-- ✅ Gráficas: alturas responsivas y sin overflow -->
+
+      <div data-report-tab-panel="resumen">
+
       <div style="
+
         display:grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         gap:12px;
@@ -9798,7 +10058,7 @@ const action =
   "";
 
   return `
-    <div class="card"
+    <div class="card report-kpi-card"
       ${clickable ? `data-action="${action}"` : ""} 
       style="${clickable ? "cursor:pointer;" : ""}">
       <h3>${title}</h3>
@@ -9988,6 +10248,10 @@ const noShow = noShowList.length;
 
 _safeSetText("kpiNoShow", String(noShow));
 _safeSetColor("kpiNoShow", noShow > 0 ? "var(--bad)" : "var(--muted)");
+
+const evalRows = buildEvaluacionProveedores(data, { nowTs, graceMin: LATE_GRACE_MIN, graveMin: 30 });
+window.__repEvalProveedores = { from, to, area, rows: evalRows };
+renderEvaluacionProveedores(evalRows);
 
     // Gráficas
     renderChartVisitasPorArea(data);
@@ -10239,6 +10503,22 @@ appEl.addEventListener("click", (e) => {
 
   const inc = e.target.closest('[data-action="repOpenIncCalidad"]');
   if(inc) return openIncCalModal();
+
+  const expEval = e.target.closest('[data-action="repExportEvalProv"]');
+  if(expEval) return exportEvaluacionProveedoresExcel();
+
+  const tabBtn = e.target.closest('[data-action="repTab"]');
+  if(tabBtn){
+    const tab = tabBtn.dataset.tab || "resumen";
+    appEl.querySelectorAll('[data-report-tab-panel]').forEach(panel => {
+      panel.style.display = panel.dataset.reportTabPanel === tab ? '' : 'none';
+    });
+    appEl.querySelectorAll('[data-action="repTab"]').forEach(btn => {
+      if(btn.dataset.tab === tab) btn.setAttribute('aria-current','page');
+      else btn.removeAttribute('aria-current');
+    });
+    return;
+  }
 });
 
 // -------------------------
