@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
@@ -2817,6 +2817,10 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M19 8h2"/><path d="M20 7v2"/></svg></span>
         <span class="sb-txt">Usuarios</span>
       </div>
+      <div class="sb-btn" data-sb="personas_visita">
+        <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8"/><path d="M4 21a8 8 0 0 1 16 0"/><path d="M18 8h4"/><path d="M20 6v4"/></svg></span>
+        <span class="sb-txt">Personas a visitar</span>
+      </div>
       <div class="sb-btn" data-sb="role_permissions">
         <span class="sb-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/><path d="M8 5v2"/><path d="M16 11v2"/><path d="M12 17v2"/></svg></span>
         <span class="sb-txt">Roles</span>
@@ -2862,7 +2866,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v126</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v127</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -4864,12 +4868,14 @@ if(rondineroBtn) rondineroBtn.style.display = hasPerm('rondinero_ver') ? '' : 'n
   const sesionesBtn = sidebarEl.querySelector('[data-sb="sesiones_activas"]');
   const rolesPermBtn = sidebarEl.querySelector('[data-sb="role_permissions"]');
   const usuariosBtn = sidebarEl.querySelector('[data-sb="roles"]');
+  const personasBtn = sidebarEl.querySelector('[data-sb="personas_visita"]');
   const miPinBtn = sidebarEl.querySelector('[data-sb="mi_pin"]');
 
   if(cfgToggle) cfgToggle.style.display = showCfg ? '' : 'none';
   if(sesionesBtn) sesionesBtn.style.display = hasPerm('ver_sesiones_activas') ? '' : 'none';
   if(rolesPermBtn) rolesPermBtn.style.display = hasPerm('admin_roles') ? '' : 'none';
   if(usuariosBtn) usuariosBtn.style.display = hasPerm('admin_roles') ? '' : 'none';
+  if(personasBtn) personasBtn.style.display = currentUser?.role === ROLES.ADMIN ? '' : 'none';
   if(miPinBtn) miPinBtn.style.display = canConfigurePin() ? '' : 'none';
   setSbExpanded(document.getElementById('sbConfigToggle'), sbConfigSub, false);
   
@@ -5034,6 +5040,12 @@ if(!sb) return;
     setActiveSb('config');
     sbClose();
     await renderAdminRoles();
+    return;
+  }
+  if(key === 'personas_visita'){
+    setActiveSb('config');
+    sbClose();
+    await renderPersonasVisita();
     return;
   }
   if(key === 'role_permissions'){
@@ -10653,6 +10665,61 @@ appEl.addEventListener("click", (e) => {
 });
 
 // -------------------------
+
+async function obtenerPersonasVisita(){
+  const snap = await getDoc(doc(db, COL_APP_CONFIG, "personas_visita"));
+  const data = snap.exists() ? snap.data() : {};
+  return Array.isArray(data.personas) ? data.personas : [];
+}
+async function guardarPersonasVisita(personas){
+  await setDoc(doc(db, COL_APP_CONFIG, "personas_visita"), {
+    personas, updatedTs:Date.now(), updatedBy:currentUser.uid
+  }, { merge:true });
+}
+function pintarPersonasSelect(select, personas){
+  if(!select || !personas.some(p=>p.activo!==false)) return;
+  const groups = new Map();
+  personas.filter(p=>p.activo!==false).sort((a,b)=>String(a.departamento).localeCompare(String(b.departamento),"es")||String(a.nombre).localeCompare(String(b.nombre),"es")).forEach(p=>{
+    const dept = p.departamento || "Sin departamento";
+    if(!groups.has(dept)) groups.set(dept,[]);
+    groups.get(dept).push(p);
+  });
+  select.innerHTML = '<option value="">Seleccione...</option>';
+  groups.forEach((items,dept)=>{
+    const group=document.createElement("optgroup"); group.label=dept;
+    items.forEach(p=>{const o=document.createElement("option");o.value=p.nombre;o.textContent=p.nombre;group.appendChild(o);});
+    select.appendChild(group);
+  });
+}
+async function cargarPersonasVisitaSelect(select){
+  try{ const personas=await obtenerPersonasVisita(); pintarPersonasSelect(select,personas); }
+  catch(e){ console.warn("Se usa el listado de respaldo.",e); }
+}
+async function renderPersonasVisita(){
+  if(currentUser?.role !== ROLES.ADMIN){ toast("Acceso denegado","Solo ADMIN puede administrar el directorio.","bad"); return; }
+  currentView="personas_visita";
+  appEl.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><div><h2>Personas a visitar</h2><p class="muted">Directorio usado en citas y kiosco de visitantes.</p></div></div><div class="two"><div><label>Nombre</label><input id="pvNombre"></div><div><label>Departamento</label><input id="pvDepto"></div></div><div class="row" style="margin-top:12px"><button id="pvAgregar">Agregar</button><button class="secondary" id="pvImportar">Importar listado actual</button></div><div class="divider"></div><div id="pvTabla">Cargando...</div></div>`;
+  document.getElementById("pvAgregar").onclick=async()=>{const nombre=document.getElementById("pvNombre").value.trim(),departamento=document.getElementById("pvDepto").value.trim();if(!nombre||!departamento)return toast("Datos incompletos","Captura nombre y departamento.","warn");const list=await obtenerPersonasVisita();list.push({id:crypto.randomUUID(),nombre,departamento,activo:true});await guardarPersonasVisita(list);renderPersonasVisita();};
+  document.getElementById("pvImportar").onclick=importarPersonasVisitaActuales;
+  const list=await obtenerPersonasVisita();
+  const tabla=document.getElementById("pvTabla");
+  if(!list.length){tabla.innerHTML='<p class="muted">El directorio está vacío. Usa Importar listado actual.</p>';return;}
+  tabla.innerHTML=`<div style="overflow:auto"><table class="table"><thead><tr><th>Nombre</th><th>Departamento</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>${list.map(p=>`<tr><td>${esc(p.nombre)}</td><td>${esc(p.departamento)}</td><td>${p.activo===false?"Inactiva":"Activa"}</td><td><button class="secondary" data-pv-edit="${p.id}">Editar</button> <button data-pv-toggle="${p.id}">${p.activo===false?"Reactivar":"Desactivar"}</button></td></tr>`).join("")}</tbody></table></div>`;
+  tabla.querySelectorAll("[data-pv-edit]").forEach(b=>b.onclick=async()=>{const p=list.find(x=>x.id===b.dataset.pvEdit);const nombre=prompt("Nombre:",p.nombre),departamento=nombre===null?null:prompt("Departamento:",p.departamento);if(nombre===null||departamento===null)return;p.nombre=nombre.trim();p.departamento=departamento.trim();await guardarPersonasVisita(list);renderPersonasVisita();});
+  tabla.querySelectorAll("[data-pv-toggle]").forEach(b=>b.onclick=async()=>{const p=list.find(x=>x.id===b.dataset.pvToggle);p.activo=p.activo===false;await guardarPersonasVisita(list);renderPersonasVisita();});
+}
+async function importarPersonasVisitaActuales(){
+  try{
+    const source=renderNuevaCita.toString();
+    const html=source.match(/<select id="persona">[\s\S]*?<\/select>/i)?.[0];
+    if(!html) throw new Error("No se encontró el listado de respaldo.");
+    const parsed=new DOMParser().parseFromString(html,"text/html");
+    const current=await obtenerPersonasVisita(), keys=new Set(current.map(p=>`${p.departamento}|${p.nombre}`.toLowerCase()));
+    parsed.querySelectorAll("optgroup").forEach(g=>g.querySelectorAll("option").forEach(o=>{const nombre=o.textContent.trim(),departamento=g.label.trim(),key=`${departamento}|${nombre}`.toLowerCase();if(nombre&&!keys.has(key)){current.push({id:crypto.randomUUID(),nombre,departamento,activo:true});keys.add(key);}}));
+    await guardarPersonasVisita(current);toast("Importación terminada",`${current.length} personas en el directorio.`,"ok");renderPersonasVisita();
+  }catch(e){toast("No se pudo importar",e.message||"Revisa permisos.","bad",4200);}
+}
+
     // Admin usuarios screen
     // -------------------------
     let _adminUsersCache = [];
@@ -11694,6 +11761,7 @@ function toggleBlock(id, show){
   }
 }
   setupProveedorAutocomplete();
+  cargarPersonasVisitaSelect(document.getElementById("persona"));
 
   async function refreshAgendaNuevo(){
     const cont = document.getElementById("agendaVisual");

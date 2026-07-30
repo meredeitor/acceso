@@ -168,6 +168,14 @@ export function slotOcupadas(citas, dateISO, area, hora){
   }).length;
 }
 
+
+export async function fetchPersonasVisita(){
+  await ensureKioskoAuth();
+  const snap = await getDoc(doc(db, "app_config", "personas_visita"));
+  const personas = snap.exists() && Array.isArray(snap.data().personas) ? snap.data().personas : [];
+  return personas.filter(p => p.activo !== false).map(p => p.nombre).filter(Boolean);
+}
+
 export function fillSelect(id, values, placeholder = "Seleccione..."){
   const el = document.getElementById(id);
   if(!el) return;
