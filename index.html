@@ -2866,7 +2866,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v127</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v128</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -10710,7 +10710,7 @@ async function renderPersonasVisita(){
 }
 async function importarPersonasVisitaActuales(){
   try{
-    const source=renderNuevaCita.toString();
+    const source=goNuevaCita.toString();
     const html=source.match(/<select id="persona">[\s\S]*?<\/select>/i)?.[0];
     if(!html) throw new Error("No se encontró el listado de respaldo.");
     const parsed=new DOMParser().parseFromString(html,"text/html");
