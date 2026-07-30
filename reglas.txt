@@ -28,6 +28,7 @@ service cloud.firestore {
     function isJefe() { return hasRole("jefe"); }
     function isCompras() { return hasRole("compras"); }
     function isJefeCompras() { return hasRole("jefe_compras"); }
+    function isJefeTi() { return hasRole("jefe_ti"); }
     function isGuardia() { return hasRole("guardia"); }
     function isCalidad() { return hasRole("calidad"); }
     function isContraloria() { return hasRole("contraloria"); }
@@ -44,6 +45,7 @@ service cloud.firestore {
         || isCoordinador()
         || isCompras()
         || isJefeCompras()
+        || isJefeTi()
         || isAnfitrion()
         || isJefe();
     }
@@ -51,6 +53,7 @@ service cloud.firestore {
     function canAuthorizeValeActivo() {
       return isAdmin()
         || isJefe()
+        || isJefeTi()
         || isContraloria();
     }
 
@@ -186,6 +189,7 @@ service cloud.firestore {
           || isCalidad()
           || isContraloria()
           || isJefe()
+          || isJefeTi()
           || isAnfitrion()
           || (isKioskoAnon() && request.query.limit <= 500)
         );
@@ -195,7 +199,7 @@ service cloud.firestore {
         && request.resource.data.tipoVisita == "visitante"
         && (
           (
-            (isAdmin() || isCoordinador() || isCompras() || isJefeCompras() || isAnfitrion() || isJefe())
+            (isAdmin() || isCoordinador() || isCompras() || isJefeCompras() || isJefeTi() || isAnfitrion() || isJefe())
             && request.resource.data.status == "programado"
           )
           || (
@@ -238,6 +242,7 @@ service cloud.firestore {
           || isCoordinador()
           || isCompras()
           || isJefeCompras()
+          || isJefeTi()
           || isGuardia()
           || isCalidad()
           || isContraloria()
@@ -267,6 +272,7 @@ service cloud.firestore {
           || isCoordinador()
           || isCompras()
           || isJefeCompras()
+          || isJefeTi()
           || isGuardia()
           || isContraloria()
           || isAnfitrion()
@@ -309,6 +315,7 @@ service cloud.firestore {
           || isCoordinador()
           || isCompras()
           || isJefeCompras()
+          || isJefeTi()
           || isGuardia()
           || isContraloria()
           || isAnfitrion()

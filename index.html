@@ -2866,7 +2866,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v135</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v136</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -3033,7 +3033,8 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
     ADMIN: "admin",
     COORDINADOR: "coordinador",
     JEFE: "jefe",
-    JEFE_COMPRAS: "jefe_compras", // ✅ NUEVO
+    JEFE_COMPRAS: "jefe_compras",
+    JEFE_TI: "jefe_ti",
     COMPRAS: "compras",
     ANFITRION: "anfitrion",
     GUARDIA: "guardia",
@@ -3097,6 +3098,20 @@ const PERMISOS = {
     "despachar",
     "ver_qr"
   ],
+
+[ROLES.JEFE_TI]: [
+  "ver_dashboard",
+  "ver_historial",
+  "ver_ficha",
+  "crear_cita_visitante",
+  "ver_qr",
+  "ver_citas_compras",
+  "ver_vales_activos",
+  "crear_vale_activo",
+  "autorizar_vale_activo",
+  "ver_vales_personal",
+  "crear_vale_personal"
+],
 
 [ROLES.JEFE_COMPRAS]: [
   "ver_dashboard",
@@ -3239,6 +3254,7 @@ function normalizePermList(perms, role=""){
 }
 
 function roleLabel(role){
+  if(role === ROLES.JEFE_TI) return "Jefe de TI";
   return String(role || "").replace(/_/g, " ").toUpperCase();
 }
 
@@ -3290,6 +3306,7 @@ async function saveRolePermsConfig(role, perms){
 
 const VALE_ACTIVO_AUTORIZADOR_ROLES = [
   ROLES.JEFE,
+  ROLES.JEFE_TI,
   ROLES.CONTRALORIA
 ];
 
@@ -3870,12 +3887,12 @@ function canCreateVisitanteCita(){
   return hasPerm("crear_cita") || hasPerm("crear_cita_visitante");
 }
 
-function isAnfitrionOnly(){
-  return currentUser?.role === ROLES.ANFITRION;
+function isVisitanteOnlyRole(){
+  return [ROLES.ANFITRION, ROLES.JEFE_TI].includes(currentUser?.role);
 }
 
 function canSeeVisita(v={}){
-  if(isAnfitrionOnly()) return isVisitante(v);
+  if(isVisitanteOnlyRole()) return isVisitante(v);
   return true;
 }
 
@@ -4841,9 +4858,9 @@ const groupVales = sidebarEl.querySelector('[data-sb="grupo_vales"]');
 const groupGuardia = sidebarEl.querySelector('[data-sb="grupo_guardia"]');
 const groupReportes = sidebarEl.querySelector('[data-sb="grupo_reportes"]');
 
-if(dashProveedores)  dashProveedores.style.display  = hasPerm('ver_dashboard') && !isAnfitrionOnly() ? '' : 'none';
+if(dashProveedores)  dashProveedores.style.display  = hasPerm('ver_dashboard') && !isVisitanteOnlyRole() ? '' : 'none';
 if(dashVisitantes)  dashVisitantes.style.display  = hasPerm('ver_dashboard') ? '' : 'none';
-if(nuevo) nuevo.style.display = canCreateProveedorCita() && !isAnfitrionOnly() ? '' : 'none';
+if(nuevo) nuevo.style.display = canCreateProveedorCita() && !isVisitanteOnlyRole() ? '' : 'none';
 if(nuevoVisitante) nuevoVisitante.style.display = canCreateVisitanteCita() ? '' : 'none';
 if(hist)  hist.style.display  = hasPerm('ver_historial') ? '' : 'none';
 if(scan)  scan.style.display  = hasPerm('escanear_qr') ? '' : 'none';
@@ -4887,7 +4904,7 @@ if(rondineroBtn) rondineroBtn.style.display = hasPerm('rondinero_ver') ? '' : 'n
   
   const citasProveedores = sidebarEl.querySelector('[data-sb="citas_proveedores"]');
   const citasVisitantes = sidebarEl.querySelector('[data-sb="citas_visitantes"]');
-if(citasProveedores) citasProveedores.style.display = hasPerm('ver_citas_compras') && !isAnfitrionOnly() ? '' : 'none';
+if(citasProveedores) citasProveedores.style.display = hasPerm('ver_citas_compras') && !isVisitanteOnlyRole() ? '' : 'none';
 if(citasVisitantes) citasVisitantes.style.display = hasPerm('ver_citas_compras') ? '' : 'none';
 
 // 🆕 Reporte de Cambios: SOLO CONTRALORIA y ADMIN
@@ -4902,9 +4919,9 @@ if (btnCambios) {
 }
 
 const hasProveedoresItems =
-  (hasPerm('ver_dashboard') && !isAnfitrionOnly()) ||
-  (canCreateProveedorCita() && !isAnfitrionOnly()) ||
-  (hasPerm('ver_citas_compras') && !isAnfitrionOnly());
+  (hasPerm('ver_dashboard') && !isVisitanteOnlyRole()) ||
+  (canCreateProveedorCita() && !isVisitanteOnlyRole()) ||
+  (hasPerm('ver_citas_compras') && !isVisitanteOnlyRole());
 const hasVisitantesItems =
   hasPerm('ver_dashboard') ||
   canCreateVisitanteCita() ||
@@ -6398,7 +6415,7 @@ window.addEventListener('visibilitychange', ()=>{
     qSearch.style.display = "";
     qSearch.placeholder = (currentUser.role === ROLES.PROVEEDOR)
     ? "Ingresa ID (del QR)..."
-    : (isAnfitrionOnly() ? "Buscar visitante..." : "Buscar proveedor / visitante / empresa...");
+    : (isVisitanteOnlyRole() ? "Buscar visitante..." : "Buscar proveedor / visitante / empresa...");
   }
 }
 
@@ -6915,7 +6932,7 @@ ${incLabel ? `
       currentView = "historial";
 
       const todayISO = new Date().toISOString().slice(0,10);
-      const defaultHistTipo = isAnfitrionOnly() ? "visitantes" : getActiveDashboardTipo();
+      const defaultHistTipo = isVisitanteOnlyRole() ? "visitantes" : getActiveDashboardTipo();
 
       appEl.innerHTML = `
         <div class="card">
@@ -10967,7 +10984,7 @@ async function saveRolePermissionsFromScreen(role){
     await renderRolePermissions(selected);
   }catch(e){
     console.error(e);
-    toast("Roles", "No se pudieron guardar permisos. Revisa Rules/Internet.", "bad", 4200);
+    toast("Roles", `No se pudieron guardar permisos: ${e?.code || "error"} - ${e?.message || "Revisa Rules/Internet."}`, "bad", 6500);
   }
 }
 
@@ -10986,7 +11003,7 @@ async function saveRolePermissionsFromScreenWithPerms(role, perms){
     await renderRolePermissions(role);
   }catch(e){
     console.error(e);
-    toast("Roles", "No se pudieron restaurar permisos. Revisa Rules/Internet.", "bad", 4200);
+    toast("Roles", `No se pudieron restaurar permisos: ${e?.code || "error"} - ${e?.message || "Revisa Rules/Internet."}`, "bad", 6500);
   }
 }
 
@@ -11178,7 +11195,7 @@ function renderUserModal(){
             <div>
               <label>Rol</label>
               <select id="editUserRole">
-                ${ALL_ROLES.map(r => `<option value="${r}">${r}</option>`).join("")}
+                ${ALL_ROLES.map(r => `<option value="${r}">${esc(roleLabel(r))}</option>`).join("")}
               </select>
             </div>
           </div>
@@ -13771,7 +13788,7 @@ function renderProveedores(lista){
       setAuthShell(false);
       if(currentUser.role === ROLES.PENDIENTE) return renderPendiente();
       if(currentUser.role === ROLES.PROVEEDOR) return renderProveedor();
-      if(isAnfitrionOnly()) return renderDashboardHoy("visitantes");
+      if(isVisitanteOnlyRole()) return renderDashboardHoy("visitantes");
       return renderModuleHome();
     }
 
