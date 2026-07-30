@@ -2866,7 +2866,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v137</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v138</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -3268,45 +3268,6 @@ function getPermsForRole(role){
   return normalizePermList(PERMISOS[r] || [], r);
 }
 
-async function loadRolePermsConfig(force=false){
-  if(rolePermsLoaded && !force) return rolePermOverrides;
-  try{
-    const snap = await getDoc(doc(db, COL_APP_CONFIG, ROLE_PERMS_DOC_ID));
-    const data = snap.exists() ? snap.data() : {};
-    const roles = data.roles || {};
-    const next = {};
-    ALL_ROLES.forEach(role => {
-      if(Array.isArray(roles[role])) next[role] = normalizePermList(roles[role], role);
-    });
-    rolePermOverrides = next;
-    rolePermsLoaded = true;
-  }catch(e){
-    console.warn("No se pudo cargar configuraci\u00f3n de permisos", e);
-    rolePermsLoaded = true;
-  }
-  return rolePermOverrides;
-}
-
-async function saveRolePermsConfig(role, perms){
-  if(currentUser?.role !== ROLES.ADMIN){
-    toast("Acceso denegado", "Solo ADMIN puede editar permisos de roles.", "bad", 3200);
-    return false;
-  }
-  if(!(await requireAdminPin("modificar permisos de rol"))) return false;
-  const clean = normalizePermList(perms, role);
-  const roles = { ...rolePermOverrides, [role]: clean };
-  await setDoc(doc(db, COL_APP_CONFIG, ROLE_PERMS_DOC_ID), {
-    roles,
-    updatedTs: Date.now(),
-    updatedAt: serverTimestamp(),
-    updatedByUid: currentUser?.uid || "",
-    updatedByRole: currentUser?.role || ""
-  }, { merge:true });
-  rolePermOverrides = roles;
-  rolePermsLoaded = true;
-  return true;
-}
-
 const VALE_ACTIVO_AUTORIZADOR_ROLES = [
   ROLES.JEFE,
   ROLES.JEFE_TI,
@@ -3438,6 +3399,43 @@ const PIN_SESSION_KEY = "adminPinOkTs";
     };
 
     let currentUser = null; // {uid,email,role,nombre}
+
+async function loadRolePermsConfig(force=false){
+  if(rolePermsLoaded && !force) return rolePermOverrides;
+  try{
+    const snap = await getDoc(doc(db, COL_APP_CONFIG, ROLE_PERMS_DOC_ID));
+    const data = snap.exists() ? snap.data() : {};
+    const roles = data.roles || {};
+    const next = {};
+    ALL_ROLES.forEach(role => {
+      if(Array.isArray(roles[role])) next[role] = normalizePermList(roles[role], role);
+    });
+    rolePermOverrides = next;
+    rolePermsLoaded = true;
+  }catch(e){
+    console.warn("No se pudo cargar configuraci\u00f3n de permisos", e);
+    rolePermsLoaded = true;
+  }
+  return rolePermOverrides;
+}
+
+async function saveRolePermsConfig(role, perms){
+  if(!requirePerm("admin_roles", "Solo ADMIN puede editar permisos de roles.")) return false;
+  if(!(await requireAdminPin("modificar permisos de rol"))) return false;
+  const clean = normalizePermList(perms, role);
+  const roles = { ...rolePermOverrides, [role]: clean };
+  await setDoc(doc(db, COL_APP_CONFIG, ROLE_PERMS_DOC_ID), {
+    roles,
+    updatedTs: Date.now(),
+    updatedAt: serverTimestamp(),
+    updatedByUid: currentUser?.uid || "",
+    updatedByRole: currentUser?.role || ""
+  }, { merge:true });
+  rolePermOverrides = roles;
+  rolePermsLoaded = true;
+  return true;
+}
+
     let visitas = loadVisitasLocal();
     let valesActivos = loadValesActivosLocal();
     let valesPersonal = loadValesPersonalLocal();
