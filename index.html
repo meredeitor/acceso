@@ -2866,7 +2866,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v139</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v140</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -5269,6 +5269,70 @@ function fmt(ts){
       return `${h}h ${m}m`;
     }
 
+    function elapsedMinutes(fromTs, toTs=Date.now()){
+      const from = Number(fromTs || 0);
+      const to = Number(toTs || 0);
+      if(!from || !to || to < from) return null;
+      return Math.max(0, Math.floor((to - from) / 60000));
+    }
+
+    function elapsedLabel(mins){
+      if(mins === null || !Number.isFinite(mins)) return "-";
+      const h = Math.floor(mins / 60);
+      const m = mins % 60;
+      return h > 0 ? `${h}h ${m}m` : `${m} min`;
+    }
+
+    function waitLevel(mins){
+      if(mins <= 5) return { name:"VERDE", color:"var(--ok)", bg:"rgba(34,197,94,.12)" };
+      if(mins <= 10) return { name:"AMARILLO", color:"var(--warn)", bg:"rgba(245,158,11,.14)" };
+      return { name:"ROJO", color:"var(--bad)", bg:"rgba(239,68,68,.12)" };
+    }
+
+    function visitTimeMetrics(v, now=Date.now()){
+      const llegada = Number(v?.llegadaTs || 0);
+      const entrada = Number(v?.entradaTs || 0);
+      const salida = Number(v?.salidaTs || 0);
+      return {
+        espera: llegada ? elapsedMinutes(llegada, entrada || now) : null,
+        dentro: entrada ? elapsedMinutes(entrada, salida || now) : null,
+        total: llegada ? elapsedMinutes(llegada, salida || now) : null
+      };
+    }
+
+    function liveTimePill(label, fromTs, toTs=0, includeLevel=false){
+      const mins = elapsedMinutes(fromTs, toTs || Date.now());
+      if(mins === null) return "";
+      const level = waitLevel(mins);
+      const style = includeLevel ? `background:${level.bg};border-color:${level.color};` : "";
+      return `<span class="pill" style="${style}" data-visit-time-from="${Number(fromTs)}" data-visit-time-to="${Number(toTs || 0)}" data-visit-time-label="${esc(label)}" data-visit-time-level="${includeLevel ? "1" : "0"}">
+        <span class="dot ${includeLevel ? "" : "info"}" style="${includeLevel ? `background:${level.color}` : ""}"></span>
+        <span data-time-text>${esc(label)}: <b>${esc(elapsedLabel(mins))}</b>${includeLevel ? ` · ${level.name}` : ""}</span>
+      </span>`;
+    }
+
+    function refreshVisitTimeDisplays(){
+      document.querySelectorAll("[data-visit-time-from]").forEach(el => {
+        const from = Number(el.dataset.visitTimeFrom || 0);
+        const fixedTo = Number(el.dataset.visitTimeTo || 0);
+        const label = el.dataset.visitTimeLabel || "Tiempo";
+        const mins = elapsedMinutes(from, fixedTo || Date.now());
+        if(mins === null) return;
+        const includeLevel = el.dataset.visitTimeLevel === "1";
+        const level = waitLevel(mins);
+        const target = el.querySelector("[data-time-text]");
+        if(target) target.innerHTML = `${esc(label)}: <b>${esc(elapsedLabel(mins))}</b>${includeLevel ? ` · ${level.name}` : ""}`;
+        if(includeLevel){
+          el.style.background = level.bg;
+          el.style.borderColor = level.color;
+          const dot = el.querySelector(".dot");
+          if(dot) dot.style.background = level.color;
+        }
+      });
+    }
+
+    setInterval(refreshVisitTimeDisplays, 15000);
+
     function updateNet(){
       const on = navigator.onLine;
       netDot.className = "dot " + (on ? "ok" : "bad");
@@ -6874,6 +6938,25 @@ ${incLabel ? `
               ${v.gafeteNo ? `<span class="pill"><span class="dot info"></span>Gafete: ${esc(v.gafeteNo)}</span>` : ""}
               ${v.incidenciasSalida ? `<span class="pill"><span class="dot warn"></span>Incidencia</span>` : ""}
             </div>
+            ${isVisitante(v) && v.status === Status.LLEGADO ? `
+              <div class="row" style="margin-top:10px;">
+                ${liveTimePill("Espera", v.llegadaTs, 0, true)}
+                ${hasPerm("registrar_entrada") ? `<button class="ok" data-action="entrada" data-id="${esc(v.id)}" data-no-sb="true">Dar acceso</button>` : ""}
+              </div>
+            ` : ""}
+            ${isVisitante(v) && v.status === Status.DENTRO ? `
+              <div class="row" style="margin-top:10px;">
+                ${liveTimePill("Espera para acceso", v.llegadaTs, v.entradaTs, false)}
+                ${liveTimePill("Tiempo dentro", v.entradaTs, 0, false)}
+              </div>
+            ` : ""}
+            ${isVisitante(v) && v.status === Status.FINALIZADO ? `
+              <div class="row" style="margin-top:10px;">
+                ${liveTimePill("Espera", v.llegadaTs, v.entradaTs, false)}
+                ${liveTimePill("Dentro", v.entradaTs, v.salidaTs, false)}
+                ${liveTimePill("Total", v.llegadaTs, v.salidaTs, false)}
+              </div>
+            ` : ""}
             ${v.status === Status.PENDIENTE_AUTORIZACION && ((isVisitante(v) && currentUser?.role === ROLES.ADMIN) || (!isVisitante(v) && currentUser?.role === ROLES.COMPRAS)) ? `
               <div class="row" style="margin-top:10px;">
                 <button class="ok" data-action="autorizarVisita" data-id="${esc(v.id)}" data-no-sb="true">Autorizar</button>
@@ -12713,6 +12796,7 @@ async function renderAdminProveedores(){
       }
 
       const dur = calcDuration(v);
+      const tiemposVisita = visitTimeMetrics(v);
       const statusLabel =
         v.status === Status.PROGRAMADO ? "Programado" :
         v.status === Status.LLEGADO ? "Llegó" :
@@ -12819,7 +12903,19 @@ ${incLabel ? `
               <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Entrada</span><b style="color:var(--text)">${esc(fmt(v.entradaTs))}</b></div>
               <div style="height:8px;"></div>
               <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Salida</span><b style="color:var(--text)">${esc(fmt(v.salidaTs))}</b></div>
-              ${dur ? `
+              ${isVisitante(v) && tiemposVisita.espera !== null ? `
+                <div style="height:8px;"></div>
+                <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Tiempo de espera</span><b style="color:var(--text)">${esc(elapsedLabel(tiemposVisita.espera))}</b></div>
+              ` : ""}
+              ${isVisitante(v) && tiemposVisita.dentro !== null ? `
+                <div style="height:8px;"></div>
+                <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Tiempo dentro</span><b style="color:var(--text)">${esc(elapsedLabel(tiemposVisita.dentro))}</b></div>
+              ` : ""}
+              ${isVisitante(v) && v.salidaTs && tiemposVisita.total !== null ? `
+                <div style="height:8px;"></div>
+                <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Tiempo total de visita</span><b style="color:var(--text)">${esc(elapsedLabel(tiemposVisita.total))}</b></div>
+              ` : ""}
+              ${!isVisitante(v) && dur ? `
                 <div style="height:8px;"></div>
                 <div class="pill" style="display:flex; justify-content:space-between;"><span style="color:var(--muted)">Tiempo Total</span><b style="color:var(--text)">${esc(dur)}</b></div>
               ` : ""}
