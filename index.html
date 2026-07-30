@@ -2866,7 +2866,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v134</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v135</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -5467,6 +5467,18 @@ function fmt(ts){
     async function cloudFetchValePersonalById(id){
       const snap = await getDoc(doc(db, COL_VALES_PERSONAL, String(id)));
       return snap.exists() ? { id: snap.id, ...snap.data() } : null;
+    }
+
+    async function cloudFetchValesPersonalByNomina(nomina){
+      const q = query(
+        collection(db, COL_VALES_PERSONAL),
+        where("nomina", "==", String(nomina || "").trim()),
+        limit(20)
+      );
+      const snap = await getDocs(q);
+      const list = [];
+      snap.forEach(d => list.push({ id:d.id, ...d.data() }));
+      return list;
     }
 
     async function cloudFetchValesPersonal(){
@@ -12368,7 +12380,7 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
       appEl.innerHTML = `
         <div class="card">
           <h2 style="margin:0 0 6px;">Escanear QR</h2>
-          <p style="margin:0 0 10px;color:var(--muted);font-size:12px;">Apunta la cámara al QR.</p>
+          <p style="margin:0 0 10px;color:var(--muted);font-size:12px;">Escanea el QR de la operación o el QR del gafete para localizar un vale de personal vigente.</p>
           <div id="reader"></div>
           <div class="divider"></div>
           <div class="row"><button class="secondary" data-action="home">Cancelar</button></div>
@@ -12401,9 +12413,72 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
       });
     }
 
+    function normalizarNomina(value){
+      const digits = String(value || "").trim().replace(/\D/g, "");
+      return digits.replace(/^0+(?=\d)/, "");
+    }
+
+    function extraerNominaDeGafete(qrText){
+      try{
+        const url = new URL(String(qrText || "").trim());
+        const match = url.pathname.match(/^\/card\/(\d+)\/?$/i);
+        if(!match) return "";
+        return normalizarNomina(match[1]);
+      }catch{
+        return "";
+      }
+    }
+
+    function valePersonalVigenteParaGafete(v, nomina){
+      const mismaNomina = normalizarNomina(v?.nomina) === normalizarNomina(nomina);
+      const fechaValida = String(v?.fecha || "") === todayISO();
+      const estadoValido = [ValeStatus.GENERADO, ValeStatus.FUERA].includes(v?.status);
+      return mismaNomina && fechaValida && estadoValido && v?.qrActivo !== false;
+    }
+
+    async function abrirValePersonalDesdeGafete(nomina){
+      let candidatos = valesPersonal.filter(v => valePersonalVigenteParaGafete(v, nomina));
+      if(navigator.onLine){
+        try{
+          const cloud = await cloudFetchValesPersonalByNomina(nomina);
+          if(cloud.length){
+            valesPersonal = mergeById(valesPersonal, cloud);
+            saveValesPersonalLocal();
+            candidatos = valesPersonal.filter(v => valePersonalVigenteParaGafete(v, nomina));
+          }
+        }catch(e){
+          console.warn("No se pudo buscar la nómina en la nube:", e);
+        }
+      }
+      candidatos.sort((a,b) => Number(b.autorizadoTs || b.updatedTs || b.createdTs || 0) - Number(a.autorizadoTs || a.updatedTs || a.createdTs || 0));
+      if(!candidatos.length){
+        toast("Sin permiso vigente", `La nómina ${nomina} no tiene un vale autorizado vigente para hoy.`, "warn", 4200);
+        moduleReturnView = "vales_personal";
+        return renderModuleHome();
+      }
+      let elegido = candidatos[0];
+      if(candidatos.length > 1){
+        const opciones = candidatos.map((v,i) => `${i+1}. ${v.folio || v.id} - ${v.tipoPermiso || "Permiso"} - ${valeStatusLabel(v.status)}`).join("\n");
+        const seleccion = prompt(`Hay ${candidatos.length} permisos vigentes para la nómina ${nomina}:\n\n${opciones}\n\nEscribe el número del permiso:`);
+        const idx = Number(seleccion) - 1;
+        if(!Number.isInteger(idx) || idx < 0 || idx >= candidatos.length){
+          toast("Selección cancelada", "No se abrió ningún permiso.", "warn", 2600);
+          return renderValesPersonal();
+        }
+        elegido = candidatos[idx];
+      }
+      toast("Gafete reconocido", `Nómina ${nomina}: permiso vigente encontrado.`, "ok", 2200);
+      return renderValePersonalQR(elegido.id);
+    }
+
     async function abrirFichaDesdeQR(id){
       const qrText = String(id || "").trim();
       const qrUpper = qrText.toUpperCase();
+
+      const nominaGafete = extraerNominaDeGafete(qrText);
+      if(nominaGafete){
+        return abrirValePersonalDesdeGafete(nominaGafete);
+      }
 
       if(qrUpper.startsWith("VALE_ACTIVO:")){
         const valeId = qrText.split(":").slice(1).join(":").trim();
