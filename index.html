@@ -2866,7 +2866,7 @@ html[data-theme="copper"] .pill .dot.muted{ background:#94a3b8 !important; }
     <div class="title">
       <div class="logo"><img src="icon-192-cobre.png" alt="Caborca Access Control"></div>
       <div>
-        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v130</span></h1>
+        <h1>Caborca Access Control <span id="appVersion" class="version-badge">v134</span></h1>
         <small>Proveedores • Visitantes • Control de Vales de Salida • Rondinero</small>
       </div>
     </div>
@@ -2987,7 +2987,13 @@ document.getElementById("btnTheme")?.addEventListener("click", toggleTheme);
   const COL_USERS = "users";
   const COL_RESUMEN_DIARIO = "resumen_diario";
   const COL_APP_CONFIG = "app_config";
-  const QR_LATE_BLOCK_MIN = 15; // BLOQUEO bloqueo duro por retraso
+  const QR_LATE_BLOCK_MIN = 15; // Proveedores
+  const VISITOR_QR_LATE_BLOCK_MIN = 60; // Visitantes: 1 hora
+
+  function qrLateBlockMin(v = {}){
+    const tipo = String(v.tipoVisita || v.tipoAcceso || "proveedor").toLowerCase();
+    return tipo === "visitante" ? VISITOR_QR_LATE_BLOCK_MIN : QR_LATE_BLOCK_MIN;
+  }
   const VALES_ACTIVOS_LOOKBACK_DAYS = 30;
 
   const CLOUD_READ_TTL = {
@@ -3666,7 +3672,7 @@ function citaVencidaSinLlegada(v, nowTs = Date.now()){
   if(typeof v.fechaHoraTs !== "number") return false;
   if(v.llegadaTs || v.entradaTs || v.salidaTs) return false;
   if(v.qrDesactivadoMotivo === "RETRASO") return true;
-  return v.fechaHoraTs < (nowTs - QR_LATE_BLOCK_MIN * 60 * 1000);
+  return v.fechaHoraTs < (nowTs - qrLateBlockMin(v) * 60 * 1000);
 }
 
 function validarReagendaProveedor({ proveedorCodigo, proveedor, fechaHoraTs, excludeId = null } = {}){
@@ -6589,13 +6595,13 @@ function renderRegisterForm(){
 }
     function qrRetrasoAutorizado(v){
       if(!v || typeof v.fechaHoraTs !== "number") return false;
-      const limiteTs = v.fechaHoraTs + (QR_LATE_BLOCK_MIN * 60 * 1000);
+      const limiteTs = v.fechaHoraTs + (qrLateBlockMin(v) * 60 * 1000);
       return typeof v.qrReactivadoTs === "number" && v.qrReactivadoTs >= limiteTs;
     }
     function qrInactivoPorImpuntualidad(v){
       if(!v || v.status !== Status.PROGRAMADO) return false;
       if(typeof v.fechaHoraTs !== "number") return false;
-      const limiteTs = v.fechaHoraTs + (QR_LATE_BLOCK_MIN * 60 * 1000);
+      const limiteTs = v.fechaHoraTs + (qrLateBlockMin(v) * 60 * 1000);
       if(qrRetrasoAutorizado(v)) return false;
       if(v.qrDesactivadoMotivo === "RETRASO") return true;
       return Date.now() > limiteTs;
@@ -6654,6 +6660,54 @@ function renderRegisterForm(){
       );
       return true;
     }
+    async function resolverAutorizacionVisita(id, autorizar){
+      const v = buscarCitaPorId(id);
+      if(!v || v.status !== Status.PENDIENTE_AUTORIZACION){
+        toast("Solicitud no disponible", "La visita ya fue atendida o no existe.", "warn", 3200);
+        return;
+      }
+      const esSolicitudVisitante = isVisitante(v);
+      const rolPermitido = esSolicitudVisitante ? ROLES.ADMIN : ROLES.COMPRAS;
+      if(currentUser?.role !== rolPermitido){
+        toast("Acceso denegado",
+          esSolicitudVisitante ? "Solo ADMIN puede autorizar visitantes." : "Solo COMPRAS puede autorizar proveedores.",
+          "bad", 3200);
+        return;
+      }
+      const accion = autorizar ? "autorizar esta solicitud" : "rechazar esta solicitud";
+      const pinValido = esSolicitudVisitante ? await requireAdminPin(accion) : await requireUserPin(accion);
+      if(!pinValido) return;
+      if(!autorizar && !confirm(`¿Rechazar la solicitud de "${getNombreAcceso(v)}"?`)) return;
+
+      const estadoAnterior = v.status;
+      const ahora = Date.now();
+      v.status = autorizar ? Status.PROGRAMADO : Status.CANCELADO;
+      v.qrActivo = Boolean(autorizar);
+      v.autorizacionEstado = autorizar ? "autorizada" : "rechazada";
+      v.autorizacionTs = ahora;
+      v.autorizacionPorUid = currentUser.uid;
+      v.autorizacionPorEmail = currentUser.email || "";
+      v.autorizacionPorNombre = currentUser.nombre || "";
+      v.autorizacionPorRol = currentUser.role;
+      v.updatedTs = ahora;
+      registrarCambio(v, "status", estadoAnterior, v.status, autorizar ? "autorizar" : "rechazar");
+
+      try{
+        saveVisitasLocal();
+        await cloudUpsertVisita(v);
+        toast(autorizar ? "Visita autorizada" : "Visita rechazada",
+          autorizar ? "La cita quedó programada y su QR está activo." : "La solicitud fue rechazada.",
+          autorizar ? "ok" : "warn", 3200);
+        renderActiveDashboard();
+      }catch(e){
+        console.error(e);
+        v.status = estadoAnterior;
+        v.qrActivo = false;
+        saveVisitasLocal();
+        toast("No se pudo guardar", e?.message || "Revisa conexión y permisos.", "bad", 4200);
+      }
+    }
+
     function renderDashboardHoy(tipoDashboard = getActiveDashboardTipo()){
       if(!requirePerm("ver_dashboard","Tu rol no puede ver el dashboard.")) return;
       const dashboardTipo = normalizeDashboardTipo(tipoDashboard);
@@ -6784,6 +6838,12 @@ ${incLabel ? `
               ${v.gafeteNo ? `<span class="pill"><span class="dot info"></span>Gafete: ${esc(v.gafeteNo)}</span>` : ""}
               ${v.incidenciasSalida ? `<span class="pill"><span class="dot warn"></span>Incidencia</span>` : ""}
             </div>
+            ${v.status === Status.PENDIENTE_AUTORIZACION && ((isVisitante(v) && currentUser?.role === ROLES.ADMIN) || (!isVisitante(v) && currentUser?.role === ROLES.COMPRAS)) ? `
+              <div class="row" style="margin-top:10px;">
+                <button class="ok" data-action="autorizarVisita" data-id="${esc(v.id)}" data-no-sb="true">Autorizar</button>
+                <button class="bad" data-action="rechazarVisita" data-id="${esc(v.id)}" data-no-sb="true">Rechazar</button>
+              </div>
+            ` : ""}
             ${qrVencido && currentUser?.role === ROLES.ADMIN ? `<button class="secondary" data-action="reactivar" data-id="${esc(v.id)}" style="margin-top:10px; width:100%;">Reactivar</button>` : ""}
           </div>
         `;
@@ -12110,7 +12170,7 @@ if(!esVisitante && existeCitaEnHorario(fechaHora, area)){
               <div class="appointment-pass-icon" aria-hidden="true">
                 <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/></svg>
               </div>
-              <div>Válido<br>15 min</div>
+              <div>Válido<br>${isVisitante(v) ? "60 min" : "15 min"}</div>
               <i></i>
             </div>
           </div>
@@ -12429,7 +12489,7 @@ ${docsText}• Horario: ${citaFmt}${reminderText}`;
   const diffMin = Math.round((now - v.fechaHoraTs) / 60000);
 
   // BLOQUEO BLOQUEO DURO POR RETRASO > 15 MIN
- if(diffMin > QR_LATE_BLOCK_MIN && !qrRetrasoAutorizado(v)){
+ if(diffMin > qrLateBlockMin(v) && !qrRetrasoAutorizado(v)){
   v.qrActivo = false;
 
   // ✅ guarda motivo/mins para mostrar el toast correcto después
@@ -12755,7 +12815,7 @@ ${incLabel ? `
 
   // BLOQUEO Bloqueo por retraso > 15 min (y desactivar QR)
   const delayMin = Math.round((Date.now() - v.fechaHoraTs) / 60000);
-  if(delayMin > QR_LATE_BLOCK_MIN && !qrRetrasoAutorizado(v)){
+  if(delayMin > qrLateBlockMin(v) && !qrRetrasoAutorizado(v)){
 
     // ✅ FIX #2: apagar QR y persistir (best effort)
     v.qrActivo = false;
@@ -12841,7 +12901,7 @@ ${incLabel ? `
 
   // BLOQUEO Bloqueo por retraso > 15 min (y desactivar QR)
   const delayMin = Math.round((Date.now() - v.fechaHoraTs) / 60000);
-  if(delayMin > QR_LATE_BLOCK_MIN && !qrRetrasoAutorizado(v)){
+  if(delayMin > qrLateBlockMin(v) && !qrRetrasoAutorizado(v)){
 
     // Apaga QR y persiste (best effort)
     v.qrActivo = false;
@@ -13673,6 +13733,8 @@ function renderProveedores(lista){
           });
           break;
         case "togglePendingAuth": dashboardPendingOnly = !dashboardPendingOnly; renderActiveDashboard(); break;
+        case "autorizarVisita": await resolverAutorizacionVisita(id, true); break;
+        case "rechazarVisita": await resolverAutorizacionVisita(id, false); break;
         case "historial": await renderHistorial(); break;
         case "histLoad": await loadHistDay(); break;
         case "valesActivos": await renderValesActivos(); break;

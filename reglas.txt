@@ -120,10 +120,18 @@ service cloud.firestore {
 
         || (
           isCompras()
-          && resource.data.createdByUid == myUid()
           && request.resource.data.createdByUid == resource.data.createdByUid
-          && resource.data.status in ["programado", "cancelado"]
-          && request.resource.data.status in ["programado", "cancelado"]
+          && (
+            (
+              resource.data.status == "pendiente_autorizacion"
+              && request.resource.data.status in ["programado", "cancelado"]
+            )
+            || (
+              resource.data.createdByUid == myUid()
+              && resource.data.status in ["programado", "cancelado"]
+              && request.resource.data.status in ["programado", "cancelado"]
+            )
+          )
         )
 
         || (
