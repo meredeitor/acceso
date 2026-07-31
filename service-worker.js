@@ -1,4 +1,4 @@
-const CACHE_NAME = "caborca-access-control-v142";
+const CACHE_NAME = "caborca-access-control-v143";
 
 // Archivos base que siempre quieres offline
 const STATIC_ASSETS = [
@@ -8,6 +8,8 @@ const STATIC_ASSETS = [
   "./kiosko-proveedores.html",
   "./kiosko-visitantes.html",
   "./kiosko-vales.html",
+  "./kiosko-vales-personal.html",
+  "./kiosko-vales-activos.html",
   "./manifest.json",
   "./icon-192-cobre.png",
   "./icon-512-cobre.png",
@@ -63,7 +65,11 @@ self.addEventListener("fetch", (event) => {
             return res;
           });
         })
-        .catch(() => caches.match("./index.html"))
+        .catch(() =>
+          caches.match(req, { ignoreSearch:true }).then((cached) =>
+            cached || caches.match("./index.html")
+          )
+        )
     );
     return;
   }

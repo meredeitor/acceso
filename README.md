@@ -336,3 +336,11 @@ Version actual:
 - Limpiar cache del navegador si una tablet sigue mostrando una version anterior.
 - Mantener la version del sidebar y del service worker sincronizadas.
 - Evitar cargar archivos pesados a Firebase desde rondines o bitacora.
+
+## Kioscos de vales
+
+- `kiosko-vales-personal.html`: solicitudes exclusivas de vales de personal.
+- `kiosko-vales-activos.html`: solicitudes exclusivas de vales de activos.
+- `kiosko-vales.html`: acceso combinado conservado por compatibilidad.
+
+Los dos kioscos dedicados reutilizan la misma lógica para mantener formularios, autorizadores y reglas sincronizados.
