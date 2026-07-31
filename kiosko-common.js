@@ -270,18 +270,47 @@ export async function requireKioskoLogin(){
   return profile;
 }
 
+const VALE_AUTH_PERMISSION = {
+  activo: "autorizar_vale_activo",
+  personal: "autorizar_vale_personal"
+};
+
+const DEFAULT_VALE_AUTH_ROLES = {
+  autorizar_vale_activo: new Set(["admin", "jefe", "jefe_ti", "contraloria"]),
+  autorizar_vale_personal: new Set(["admin", "jefe", "jefe_compras", "contraloria"])
+};
+
+async function fetchRolePermissionOverrides(){
+  try{
+    const snap = await getDoc(doc(db, "app_config", "role_permissions"));
+    const roles = snap.exists() ? (snap.data()?.roles || {}) : {};
+    return roles && typeof roles === "object" ? roles : {};
+  }catch(err){
+    console.warn("No se pudo cargar la configuración de permisos de roles; se usarán permisos base.", err);
+    return {};
+  }
+}
+
+function roleHasValePermission(role, permission, overrides){
+  const configured = overrides?.[role];
+  if(Array.isArray(configured)) return configured.includes(permission);
+  return DEFAULT_VALE_AUTH_ROLES[permission]?.has(role) || false;
+}
+
 export async function fetchValeAutorizadores(tipo = "personal"){
   await ensureKioskoAuth();
-  const snap = await getDocs(query(collection(db, "users"), limit(300)));
-  const roles = tipo === "activo"
-    ? ["jefe", "contraloria"]
-    : ["jefe", "jefe_compras", "contraloria", "admin"];
+  const normalizedType = tipo === "activo" ? "activo" : "personal";
+  const permission = VALE_AUTH_PERMISSION[normalizedType];
+  const [usersSnap, rolePermissionOverrides] = await Promise.all([
+    getDocs(query(collection(db, "users"), limit(300))),
+    fetchRolePermissionOverrides()
+  ]);
   const arr = [];
-  snap.forEach(d => {
+  usersSnap.forEach(d => {
     const u = { uid: d.id, ...d.data() };
     if(u.eliminado) return;
     if(u.aprobado === false) return;
-    if(!roles.includes(u.role)) return;
+    if(!roleHasValePermission(u.role, permission, rolePermissionOverrides)) return;
     arr.push({
       uid: u.uid,
       nombre: u.nombre || u.email || "Usuario",
@@ -289,7 +318,7 @@ export async function fetchValeAutorizadores(tipo = "personal"){
       role: u.role || ""
     });
   });
-  return arr.sort((a,b) => String(a.nombre).localeCompare(String(b.nombre)));
+  return arr.sort((a,b) => String(a.nombre).localeCompare(String(b.nombre), "es"));
 }
 
 export const fetchValeActivoAutorizadores = fetchValeAutorizadores;

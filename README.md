@@ -343,4 +343,4 @@ Version actual:
 - `kiosko-vales-activos.html`: solicitudes exclusivas de vales de activos.
 - `kiosko-vales.html`: acceso combinado conservado por compatibilidad.
 
-Los dos kioscos dedicados reutilizan la misma lógica para mantener formularios, autorizadores y reglas sincronizados.
+Los dos kioscos dedicados reutilizan la misma lógica para mantener formularios, autorizadores y reglas sincronizados. El selector Autoriza consulta los permisos configurados en Roles y sólo muestra usuarios cuyo rol puede autorizar el tipo de vale correspondiente.

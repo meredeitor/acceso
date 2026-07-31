@@ -50,18 +50,29 @@ service cloud.firestore {
         || isJefe();
     }
 
+    function hasValeRoleOverride() {
+      return isAuth()
+        && exists(/databases/$(database)/documents/app_config/role_permissions)
+        && get(/databases/$(database)/documents/app_config/role_permissions).data.roles is map
+        && myRole() in get(/databases/$(database)/documents/app_config/role_permissions).data.roles;
+    }
+
+    function hasConfiguredRolePermission(permission) {
+      return hasValeRoleOverride()
+        && get(/databases/$(database)/documents/app_config/role_permissions).data.roles[myRole()] is list
+        && get(/databases/$(database)/documents/app_config/role_permissions).data.roles[myRole()].hasAny([permission]);
+    }
+
     function canAuthorizeValeActivo() {
       return isAdmin()
-        || isJefe()
-        || isJefeTi()
-        || isContraloria();
+        || hasConfiguredRolePermission("autorizar_vale_activo")
+        || (!hasValeRoleOverride() && (isJefe() || isJefeTi() || isContraloria()));
     }
 
     function canAuthorizeValePersonal() {
       return isAdmin()
-        || isJefe()
-        || isJefeCompras()
-        || isContraloria();
+        || hasConfiguredRolePermission("autorizar_vale_personal")
+        || (!hasValeRoleOverride() && (isJefe() || isJefeCompras() || isContraloria()));
     }
 
     match /app_config/{id} {
@@ -277,6 +288,7 @@ service cloud.firestore {
           || isContraloria()
           || isAnfitrion()
           || isJefe()
+          || canAuthorizeValeActivo()
         );
 
       allow create: if isAuth()
@@ -320,6 +332,7 @@ service cloud.firestore {
           || isContraloria()
           || isAnfitrion()
           || isJefe()
+          || canAuthorizeValePersonal()
         );
 
       allow create: if isAuth()
